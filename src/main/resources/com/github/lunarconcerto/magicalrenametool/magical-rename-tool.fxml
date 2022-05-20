@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<AnchorPane maxHeight="600" maxWidth="600" minHeight="600" minWidth="600" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.magicalrenametool.core.RenameToolController">
+   <children>
+      <TabPane prefHeight="600.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="运行">
+              <graphic>
+                  <FontIcon fill="black" iconLiteral="fa-play-circle-o" />
+              </graphic>
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TreeView fx:id="file_tree" layoutX="14.0" layoutY="16.0" prefHeight="520.0" prefWidth="260.0">
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#onTreeMenuSelectAction" text="选择">
+                                        <graphic>
+                                            <FontIcon fill="black" iconLiteral="fa-check" />
+                                        </graphic>
+                                    </MenuItem>
+                                  <MenuItem mnemonicParsing="false" onAction="#onTreeMenuSelectAllAction" text="全选">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-check-square-o" />
+                                      </graphic>
+                                  </MenuItem>
+                                    <MenuItem mnemonicParsing="false" onAction="#onTreeMenuReverseSelectAction" text="反选">
+                                        <graphic>
+                                            <FontIcon fill="black" iconLiteral="fa-check-square" />
+                                        </graphic>
+                                    </MenuItem>
+                                    <MenuItem mnemonicParsing="false" onAction="#onTreeMenuRefreshAction" text="刷新">
+                                        <graphic>
+                                            <FontIcon fill="black" iconLiteral="fa-refresh" />
+                                        </graphic>
+                                    </MenuItem>
+                                    <CheckMenuItem fx:id="dir_only" mnemonicParsing="false" onAction="#onDirOnlyButtonAction" text="仅显示文件夹">
+                                        <graphic>
+                                            <FontIcon fill="black" iconLiteral="fa-folder" />
+                                        </graphic>
+                                    </CheckMenuItem>
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </TreeView>
+                        <ListView fx:id="selected_file_list" layoutX="287.0" layoutY="16.0" prefHeight="300.0" prefWidth="300.0">
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                  <MenuItem mnemonicParsing="false" onAction="#onListMenuRemoveAction" text="移除选中">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-remove" />
+                                      </graphic>
+                                  </MenuItem>
+                                    <MenuItem mnemonicParsing="false" onAction="#onListMenuRemoveAllAction" text="全部移除">
+                                        <graphic>
+                                            <FontIcon fill="black" iconLiteral="fa-reply-all" />
+                                        </graphic>
+                                    </MenuItem>
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </ListView>
+                        <Button fx:id="button_start" layoutX="286.0" layoutY="358.0" mnemonicParsing="false" onAction="#onStartButtonAction" prefHeight="50.0" prefWidth="100.0" text="运行">
+                            <graphic>
+                                <FontIcon fill="black" iconLiteral="fa-play" />
+                            </graphic>
+                        </Button>
+                        <Button fx:id="button_select_file" layoutX="486.0" layoutY="358.0" mnemonicParsing="false" onAction="#onSelectFilePathButtonAction" prefHeight="50.0" prefWidth="100.0" text="选择文件夹">
+                            <graphic>
+                                <FontIcon fill="black" iconLiteral="fa-folder-open-o" />
+                            </graphic>
+                        </Button>
+                        <ProgressBar fx:id="progress_bar" layoutX="286.0" layoutY="330.0" prefHeight="20.0" prefWidth="300.0" progress="0.0" />
+                        <Label layoutX="6.0" layoutY="547.0" prefHeight="20.0" prefWidth="44.0" text="状态：" />
+                        <Label fx:id="label_status" layoutX="50.0" layoutY="547.0" prefHeight="20.0" prefWidth="536.0" />
+                        <ListView fx:id="console_list" layoutX="287.0" layoutY="416.0" prefHeight="120.0" prefWidth="300.0">
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#onUIConsoleCopy" text="复制">
+                                            <graphic>
+                                                <FontIcon fill="black" iconLiteral="fa-copy" />
+                                            </graphic>
+                                        </MenuItem>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </ListView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="设置">
+              <graphic>
+                  <FontIcon fill="black" iconLiteral="fa-sliders" />
+              </graphic>
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScrollPane layoutY="-4.0" prefHeight="580.0" prefWidth="600.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="600.0">
+                                 <children>
+                                    <Accordion prefHeight="600.0" prefWidth="580.0">
+                                      <panes>
+                                        <TitledPane animated="false" prefHeight="200.0" prefWidth="580.0" text="网络">
+                                            <graphic>
+                                                <FontIcon fill="black" iconLiteral="fa-connectdevelop" />
+                                            </graphic>
+                                             <content>
+                                                <AnchorPane prefHeight="50.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="55.0" text="代理主机:" />
+                                                      <TextField fx:id="input_proxy_host" layoutX="74.0" layoutY="17.0" onAction="#onProxyHostInput" prefHeight="25.0" prefWidth="200.0" />
+                                                      <Label layoutX="289.0" layoutY="15.0" prefHeight="30.0" prefWidth="55.0" text="代理端口:" />
+                                                      <TextField fx:id="input_proxy_post" layoutX="344.0" layoutY="18.0" onAction="#onProxyPortInput" prefHeight="25.0" prefWidth="200.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="文件">
+                                            <graphic>
+                                                <FontIcon fill="black" iconLiteral="fa-folder" />
+                                            </graphic>
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="170.0" prefWidth="578.0">
+                                                   <children>
+                                                      <Label layoutX="12.0" layoutY="23.0" prefHeight="30.0" prefWidth="94.0" text="默认打开路径:" />
+                                                      <TextField fx:id="input_default_file_path" layoutX="91.0" layoutY="26.0" prefHeight="25.0" prefWidth="397.0" />
+                                                      <Button fx:id="button_select_default_path" layoutX="494.0" layoutY="27.0" mnemonicParsing="false" onAction="#onSelectDefaultPathButtonAction" prefHeight="23.0" prefWidth="70.0" text="打开...">
+                                                          <graphic>
+                                                              <FontIcon fill="black" iconLiteral="fa-folder-open-o" />
+                                                          </graphic>
+                                                      </Button>
+                                                      <Separator layoutY="73.0" prefHeight="10.0" prefWidth="580.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="规则">
+                                            <graphic>
+                                                <FontIcon fill="black" iconLiteral="fa-align-justify" />
+                                            </graphic>
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="580.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="56.0" text="命名规则:" />
+                                                      <ComboBox fx:id="combe_box_rename_rule" layoutX="81.0" layoutY="18.0" onAction="#onRuleSelectAction" prefHeight="23.0" prefWidth="208.0" />
+                                                      <ScrollPane fx:id="rule_pane" layoutX="15.0" layoutY="56.0" prefHeight="377.0" prefWidth="550.0" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                        </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="关于">
+                <graphic>
+                    <FontIcon fill="black" iconLiteral="fa-copyright" />
+                </graphic>
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                         <ImageView fx:id="image_cafe" fitHeight="265.0" fitWidth="288.0" layoutX="156.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                         </ImageView>
+                        <Label layoutX="14.0" layoutY="286.0" prefHeight="30.0" prefWidth="451.0" text="MRT是一个按规则对文件夹进行批量重命名的小工具，起源为我的另一类似的项目:" />
+                        <Label layoutX="14.0" layoutY="316.0" prefHeight="30.0" prefWidth="482.0" text="制作这个工具一开始是为了对从Dlsite上下载的音声按照信息进行整理。" />
+                        <Label layoutX="14.0" layoutY="346.0" prefHeight="30.0" prefWidth="546.0" text="不过如果只有这个功能的话就太没意思了，所以我又做了这个软件，打算以后能实现更加多样的功能。" />
+                        <Hyperlink layoutX="465.0" layoutY="291.0" text="音声自动重命名工具" onAction="#onLink1" />
+                        <Label layoutX="14.0" layoutY="376.0" prefHeight="30.0" prefWidth="216.0" text="如果你对此感兴趣，可以持续关注我。" />
+                        <Label layoutX="14.0" layoutY="406.0" prefHeight="30.0" prefWidth="216.0" text="制作 LunarConcerto" />
+                        <Label layoutX="14.0" layoutY="436.0" prefHeight="30.0" prefWidth="216.0" text="联系方式 :" />
+                        <Label layoutX="48.0" layoutY="466.0" prefHeight="30.0" prefWidth="216.0" text="QQ 1399265255">
+                            <graphic>
+                                <FontIcon fill="black" iconLiteral="fa-qq"/>
+                            </graphic>
+                        </Label>
+                        <Label layoutX="48.0" layoutY="496.0" prefHeight="30.0" prefWidth="60.0" text="Github">
+                            <graphic>
+                                <FontIcon fill="black" iconLiteral="fa-github"/>
+                            </graphic>
+                        </Label>
+                        <Hyperlink layoutX="100.0" layoutY="501.0" text="LunarConcerto" onAction="#onLink2" />
+                        <Label layoutX="357.0" layoutY="436.0" prefHeight="30.0" prefWidth="216.0" text="如果这个软件对你有帮助，可以点下面" />
+                        <Label layoutX="357.0" layoutY="466.0" prefHeight="30.0" prefWidth="197.0" />
+                        <Label layoutX="357.0" layoutY="466.0" prefHeight="30.0" prefWidth="216.0" text="请我喝一瓶可乐，为我提供更新的动力~" />
+                        <Button layoutX="414.0" layoutY="500.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="84.0" text="捐赠" onAction="#onContributeButtonAction"/>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
+               prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+      <ImageView fx:id="image1" fitHeight="400.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true"/>
+      <ImageView fx:id="image2" fitHeight="400.0" fitWidth="300.0" layoutX="300.0" pickOnBounds="true" preserveRatio="true"/>
+      <Label layoutX="258.0" layoutY="400.0" text="感谢你的捐助！"/>
+   </AnchorPane>
+</fx:root>
