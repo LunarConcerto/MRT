@@ -11,17 +11,17 @@
 1.  前往设置页面。
 2.  设置您需要的重命名格式。
   <p align="center">
-  <img src="https://github.com/LunarConcerto/MRT/blob/main/tutorial/tutorial1.png?raw=true" width="250" height="250" alt="tutorial">
+  <img src="https://github.com/LunarConcerto/MRT/blob/main/tutorial/tutorial1.png?raw=true" width="600" height="600" alt="tutorial">
 </p>
 3.  回到运行页面。
 4.  点击选择文件夹，选择到您需要重命名的文件/文件夹所在的目录。
   <p align="center">
-  <img src="https://github.com/LunarConcerto/MRT/blob/main/tutorial/tutorial2.png?raw=true" width="250" height="250" alt="tutorial">
+  <img src="https://github.com/LunarConcerto/MRT/blob/main/tutorial/tutorial2.png?raw=true" width="600" height="600" alt="tutorial">
 </p>
 5.  在左侧列表中点选您要进行重命名的文件/文件夹。然后在右键菜单中点击选择，这样可以使其添加到右侧待处理列表中。
 6.  点击运行。程序将开始按规则进行重命名操作。
   <p align="center">
-  <img src="https://github.com/LunarConcerto/MRT/blob/main/tutorial/tutorial3.png?raw=true" width="250" height="250" alt="tutorial">
+  <img src="https://github.com/LunarConcerto/MRT/blob/main/tutorial/tutorial3.png?raw=true" width="600" height="600" alt="tutorial">
 </p>
 
 # 注意事项
