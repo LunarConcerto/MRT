@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <AnchorPane maxHeight="300" maxWidth="400" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="400.0"
+               xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+      <TextArea fx:id="text" layoutX="10.0" layoutY="10.0" prefHeight="300" prefWidth="400"/>
+   </AnchorPane>
+</fx:root>
