@@ -1,6 +1,6 @@
 package com.github.lunarconcerto.magicalrenametool.rule;
 
-import com.github.lunarconcerto.magicalrenametool.core.RenameToolApplication;
+import com.github.lunarconcerto.magicalrenametool.core.MRTApp;
 import com.github.lunarconcerto.magicalrenametool.util.FileNode;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
@@ -32,7 +32,7 @@ public class EmptyRule extends AbstractRule{
 
     @Override
     public List<RenameResult> run(List<FileNode> fileNodeList , ProgressBar bar) {
-        RenameToolApplication.printToUIConsole("未选择规则，无法运行。");
+        MRTApp.printToUIConsole("未选择规则，无法运行。");
         return null;
     }
 }

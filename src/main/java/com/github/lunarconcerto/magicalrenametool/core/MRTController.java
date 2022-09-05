@@ -1,10 +1,9 @@
 package com.github.lunarconcerto.magicalrenametool.core;
 
-import com.github.lunarconcerto.magicalrenametool.config.ConfigurationLoader;
-import com.github.lunarconcerto.magicalrenametool.func.*;
-import com.github.lunarconcerto.magicalrenametool.rule.EmptyRule;
-import com.github.lunarconcerto.magicalrenametool.rule.RenameResult;
-import com.github.lunarconcerto.magicalrenametool.rule.Rule;
+import com.github.lunarconcerto.magicalrenametool.config.Configuration;
+import com.github.lunarconcerto.magicalrenametool.config.ConfigurationManager;
+import com.github.lunarconcerto.magicalrenametool.exc.MRTRuntimeException;
+import com.github.lunarconcerto.magicalrenametool.component.*;
 import com.github.lunarconcerto.magicalrenametool.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -28,16 +27,26 @@ import java.util.stream.Collectors;
 
 @Data
 @Log4j(topic = "controller")
-public class RenameToolController {
+public class MRTController {
 
+
+    /**
+     * 当前选择的路径
+     */
     protected FileNode selectingPath ;
 
+    /**
+     * 当前文件树建造者
+     */
     protected FileTreeBuilder fileTreeBuilder ;
 
+    /**
+     * 多线程管理器
+     */
     protected WorkerManager workerManager ;
 
     /*
-    * main elements
+    * [运行]页面的元素
     * */
 
     @FXML
@@ -61,40 +70,54 @@ public class RenameToolController {
     @FXML
     protected ProgressBar progress_bar;
 
+    @FXML
+    protected ScrollPane name_field_pane;
+
     /*
-    * Settings elements
+    * 文件选择列表右键菜单的元素
+    * */
+
+    @FXML
+    protected CheckMenuItem dir_only;
+
+    /*
+    * [设置]页面中的元素
     * */
 
     @FXML
     protected TextField input_proxy_host;
 
     @FXML
-    protected TextField input_proxy_post;
+    protected TextField input_proxy_port;
 
     @FXML
     protected TextField input_default_file_path;
 
     @FXML
-    protected CheckMenuItem dir_only;
-
-    @FXML
     protected Button button_select_default_path;
 
     @FXML
-    protected ComboBox<Rule> combe_box_rename_rule;
+    protected CheckBox enable_proxy;
 
     @FXML
-    protected ScrollPane rule_pane;
+    protected CheckBox enable_preview;
 
     @FXML
-    protected ImageView image_cafe;
+    protected ListView<AnchorPane> other_setting_list;
 
-    public RenameToolController() {
+    /*
+    * [关于]页面的元素
+    * */
+
+    @FXML
+    protected ImageView image_cafe ;
+
+    public MRTController() {
         workerManager = new WorkerManager() ;
     }
 
     /*
-    * 运行面板触发
+    * [运行] 面板触发
     * */
 
     @FXML
@@ -110,7 +133,7 @@ public class RenameToolController {
 
     @FXML
     public void onStartButtonAction(){
-        List<FileNode> fileNodeList = selected_file_list.getItems().stream().toList();
+/*        List<FileNode> fileNodeList = selected_file_list.getItems().stream().toList();
         Rule rule = combe_box_rename_rule.getSelectionModel().getSelectedItem();
 
         if (fileNodeList.isEmpty()){
@@ -133,7 +156,7 @@ public class RenameToolController {
             RenameProgress progress = new RenameProgress(result);
             progress.run(progress_bar);
             Platform.runLater(this::reset);
-        });
+        });*/
     }
 
 
@@ -170,7 +193,8 @@ public class RenameToolController {
 
     @FXML
     public void onDirOnlyButtonAction(){
-        RenameToolApplication.configuration.setDirShowOnlyAndUpdateUI(dir_only.isSelected());
+        MRTApp.configuration.setDirShowOnly(dir_only.isSelected());
+        updateUI();
     }
 
     /*
@@ -214,33 +238,45 @@ public class RenameToolController {
     * */
 
     @FXML
-    public void onSelectDefaultPathButtonAction(){
-        File choosingFile = createNewDirectoryChooser();
-        if (choosingFile==null){
-            return;
-        }
+    public void onSelectionTabChange() {
+        collectSetting();
 
-        RenameToolApplication.configuration.setDefaultPath(choosingFile);
-        ConfigurationLoader.getLoader().save(RenameToolApplication.configuration);
+        ConfigurationManager.getManager().save();
     }
 
     @FXML
-    public void onRuleSelectAction(){
-        Rule rule = combe_box_rename_rule.getSelectionModel().getSelectedItem();
-        if (rule!=null){
-            saveSelectedRule(rule);
-            setSelectedRule(rule);
+    public void onSelectDefaultPathButtonAction(){
+        File choosingFile = createNewDirectoryChooser();
+        if (choosingFile == null){
+            return;
         }
+
+        MRTApp.configuration.setDefaultPath(choosingFile.getPath());
+        ConfigurationManager.getManager().save();
+    }
+
+    public void onChangeProxyStatus() {
+        boolean enableProxy = enable_proxy.isSelected();
+        if (enableProxy){
+            MRTApp.configuration.setEnableProxy(true).enableProxy();
+        }else {
+            MRTApp.configuration.setEnableProxy(false).disableProxy();
+        }
+
+        collectSetting();
+        updateProxyInputField();
+
+        ConfigurationManager.getManager().save();
     }
 
     @FXML
     public void onProxyHostInput(){
-        RenameToolApplication.configuration.setProxyHost(input_proxy_host.getText());
+        MRTApp.configuration.setProxyHost(input_proxy_host.getText());
     }
 
     @FXML
     public void onProxyPortInput(){
-        RenameToolApplication.configuration.setProxyPort(input_proxy_post.getText());
+        MRTApp.configuration.setProxyPort(input_proxy_port.getText());
     }
 
     /*
@@ -256,7 +292,7 @@ public class RenameToolController {
 
             dialog.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MRTRuntimeException(e);
         }
     }
 
@@ -269,7 +305,7 @@ public class RenameToolController {
 
             dialog.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new MRTRuntimeException(e);
         }
     }
 
@@ -279,8 +315,17 @@ public class RenameToolController {
 
             dialog.show();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MRTRuntimeException(e);
         }
+    }
+
+    /**
+     * 该方法用于主动保存某些保存不太即时的设置项
+     */
+    public void collectSetting(){
+        Configuration configuration = MRTApp.configuration;
+        configuration.setProxyHost(this.input_proxy_host.getText());
+        configuration.setProxyPort(this.input_proxy_port.getText());
     }
 
     /*
@@ -297,21 +342,57 @@ public class RenameToolController {
     }
 
     public void changeStatusLabel(String text){
-        label_status.setText(text);
+        Platform.runLater(() -> label_status.setText(text));
     }
 
     public void statusLabelSetDefault(){
-        label_status.setText("就绪");
+        Platform.runLater(() -> label_status.setText("就绪"));
     }
 
     /*
     * 其他方法
     * */
 
+    public void updateUI(){
+        this.getInput_proxy_host().setText(MRTApp.configuration.getProxyHost());
+        this.getInput_proxy_port().setText(MRTApp.configuration.getProxyPort());
+
+        this.getInput_default_file_path().setText(MRTApp.configuration.getDefaultPath());
+        this.setSelectingPath(new FileNode(new File(MRTApp.configuration.getDefaultPath())));
+
+        if (MRTApp.configuration.isDirShowOnly()) this.getDir_only().setSelected(true);
+        this.updateProxyInputField();
+
+        this.buildTree();
+
+    }
+
+    public void updateProxyInputField(){
+        boolean enableProxy = MRTApp.configuration.isEnableProxy();
+        if (enableProxy){
+            this.input_proxy_host.setEditable(true);
+            this.input_proxy_port.setEditable(true);
+
+            this.input_proxy_host.setDisable(false);
+            this.input_proxy_port.setDisable(false);
+
+            this.enable_proxy.setSelected(true);
+        }else {
+            this.input_proxy_host.setEditable(false);
+            this.input_proxy_port.setEditable(false);
+
+            this.input_proxy_host.setDisable(true);
+            this.input_proxy_port.setDisable(true);
+
+            this.enable_proxy.setSelected(false);
+        }
+    }
+
     public void reset(){
         statusLabelSetDefault();
         selected_file_list.getItems().clear();
         progress_bar.setProgress(0);
+
         buildTree();
     }
 
@@ -383,23 +464,6 @@ public class RenameToolController {
                 .toList();
     }
 
-    public void addRule(Rule rule){
-        this.combe_box_rename_rule.getItems().add(rule);
-    }
-
-    public void setSelectedRule(@NotNull Rule rule){
-        try {
-            AnchorPane panel = rule.getSettingPanel();
-            rule_pane.setContent(panel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveSelectedRule(@NotNull Rule rule){
-        RenameToolApplication.configuration.setSelectedRule(rule.getClass().getName());
-    }
-
     public static final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
     public void printToUIConsole(String text){
@@ -409,6 +473,5 @@ public class RenameToolController {
         });
 
     }
-
 
 }

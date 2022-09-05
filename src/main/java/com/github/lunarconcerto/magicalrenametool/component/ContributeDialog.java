@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.magicalrenametool.func;
+package com.github.lunarconcerto.magicalrenametool.component;
 
 import com.github.lunarconcerto.magicalrenametool.util.FileUtil;
 import javafx.fxml.FXML;

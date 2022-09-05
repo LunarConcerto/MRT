@@ -1,6 +1,6 @@
-package com.github.lunarconcerto.magicalrenametool.func;
+package com.github.lunarconcerto.magicalrenametool.component;
 
-import com.github.lunarconcerto.magicalrenametool.core.RenameToolApplication;
+import com.github.lunarconcerto.magicalrenametool.core.MRTApp;
 import com.github.lunarconcerto.magicalrenametool.rule.RenameResult;
 import com.github.lunarconcerto.magicalrenametool.util.FileNode;
 import javafx.application.Platform;
@@ -21,7 +21,7 @@ public class RenameProgress {
     public void run(ProgressBar bar){
         double increment = 1.0 / target.size() , progress = increment ;
 
-        RenameToolApplication.printToUIConsole("开始进行文件操作");
+        MRTApp.printToUIConsole("开始进行文件操作");
 
         for (RenameResult renameResult : target) {
             FileNode fileNode = renameResult.getSource();
@@ -36,7 +36,7 @@ public class RenameProgress {
 
             boolean result = fileNode.renameTo(targetFile);
             if (!result){
-                RenameToolApplication.printToUIConsole("重命名失败，可能是因为没有权限，请尝试以管理员权限打开本程序");
+                MRTApp.printToUIConsole("重命名失败，可能是因为没有权限，请尝试以管理员权限打开本程序");
             }
 
             double finalProgress = progress;
@@ -47,7 +47,7 @@ public class RenameProgress {
             progress+=increment ;
         }
 
-        RenameToolApplication.printToUIConsole("已完成全部的重命名工作");
+        MRTApp.printToUIConsole("已完成全部的重命名工作");
     }
 
     private @NotNull String checkName(@NotNull String string){

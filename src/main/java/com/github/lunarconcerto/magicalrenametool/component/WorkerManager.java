@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.magicalrenametool.func;
+package com.github.lunarconcerto.magicalrenametool.component;
 
 import javafx.concurrent.Task;
 import org.jetbrains.annotations.Contract;

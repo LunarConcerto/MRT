@@ -1,7 +1,6 @@
 package com.github.lunarconcerto.magicalrenametool.util;
 
-import com.github.lunarconcerto.magicalrenametool.Main;
-import com.github.lunarconcerto.magicalrenametool.core.RenameToolApplication;
+import com.github.lunarconcerto.magicalrenametool.MRTStarter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +18,7 @@ public class FileUtil {
      * @return 对应文件的输入流
      */
     public static InputStream getResourceAsStream(String path) throws IOException {
-        return Objects.requireNonNull(Main.class.getResource(path)).openStream();
+        return Objects.requireNonNull(MRTStarter.class.getResource(path)).openStream();
     }
 
     public static String getUserPath(){

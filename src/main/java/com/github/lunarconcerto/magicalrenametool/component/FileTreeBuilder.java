@@ -1,6 +1,6 @@
-package com.github.lunarconcerto.magicalrenametool.func;
+package com.github.lunarconcerto.magicalrenametool.component;
 
-import com.github.lunarconcerto.magicalrenametool.core.RenameToolApplication;
+import com.github.lunarconcerto.magicalrenametool.core.MRTApp;
 import com.github.lunarconcerto.magicalrenametool.util.FileNode;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;
@@ -19,10 +19,24 @@ public class FileTreeBuilder {
 
     protected final TreeView<FileNode> treeView;
 
+    /**
+     * 当前文件树所显示的目录的根级
+     */
     protected FileNode file ;
 
-    public static int layerLength = 1 ;
+    /**
+     * 文件树最大子层级
+     */
+    public static int layerLength = 1 ,
 
+    /**
+     * 文件树最大文件数限制
+     */
+    fileSizeLimit = 2000 ;
+
+    /**
+     * 当前文件树已显示的文件规模
+     */
     protected int fileSize = 1 ;
 
     public FileTreeBuilder(TreeView<FileNode> treeView, @NotNull FileNode file) {
@@ -59,7 +73,7 @@ public class FileTreeBuilder {
         treeView.setRoot(root);
 
         buildChild(root);
-        RenameToolApplication.printToUIConsole("读取了%s个文件".formatted(fileSize));
+        MRTApp.printToUIConsole("读取了%s个文件".formatted(fileSize));
 
         root.setExpanded(true);
     }
@@ -68,7 +82,7 @@ public class FileTreeBuilder {
 
         for (FileNode fileNode : Objects.requireNonNull(root.getValue().listFiles())) {
             if (fileNode != null) {
-                if (RenameToolApplication.configuration.isDirShowOnly() && !fileNode.isDirectory()) {
+                if (MRTApp.configuration.isDirShowOnly() && !fileNode.isDirectory()) {
                     continue;
                 }
 
@@ -78,6 +92,7 @@ public class FileTreeBuilder {
 
                 ifContinueAndSetIcon(item, fileNode);
                 fileSize++;
+
                 ifPause();
             }
         }
@@ -96,7 +111,7 @@ public class FileTreeBuilder {
     }
 
     private void ifPause(){
-        if (fileSize>2000){
+        if (fileSize > fileSizeLimit){
             treeView.setRoot(null);
             throw new RuntimeException("文件规模过大,请重新选择文件夹。");
         }

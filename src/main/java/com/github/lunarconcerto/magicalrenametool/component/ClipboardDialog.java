@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.magicalrenametool.func;
+package com.github.lunarconcerto.magicalrenametool.component;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +15,7 @@ public class ClipboardDialog extends AnchorPane {
     @FXML
     public TextArea text ;
 
-    public ClipboardDialog() {
-
-    }
+    public ClipboardDialog() {}
 
     public static @NotNull Dialog<String> getDialog(String s) throws IOException {
         ClipboardDialog dialog = ClipboardDialog.load(s);

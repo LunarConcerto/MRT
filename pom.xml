@@ -63,6 +63,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-fontawesome-pack</artifactId>
@@ -114,7 +122,7 @@
                 <version>1.0.13</version>
                 <configuration>
                     <mainClass>
-                        com.github.lunarconcerto.magicalrenametool.Main
+                        com.github.lunarconcerto.magicalrenametool.MRTStarter
                     </mainClass>
                     <graalvmHome>E:\Program Files\JAVA\graalvm-ce-java17-22.1.0</graalvmHome>
                 </configuration>
@@ -130,7 +138,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.github.lunarconcerto.magicalrenametool/com.github.lunarconcerto.magicalrenametool.Main
+                                com.github.lunarconcerto.magicalrenametool/com.github.lunarconcerto.magicalrenametool.MRTStarter
                             </mainClass>
                         </configuration>
                     </execution>

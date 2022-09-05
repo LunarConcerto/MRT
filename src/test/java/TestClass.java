@@ -1,5 +1,4 @@
-import com.github.lunarconcerto.magicalrenametool.Main;
-import com.github.lunarconcerto.magicalrenametool.rule.Rule;
+import com.github.lunarconcerto.magicalrenametool.MRTStarter;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -14,7 +13,7 @@ public class TestClass {
     void method1() throws URISyntaxException, MalformedURLException {
         String path = "com/github/lunarconcerto/magicalrenametool/rule";
 
-        URL url = Main.class.getClassLoader().getResource(path);
+        URL url = MRTStarter.class.getClassLoader().getResource(path);
 
         assert url != null;
 
