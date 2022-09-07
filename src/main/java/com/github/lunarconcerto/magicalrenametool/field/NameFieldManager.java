@@ -3,9 +3,7 @@ package com.github.lunarconcerto.magicalrenametool.field;
 import com.github.lunarconcerto.magicalrenametool.core.MRTApp;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
@@ -61,15 +59,22 @@ public class NameFieldManager {
             this.setHeight(containerPaneHeight);
             this.setLayoutY(index * containerPaneHeight);
 
-            Button xButton = new Button("x");
-            xButton.setLayoutY(5);
-            xButton.setLayoutX(5);
-            xButton.setOnAction(event -> {
-                NameFieldManager.instance.deletePane(this.index);
-            });
 
-            this.getChildren().add(xButton);
+
+            this.getChildren().add(createControlButton());
             this.getChildren().add(createSeparator());
+        }
+
+        SplitMenuButton createControlButton(){
+            SplitMenuButton controlButton = new SplitMenuButton();
+
+            controlButton.setMinSize(24 , 20);
+            controlButton.setPrefSize(0, 0);
+            controlButton.setMaxSize(0 , 0);
+            controlButton.setLayoutY(6);
+            controlButton.setLayoutX(5);
+
+            return controlButton;
         }
 
         Separator createSeparator(){
