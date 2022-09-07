@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j;
 import org.jetbrains.annotations.NotNull;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.File;
 import java.util.Objects;
 
 @Data
@@ -37,7 +38,7 @@ public class FileTreeBuilder {
     /**
      * 当前文件树已显示的文件规模
      */
-    protected int fileSize = 1 ;
+    protected int loadedFileAmount = 1 ;
 
     public FileTreeBuilder(TreeView<FileNode> treeView, @NotNull FileNode file) {
         this.treeView = treeView;
@@ -65,7 +66,7 @@ public class FileTreeBuilder {
     }
 
     private void build(){
-        fileSize = 1 ;
+        loadedFileAmount = 1 ;
         file.setLevel(0);
         TreeItem<FileNode> root = new TreeItem<>(file);
         root.setGraphic(getFolderIconNode());
@@ -73,7 +74,7 @@ public class FileTreeBuilder {
         treeView.setRoot(root);
 
         buildChild(root);
-        MRTApp.printToUIConsole("读取了%s个文件".formatted(fileSize));
+        MRTApp.printToUIConsole("读取了%s个文件".formatted(loadedFileAmount));
 
         root.setExpanded(true);
     }
@@ -91,7 +92,10 @@ public class FileTreeBuilder {
                 item.getValue().setLevel(root.getValue().getLevel() + 1);
 
                 ifContinueAndSetIcon(item, fileNode);
-                fileSize++;
+                loadedFileAmount++;
+                Platform.runLater(() -> {
+                    MRTApp.controller.getProgress_bar().setProgress( (double) fileSizeLimit / loadedFileAmount);
+                });
 
                 ifPause();
             }
@@ -111,7 +115,7 @@ public class FileTreeBuilder {
     }
 
     private void ifPause(){
-        if (fileSize > fileSizeLimit){
+        if (loadedFileAmount > fileSizeLimit){
             treeView.setRoot(null);
             throw new RuntimeException("文件规模过大,请重新选择文件夹。");
         }

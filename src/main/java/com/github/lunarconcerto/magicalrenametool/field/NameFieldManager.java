@@ -1,6 +1,8 @@
 package com.github.lunarconcerto.magicalrenametool.field;
 
 import com.github.lunarconcerto.magicalrenametool.core.MRTApp;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
@@ -67,14 +69,21 @@ public class NameFieldManager {
 
         SplitMenuButton createControlButton(){
             SplitMenuButton controlButton = new SplitMenuButton();
-
             controlButton.setMinSize(24 , 20);
             controlButton.setPrefSize(0, 0);
             controlButton.setMaxSize(0 , 0);
             controlButton.setLayoutY(6);
             controlButton.setLayoutX(5);
-
+            controlButton.getItems().add(createMenuItem("删除" , event -> {
+//                NameFieldManager.instance.deletePane(this.getIndex());
+            }));
             return controlButton;
+        }
+
+        MenuItem createMenuItem(String text , EventHandler<ActionEvent> handler){
+            MenuItem item = new MenuItem(text);
+            item.setOnAction(handler);
+            return item ;
         }
 
         Separator createSeparator(){
