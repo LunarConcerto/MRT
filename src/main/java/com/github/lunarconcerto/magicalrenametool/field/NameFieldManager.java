@@ -5,10 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NameFieldManager {
@@ -45,26 +47,54 @@ public class NameFieldManager {
         nameFieldPane.getChildren().add(container);
     }
 
-    public void deletePane(int index){
-        this.containerList.remove(index);
-        this.nameFieldPane.getChildren().remove(index);
+    public void deletePane(NameFieldPaneContainer container){
+        container.setVisible(false);
+
+        this.containerList.remove(container);
+        this.nameFieldPane.getChildren().remove(container);
+    }
+
+    public void upMovePane(NameFieldPaneContainer container){
+        int i = container.getIndex();
+        int j = i - 1 ;
+        if (j != -1){
+            Collections.swap(this.containerList, i, j);
+
+            container.resetLocation(j);
+            ((NameFieldPaneContainer) this.nameFieldPane.getChildren().get(j)).resetLocation(i);
+        }
+
+
     }
 
     public static class NameFieldPaneContainer extends AnchorPane {
 
         int index ;
 
+//        Label name ;
+
         public NameFieldPaneContainer(int index) {
             this.index = index;
 
-            this.setWidth(500);
-            this.setHeight(containerPaneHeight);
-            this.setLayoutY(index * containerPaneHeight);
-
-
+//            name = new Label(""+this.index);
+//            name.setLayoutX(50);
+//            this.getChildren().add(name);
+            init();
 
             this.getChildren().add(createControlButton());
             this.getChildren().add(createSeparator());
+        }
+
+        public void init(){
+            this.setWidth(500);
+            this.setHeight(containerPaneHeight);
+            this.setLayoutY(index * containerPaneHeight);
+        }
+
+        public void resetLocation(int index){
+            this.index = index;
+
+            init();
         }
 
         SplitMenuButton createControlButton(){
@@ -74,9 +104,11 @@ public class NameFieldManager {
             controlButton.setMaxSize(0 , 0);
             controlButton.setLayoutY(6);
             controlButton.setLayoutX(5);
-            controlButton.getItems().add(createMenuItem("删除" , event -> {
-//                NameFieldManager.instance.deletePane(this.getIndex());
-            }));
+            controlButton.getItems().addAll(
+                    createMenuItem("删除" , event -> NameFieldManager.instance.deletePane(this)),
+                    createMenuItem("上移", event -> {NameFieldManager.instance.upMovePane(this);}),
+                    createMenuItem("下移", event -> {})
+                    );
             return controlButton;
         }
 
