@@ -65,8 +65,8 @@ public class MRTApp extends Application {
         controller.statusLabelSetDefault();
         configuration.enableProxy();
 
-        NameFieldManager.getInstance().addPane();
-        NameFieldManager.getInstance().addPane();
+        NameFieldManager.getInstance().addEmptyPane();
+        NameFieldManager.getInstance().addEmptyPane();
 
         controller.updateUI();
     }

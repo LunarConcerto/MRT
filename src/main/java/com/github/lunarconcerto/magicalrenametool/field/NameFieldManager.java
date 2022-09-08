@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
@@ -24,10 +23,7 @@ public class NameFieldManager {
     protected static NameFieldManager instance;
 
     public static NameFieldManager getInstance() {
-        if (instance == null){
-            instance = new NameFieldManager();
-        }
-
+        if (instance == null) instance = new NameFieldManager();
         return instance;
     }
 
@@ -41,8 +37,9 @@ public class NameFieldManager {
         this.containerList = new ArrayList<>();
     }
 
-    public void addPane(){
-        NameFieldPaneContainer container = new NameFieldPaneContainer(this.nameFieldPane.getChildren().size());
+    public void addEmptyPane(){
+        NameFieldPaneContainer container = new NameFieldPaneContainer
+                (this.nameFieldPane.getChildren().size(), new NameFieldSelector());
         this.containerList.add(container);
         nameFieldPane.getChildren().add(container);
     }
@@ -50,51 +47,84 @@ public class NameFieldManager {
     public void deletePane(NameFieldPaneContainer container){
         container.setVisible(false);
 
+        int index = container.getIndex();
+        if (index != containerList.size()){
+            for (int i = 0 ; i < containerList.size() - 1 ; i++) {
+                exchangePaneLocation(container , index + i , index + i + 1 );
+            }
+        }
+
         this.containerList.remove(container);
         this.nameFieldPane.getChildren().remove(container);
     }
 
-    public void upMovePane(NameFieldPaneContainer container){
+    public void moveUpPane(NameFieldPaneContainer container){
         int i = container.getIndex();
         int j = i - 1 ;
         if (j != -1){
-            Collections.swap(this.containerList, i, j);
+            exchangePaneLocation(container, i, j);
+        }
+    }
 
-            container.resetLocation(j);
-            ((NameFieldPaneContainer) this.nameFieldPane.getChildren().get(j)).resetLocation(i);
+    public void moveDownPane(NameFieldPaneContainer container){
+        int i = container.getIndex();
+        int j = i + 1 ;
+        if (j <= this.containerList.size()){
+            exchangePaneLocation(container , i , j);
+        }
+    }
+
+    public void exchangePaneLocation(NameFieldPaneContainer container /* 要调整的container */,
+                                     int oldLocation , int newLocation){
+        if (container!=null){
+            container.resetLocation(newLocation);
+        }
+        NameFieldPaneContainer jPane = this.containerList.get(newLocation);
+        if (jPane!=null){
+            jPane.resetLocation(oldLocation);
         }
 
-
+        Collections.swap(this.containerList, oldLocation, newLocation);
     }
 
     public static class NameFieldPaneContainer extends AnchorPane {
 
-        int index ;
+        protected int index ;
 
-//        Label name ;
+        protected NameField nameField ;
 
-        public NameFieldPaneContainer(int index) {
-            this.index = index;
+/*
+        Label name ; //测试用
+*/
 
-//            name = new Label(""+this.index);
-//            name.setLayoutX(50);
-//            this.getChildren().add(name);
-            init();
+        public NameFieldPaneContainer(int i , NameField field) {
+            this.index = i ;
+            this.nameField = field ;
 
+            this.setWidth(500);
+            this.setHeight(containerPaneHeight);
+
+/*
+            name = new Label("Pane-"+this.index);  //测试用
+            name.setLayoutX(50);  //测试用
+            this.getChildren().add(name);  //测试用
+*/
+            resetLayout();
+
+            AnchorPane pane = field.getNameFieldPane();
+            pane.setLayoutX(10);
+
+            this.getChildren().add(pane);
             this.getChildren().add(createControlButton());
             this.getChildren().add(createSeparator());
         }
 
-        public void init(){
-            this.setWidth(500);
-            this.setHeight(containerPaneHeight);
+        public void resetLayout(){
             this.setLayoutY(index * containerPaneHeight);
         }
 
         public void resetLocation(int index){
-            this.index = index;
-
-            init();
+            setIndex(index).resetLayout();
         }
 
         SplitMenuButton createControlButton(){
@@ -105,9 +135,9 @@ public class NameFieldManager {
             controlButton.setLayoutY(6);
             controlButton.setLayoutX(5);
             controlButton.getItems().addAll(
-                    createMenuItem("删除" , event -> NameFieldManager.instance.deletePane(this)),
-                    createMenuItem("上移", event -> {NameFieldManager.instance.upMovePane(this);}),
-                    createMenuItem("下移", event -> {})
+                    createMenuItem("删除", event -> NameFieldManager.getInstance().deletePane(this)),
+                    createMenuItem("上移", event -> NameFieldManager.getInstance().moveUpPane(this)),
+                    createMenuItem("下移", event -> NameFieldManager.getInstance().moveDownPane(this))
                     );
             return controlButton;
         }
@@ -136,6 +166,23 @@ public class NameFieldManager {
         public NameFieldPaneContainer setIndex(int index) {
             this.index = index;
             return this;
+        }
+
+        public NameField getNameField() {
+            return nameField;
+        }
+
+        public NameFieldPaneContainer setNameField(NameField nameField) {
+            this.nameField = nameField;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return "NameFieldPaneContainer{" +
+                    "index=" + index +
+/*                    +", name=" + name.getText() +*/
+                    '}';
         }
     }
 
