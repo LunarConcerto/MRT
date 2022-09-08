@@ -8,33 +8,22 @@ import java.io.PrintWriter;
 
 public class MRTException extends RuntimeException {
 
-    public MRTException() {
-
-        printStackTrace();
-    }
+    public MRTException() {}
 
     public MRTException(String message) {
         super(message);
-
-        printStackTrace();
     }
 
     public MRTException(String message, Throwable cause) {
         super(message, cause);
-
-        printStackTrace();
     }
 
     public MRTException(Throwable cause) {
         super(cause);
-
-        printStackTrace();
     }
 
     public MRTException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
-
-        printStackTrace();
     }
 
     @Override

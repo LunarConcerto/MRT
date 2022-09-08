@@ -51,27 +51,35 @@ public class MRTController {
     * [运行]页面的元素
     * */
 
+    // GUI模拟控制台(仅可打印消息)
     @FXML
     protected ListView<String> console_list;
 
+    // [选择文件夹]按钮
     @FXML
     protected Button button_select_file;
 
+    // [运行]按钮
     @FXML
     protected Button button_start;
 
+    // 左侧显示文件层次的树视图
     @FXML
     protected TreeView<FileNode> file_tree;
 
+    // 中间上方显示已显示文件的列表视图
     @FXML
     protected ListView<FileNode> selected_file_list;
 
+    // 左下方显示当前状态的标签
     @FXML
     protected Label label_status ;
 
+    // 中间进度条
     @FXML
     protected ProgressBar progress_bar;
 
+    // 右侧用于设置命名规则的面板
     @FXML
     protected ScrollPane name_field_pane;
 
@@ -79,6 +87,7 @@ public class MRTController {
     * 文件选择列表右键菜单的元素
     * */
 
+    // 文件树视图中右键选择的[仅显示文件夹]菜单按钮
     @FXML
     protected CheckMenuItem dir_only;
 

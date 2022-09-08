@@ -25,4 +25,13 @@ public class NameFieldSelector extends AbstractNameField {
     @Override
     public void run(StringBuilder builder) {}
 
+    static class SelectorPane extends AnchorPane {
+
+        public SelectorPane() {
+
+        }
+
+
+    }
+
 }

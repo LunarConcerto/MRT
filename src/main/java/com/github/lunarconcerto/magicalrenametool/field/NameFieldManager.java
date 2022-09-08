@@ -1,18 +1,27 @@
 package com.github.lunarconcerto.magicalrenametool.field;
 
 import com.github.lunarconcerto.magicalrenametool.core.MRTApp;
+import com.github.lunarconcerto.magicalrenametool.exc.MRTRuntimeException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class NameFieldManager {
+
+    List<Class<NameField>> nameFieldTypes ;
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     *                   面板相关变量
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     static int containerPaneHeight = 40 ;
 
@@ -37,9 +46,41 @@ public class NameFieldManager {
         this.containerList = new ArrayList<>();
     }
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     *                    NameField类管理
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public void registerNameField(Class<NameField> field){
+        if (nameFieldTypes.stream().noneMatch(c -> c.equals(field))) {
+            nameFieldTypes.add(field);
+        }
+    }
+
+    public void unregisterNameField(Class<NameField> field){
+        nameFieldTypes.remove(field);
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+    *                     NameField面板操作
+    * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     public void addEmptyPane(){
+        addPane(new NameFieldSelector());
+    }
+
+    public void addPane(Class<NameField> type){
+        try {
+            if (type!=null){
+                addPane(type.getConstructor(type).newInstance());
+            }
+        }catch (Exception e){
+            throw new MRTRuntimeException(e);
+        }
+    }
+
+    public void addPane(NameField nameField){
         NameFieldPaneContainer container = new NameFieldPaneContainer
-                (this.nameFieldPane.getChildren().size(), new NameFieldSelector());
+                (this.nameFieldPane.getChildren().size(), nameField);
         this.containerList.add(container);
         nameFieldPane.getChildren().add(container);
     }
@@ -49,7 +90,7 @@ public class NameFieldManager {
         this.containerList.clear();
     }
 
-    public void deletePane(NameFieldPaneContainer container){
+    public void deletePane(@NotNull NameFieldPaneContainer container){
         container.setVisible(false);
 
         int index = container.getIndex();
@@ -63,7 +104,7 @@ public class NameFieldManager {
         this.nameFieldPane.getChildren().remove(container);
     }
 
-    public void moveUpPane(NameFieldPaneContainer container){
+    public void moveUpPane(@NotNull NameFieldPaneContainer container){
         int i = container.getIndex();
         int j = i - 1 ;
         if (j != -1){
@@ -71,7 +112,7 @@ public class NameFieldManager {
         }
     }
 
-    public void moveDownPane(NameFieldPaneContainer container){
+    public void moveDownPane(@NotNull NameFieldPaneContainer container){
         int i = container.getIndex();
         int j = i + 1 ;
         if (j <= this.containerList.size()){
