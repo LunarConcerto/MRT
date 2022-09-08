@@ -109,11 +109,8 @@
                       <contextMenu>
                           <ContextMenu>
                               <items>
-                                  <MenuItem mnemonicParsing="false" text="添加命名块">
-<!--                                      <graphic>-->
-<!--                                          <FontIcon fill="black" iconLiteral="fa-add" />-->
-<!--                                      </graphic>-->
-                                  </MenuItem>
+                                  <MenuItem onAction="#onAddNewNameField" mnemonicParsing="false" text="添加命名块"/>
+                                  <MenuItem onAction="#onClearNameField" mnemonicParsing="false" text="清空"/>
                               </items>
                           </ContextMenu>
                       </contextMenu>

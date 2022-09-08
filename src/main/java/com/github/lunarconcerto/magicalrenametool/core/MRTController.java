@@ -4,9 +4,11 @@ import com.github.lunarconcerto.magicalrenametool.config.Configuration;
 import com.github.lunarconcerto.magicalrenametool.config.ConfigurationManager;
 import com.github.lunarconcerto.magicalrenametool.exc.MRTRuntimeException;
 import com.github.lunarconcerto.magicalrenametool.component.*;
+import com.github.lunarconcerto.magicalrenametool.field.NameFieldManager;
 import com.github.lunarconcerto.magicalrenametool.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -213,6 +215,20 @@ public class MRTController {
         selected_file_list.getItems().clear();
 
         selected_file_list.refresh();
+    }
+
+    /*
+    * 命名设置菜单触发
+    * */
+
+    @FXML
+    public void onAddNewNameField(ActionEvent actionEvent) {
+        NameFieldManager.getInstance().addEmptyPane();
+    }
+
+    @FXML
+    public void onClearNameField(ActionEvent actionEvent){
+        NameFieldManager.getInstance().clearAllPane();
     }
 
     /*

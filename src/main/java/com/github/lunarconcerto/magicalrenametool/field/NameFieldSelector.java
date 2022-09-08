@@ -8,12 +8,12 @@ public class NameFieldSelector extends AbstractNameField {
 
     @Override
     public AnchorPane getNameFieldPane() {
-        return null;
+        return new AnchorPane();
     }
 
     @Override
     public AnchorPane getExtraSettingsPane() {
-        return null;
+        return new AnchorPane();
     }
 
     @Override

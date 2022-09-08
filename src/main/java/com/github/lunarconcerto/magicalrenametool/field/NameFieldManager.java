@@ -44,6 +44,11 @@ public class NameFieldManager {
         nameFieldPane.getChildren().add(container);
     }
 
+    public void clearAllPane(){
+        this.nameFieldPane.getChildren().clear();
+        this.containerList.clear();
+    }
+
     public void deletePane(NameFieldPaneContainer container){
         container.setVisible(false);
 
@@ -79,9 +84,12 @@ public class NameFieldManager {
         if (container!=null){
             container.resetLocation(newLocation);
         }
-        NameFieldPaneContainer jPane = this.containerList.get(newLocation);
-        if (jPane!=null){
-            jPane.resetLocation(oldLocation);
+
+        if (newLocation<=this.containerList.size()){
+            NameFieldPaneContainer jPane = this.containerList.get(newLocation);
+            if (jPane!=null){
+                jPane.resetLocation(oldLocation);
+            }
         }
 
         Collections.swap(this.containerList, oldLocation, newLocation);
