@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<VBox minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.core.MRTController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="文件">
+          <items>
+            <MenuItem fx:id="menuItemSelectFile" mnemonicParsing="false" onAction="#onSelectFilePathButtonAction" text="打开..." />
+            <Menu mnemonicParsing="false" text="打开最近的路径" />
+            <MenuItem mnemonicParsing="false" text="关闭" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem onAction="#onMenuItemPropertyAction" mnemonicParsing="false" text="设置..." />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem onAction="#onMenuItemExitAction" mnemonicParsing="false" text="退出" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="运行">
+          <items>
+            <MenuItem mnemonicParsing="false" text="开始运行" />
+            <MenuItem mnemonicParsing="false" text="撤销结果" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="帮助">
+          <items>
+            <MenuItem mnemonicParsing="false" text="关于..." />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <SplitPane dividerPositions="0.3374164810690423, 0.6837416481069042" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <items>
+        <AnchorPane maxHeight="650.0" maxWidth="300.0" minHeight="650.0" minWidth="300.0" prefHeight="650.0" prefWidth="300.0">
+               <children>
+                  <TreeView fx:id="treeViewFileSelector" prefHeight="650.0" prefWidth="300.0">
+                      <contextMenu>
+                          <ContextMenu>
+                              <items>
+                                  <MenuItem mnemonicParsing="false" onAction="#onTreeMenuSelectAction" text="选择">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-check" />
+                                      </graphic>
+                                  </MenuItem>
+                                  <MenuItem mnemonicParsing="false" onAction="#onTreeMenuSelectAllAction" text="全选">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-check-square-o" />
+                                      </graphic>
+                                  </MenuItem>
+                                  <MenuItem mnemonicParsing="false" onAction="#onTreeMenuReverseSelectAction" text="反选">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-check-square" />
+                                      </graphic>
+                                  </MenuItem>
+                                  <MenuItem mnemonicParsing="false" onAction="#onTreeMenuRefreshAction" text="刷新">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-refresh" />
+                                      </graphic>
+                                  </MenuItem>
+                                  <CheckMenuItem fx:id="menuItemDirOnly" mnemonicParsing="false" onAction="#onDirOnlyButtonAction" text="仅显示文件夹">
+                                      <graphic>
+                                          <FontIcon fill="black" iconLiteral="fa-folder" />
+                                      </graphic>
+                                  </CheckMenuItem>
+                              </items>
+                          </ContextMenu>
+                      </contextMenu>
+                  </TreeView>
+               </children>
+        </AnchorPane>
+      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="650.0" prefWidth="300.0">
+               <children>
+                  <SplitPane dividerPositions="0.5, 0.5" orientation="VERTICAL" prefHeight="650.0" prefWidth="300.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ListView fx:id="listViewSelectedFiles" prefHeight="320.0" prefWidth="300.0">
+                                  <contextMenu>
+                                      <ContextMenu>
+                                          <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#onListMenuRemoveAction" text="移除选中">
+                                                  <graphic>
+                                                      <FontIcon fill="black" iconLiteral="fa-remove" />
+                                                  </graphic>
+                                              </MenuItem>
+                                              <MenuItem mnemonicParsing="false" onAction="#onListMenuRemoveAllAction" text="全部移除">
+                                                  <graphic>
+                                                      <FontIcon fill="black" iconLiteral="fa-reply-all" />
+                                                  </graphic>
+                                              </MenuItem>
+                                          </items>
+                                      </ContextMenu>
+                                  </contextMenu>
+                              </ListView>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ListView fx:id="uiConsole" prefHeight="300.0" prefWidth="300.0">
+                                  <contextMenu>
+                                      <ContextMenu>
+                                          <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#onUIConsoleCopy" text="复制">
+                                                  <graphic>
+                                                      <FontIcon fill="black" iconLiteral="fa-copy" />
+                                                  </graphic>
+                                              </MenuItem>
+                                          </items>
+                                      </ContextMenu>
+                                  </contextMenu>
+                              </ListView>
+                           </children>
+                        </AnchorPane>
+                        <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="396.0" progress="0.0" />
+                    </items>
+                  </SplitPane>
+               </children>
+      </AnchorPane>
+        <AnchorPane prefHeight="650.0" prefWidth="300.0">
+               <children>
+                  <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="650.0" prefWidth="281.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
+                           <children>
+                              <ListView fx:id="ruleSetterUp" prefHeight="321.0" prefWidth="279.0" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="279.0">
+                           <children>
+                              <ListView fx:id="ruleSetterDown" prefHeight="321.0" prefWidth="279.0" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children></AnchorPane>
+      </items>
+    </SplitPane>
+    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+      <children>
+        <Label fx:id="labelStatusLeft" maxHeight="1.7976931348623157E308" maxWidth="-1.0" HBox.hgrow="ALWAYS">
+          <font>
+            <Font size="11.0" fx:id="x3" />
+          </font>
+          <textFill>
+            <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
+          </textFill>
+        </Label>
+        <Pane prefHeight="51.0" prefWidth="766.0" HBox.hgrow="ALWAYS" />
+        <Label font="$x3" maxWidth="-1.0" textFill="$x4" HBox.hgrow="NEVER" />
+      </children>
+      <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
+  </children>
+</VBox>
