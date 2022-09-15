@@ -47,7 +47,7 @@ public class MRTAboutPaneController extends AnchorPane {
 
     @FXML
     public void onLink2(){
-        String url = "https://github.com/LunarConcerto/MRT";
+        String url = "https://github.com/LunarConcerto/";
 
         try {
             Dialog<String> dialog = ClipboardDialog.getDialog(url);
