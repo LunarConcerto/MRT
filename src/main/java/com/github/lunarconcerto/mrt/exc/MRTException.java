@@ -30,21 +30,21 @@ public class MRTException extends RuntimeException {
     public void printStackTrace() {
         super.printStackTrace();
 
-        MRTApp.printToUIConsole(buildErrorText(this));
+        MRTApp.printToUiLogger(buildErrorText(this));
     }
 
     @Override
     public void printStackTrace(PrintStream s) {
         super.printStackTrace(s);
 
-        MRTApp.printToUIConsole(buildErrorText(this));
+        MRTApp.printToUiLogger(buildErrorText(this));
     }
 
     @Override
     public void printStackTrace(PrintWriter s) {
         super.printStackTrace(s);
 
-        MRTApp.printToUIConsole(buildErrorText(this));
+        MRTApp.printToUiLogger(buildErrorText(this));
     }
 
     public static @NotNull String buildErrorText(@NotNull Throwable e){

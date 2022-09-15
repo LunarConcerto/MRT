@@ -55,7 +55,7 @@ public class MRTController {
 
     // GUI模拟控制台(仅可打印消息)
     @FXML
-    protected ListView<String> uiConsole ;
+    protected ListView<String> uiLogger;
 
     // [选择文件夹]按钮
     @FXML
@@ -118,20 +118,13 @@ public class MRTController {
     @FXML
     protected ListView<AnchorPane> other_setting_list;
 
-    /*
-    * [关于]页面的元素
-    * */
-
-    @FXML
-    protected ImageView image_cafe ;
-
     public MRTController() {
         workerManager = new WorkerManager() ;
     }
 
-    /*
-    * [运行] 面板触发
-    * */
+    public void onMenuItemAboutAction(ActionEvent actionEvent) {
+        MRTAboutPaneController.showWindow();
+    }
 
     @FXML
     public void onMenuItemPropertyAction(ActionEvent actionEvent) {
@@ -257,8 +250,8 @@ public class MRTController {
     * */
 
     @FXML
-    public void onUIConsoleCopy(){
-        String s = uiConsole.getSelectionModel().getSelectedItems().stream().toList().toString();
+    public void onUILoggerCopy(){
+        String s = uiLogger.getSelectionModel().getSelectedItems().stream().toList().toString();
 
         try {
             Dialog<String> dialog = ClipboardDialog.getDialog(s);
@@ -316,45 +309,6 @@ public class MRTController {
         MRTApp.configuration.setProxyPort(input_proxy_port.getText());
     }
 
-    /*
-    * 关于页面触发
-    * */
-
-    @FXML
-    public void onLink1(){
-        String url = "https://github.com/LunarConcerto/AutoRenameToolForDoujinOnsei";
-
-        try {
-            Dialog<String> dialog = ClipboardDialog.getDialog(url);
-
-            dialog.show();
-        } catch (IOException e) {
-            throw new MRTRuntimeException(e);
-        }
-    }
-
-    @FXML
-    public void onLink2(){
-        String url = "https://github.com/LunarConcerto/MRT";
-
-        try {
-            Dialog<String> dialog = ClipboardDialog.getDialog(url);
-
-            dialog.show();
-        } catch (IOException e) {
-            throw new MRTRuntimeException(e);
-        }
-    }
-
-    public void onContributeButtonAction(){
-        try {
-            Dialog<String> dialog = ContributeDialog.getDialog();
-
-            dialog.show();
-        } catch (IOException e) {
-            throw new MRTRuntimeException(e);
-        }
-    }
 
     /**
      * 该方法用于主动保存某些保存不太即时的设置项
@@ -462,7 +416,7 @@ public class MRTController {
                 addedItems++ ;
             }
         }
-        printToUIConsole("将%s个文件加入到待处理列表".formatted(addedItems));
+        printToUILogger("将%s个文件加入到待处理列表".formatted(addedItems));
     }
 
     private boolean isChild(@NotNull TreeItem<FileNode> parent , @NotNull TreeItem<FileNode> child){
@@ -503,14 +457,12 @@ public class MRTController {
 
     public static final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
-    public void printToUIConsole(String text){
+    public void printToUILogger(String text){
         Platform.runLater(() -> {
-            uiConsole.getItems().add(formatter.format(new Date()) + " : " + text + "\n");
-            uiConsole.scrollTo(uiConsole.getItems().size());
+            uiLogger.getItems().add(formatter.format(new Date()) + " : " + text + "\n");
+            uiLogger.scrollTo(uiLogger.getItems().size());
         });
 
     }
-
-
 
 }

@@ -32,7 +32,7 @@ public class EmptyRule extends AbstractRule{
 
     @Override
     public List<RenameResult> run(List<FileNode> fileNodeList , ProgressBar bar) {
-        MRTApp.printToUIConsole("未选择规则，无法运行。");
+        MRTApp.printToUiLogger("未选择规则，无法运行。");
         return null;
     }
 }

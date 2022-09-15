@@ -73,7 +73,7 @@ public class FileTreeBuilder {
         treeView.setRoot(root);
 
         buildChild(root);
-        MRTApp.printToUIConsole("读取了%s个文件".formatted(loadedFileAmount));
+        MRTApp.printToUiLogger("读取了%s个文件".formatted(loadedFileAmount));
 
         root.setExpanded(true);
     }

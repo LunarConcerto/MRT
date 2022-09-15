@@ -110,7 +110,7 @@ public class DlsiteOnseiRule extends AbstractRule {
         double increment = 1.0 / fileNodeList.size() , progress = increment ;
         List<RenameResult> results = new ArrayList<>();
 
-        MRTApp.printToUIConsole("现在开始爬取信息");
+        MRTApp.printToUiLogger("现在开始爬取信息");
         long startTimes = System.currentTimeMillis();
 
         for (FileNode fileNode : fileNodeList) {
@@ -131,7 +131,7 @@ public class DlsiteOnseiRule extends AbstractRule {
         }
 
         long endTimes = System.currentTimeMillis();
-        MRTApp.printToUIConsole("已全部爬取完成,用时%s秒".formatted((endTimes-startTimes)/1000));
+        MRTApp.printToUiLogger("已全部爬取完成,用时%s秒".formatted((endTimes-startTimes)/1000));
 
         return results ;
     }
@@ -174,14 +174,14 @@ public class DlsiteOnseiRule extends AbstractRule {
             List<String> id = searchResult.eachAttr("id");
 
             if (id.isEmpty()){
-                MRTApp.printToUIConsole("未能搜索到结果...");
+                MRTApp.printToUiLogger("未能搜索到结果...");
             }else if (id.size()==1){
                 Optional<String> rj = checkIncludeRJ(id.get(0));
                 if (rj.isPresent()){
                     return getInfoByRJNumber(rj.get());
                 }
             }else {
-                MRTApp.printToUIConsole("搜索到多个结果...");
+                MRTApp.printToUiLogger("搜索到多个结果...");
             }
         } catch (IOException e) {
             netExceptionHandler(e);
@@ -247,7 +247,7 @@ public class DlsiteOnseiRule extends AbstractRule {
 
     private void netExceptionHandler(IOException e){
         if (e instanceof ConnectException){
-            MRTApp.printToUIConsole("连接被拒绝，请检查代理是否开启，代理地址及端口填写是否正确。");
+            MRTApp.printToUiLogger("连接被拒绝，请检查代理是否开启，代理地址及端口填写是否正确。");
         }else {
             e.printStackTrace();
         }

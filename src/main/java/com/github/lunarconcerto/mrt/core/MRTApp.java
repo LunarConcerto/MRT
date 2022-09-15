@@ -59,9 +59,8 @@ public class MRTApp extends Application {
     private static void initAfterUILoad() throws IOException {
         controller.getTreeViewFileSelector().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         controller.getListViewSelectedFiles().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        controller.getUiConsole().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        controller.getUiLogger().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-//        controller.image_cafe.setImage(new Image(FileUtil.getResourceAsStream("cafe.jpg")));
         controller.statusLabelSetDefault();
         configuration.enableProxy();
 
@@ -84,14 +83,14 @@ public class MRTApp extends Application {
     }
 
     private static void errorHandler(Thread t, @NotNull Throwable e){
-        printToUIConsole(MRTException.buildErrorText(e));
+        printToUiLogger(MRTException.buildErrorText(e));
         e.printStackTrace();
     }
 
 
-    public static void printToUIConsole(String text){
+    public static void printToUiLogger(String text){
         if (controller!=null) {
-            controller.printToUIConsole(text);
+            controller.printToUILogger(text);
         }
     }
 }

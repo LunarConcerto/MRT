@@ -28,31 +28,19 @@ public class MRTPropertyPaneController extends AnchorPane {
     }
 
     void init() throws IntrospectionException {
-        propertySheet.getItems().add(new BeanProperty(ConfigurationManager.getManager().getConfiguration() ,
-                new PropertyDescriptor("config" , Configuration.class)));
+
     }
 
     public static void showWindow(){
         try {
             MRTPropertyPaneController controller = new MRTPropertyPaneController();
-            FXMLLoader fxmlLoader = new FXMLLoader(MRTStarter.class.getResource("mrt.property.fxml"));
-            fxmlLoader.setRoot(controller);
-            fxmlLoader.setController(controller);
-            Parent parent = fxmlLoader.load();
+            Parent parent = ControllerUtil.loadWindow(controller, "mrt.property.fxml");
 
             controller.init();
-            newStage(parent).show();
-        } catch (Exception e) {
+            ControllerUtil.newStage(parent, "设置", 400, 800).show();
+        } catch (IntrospectionException e) {
             throw new MRTRuntimeException(e);
         }
     }
-
-    static Stage newStage(Parent parent){
-        Stage stage = new Stage();
-        stage.setTitle("设置");
-        stage.setScene(new Scene(parent, 400, 800));
-        return stage ;
-    }
-
 
 }
