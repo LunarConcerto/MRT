@@ -32,27 +32,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<VBox minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.core.MRTController">
+<VBox minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.core.MRTController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -76,7 +63,7 @@
                 <Menu mnemonicParsing="false" text="帮助">
                     <items>
                         <MenuItem mnemonicParsing="false" text="帮助" />
-                        <MenuItem onAction="#onMenuItemAboutAction" mnemonicParsing="false" text="关于..." />
+                        <MenuItem mnemonicParsing="false" onAction="#onMenuItemAboutAction" text="关于..." />
                     </items>
                 </Menu>
             </menus>
@@ -171,7 +158,7 @@
                                                 </ContextMenu>
                                             </contextMenu>
                                         </ListView>
-                                        <Label layoutX="242.0" layoutY="246.0" prefHeight="37.0" prefWidth="42.0" text="日志" textFill="#00000043">
+                                        <Label layoutX="198.0" layoutY="14.0" prefHeight="37.0" prefWidth="86.0" text="       日志" textFill="#00000043">
                                             <font>
                                                 <Font name="Microsoft YaHei" size="20.0" />
                                             </font>
@@ -200,7 +187,7 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="279.0">
                                     <children>
                                         <ListView fx:id="ruleSetterDown" prefHeight="321.0" prefWidth="279.0" />
-                                        <Label layoutX="167.0" layoutY="270.0" prefHeight="37.0" prefWidth="98.0" text="规则定义2" textFill="#00000043">
+                                        <Label layoutX="167.0" layoutY="14.0" prefHeight="37.0" prefWidth="98.0" text="规则定义2" textFill="#00000043">
                                             <font>
                                                 <Font name="Microsoft YaHei" size="20.0" />
                                             </font>

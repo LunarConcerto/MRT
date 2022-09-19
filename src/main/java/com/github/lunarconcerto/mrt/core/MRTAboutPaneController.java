@@ -10,6 +10,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -76,7 +77,10 @@ public class MRTAboutPaneController extends AnchorPane {
             Parent parent = ControllerUtil.loadWindow(controller, "mrt.about.fxml");
 
             controller.init();
-            ControllerUtil.newStage(parent, "关于", 800, 600).show();
+            Stage stage = ControllerUtil.newStage(parent, "关于", 800, 600);
+
+            stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
+            stage.show();
         }catch (Exception e){
             throw new MRTRuntimeException(e);
         }

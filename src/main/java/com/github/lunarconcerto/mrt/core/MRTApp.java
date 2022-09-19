@@ -43,7 +43,7 @@ public class MRTApp extends Application {
         stage.setTitle(NAME + " —— " + VERSION);
         stage.setScene(scene);
         stage.setOnCloseRequest(MRTApp::closeHandler);
-        stage.getIcons().add(new Image(FileUtil.getResourceAsStream("cafe.png")));
+        stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
         stage.show();
     }
 
@@ -64,9 +64,6 @@ public class MRTApp extends Application {
         controller.statusLabelSetDefault();
         configuration.enableProxy();
 
-//        NameFieldManager.getInstance().addEmptyPane();
-//        NameFieldManager.getInstance().addEmptyPane();
-
         controller.updateUI();
 
         AnchorPane pane = new AnchorPane();
@@ -74,6 +71,7 @@ public class MRTApp extends Application {
         controller.ruleSetterUp.setFixedCellSize(40);
         controller.ruleSetterUp.getItems().add(pane);
     }
+
 
     private static void closeHandler(WindowEvent event){
         controller.collectSetting();

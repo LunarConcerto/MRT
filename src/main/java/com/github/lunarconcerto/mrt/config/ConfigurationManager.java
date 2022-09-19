@@ -1,6 +1,7 @@
 package com.github.lunarconcerto.mrt.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.lunarconcerto.mrt.core.MRTPropertyPaneController;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import com.github.lunarconcerto.mrt.util.TimeUtil;
 import org.jetbrains.annotations.NotNull;
