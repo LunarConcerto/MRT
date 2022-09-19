@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 主面板控制器
+ */
 @Data
 @Log4j(topic = "controller")
 public class MRTController {
@@ -49,9 +52,9 @@ public class MRTController {
      */
     protected WorkerManager workerManager ;
 
-    /*
-    * [运行]页面的元素
-    * */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 控件
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // GUI模拟控制台(仅可打印消息)
     @FXML
@@ -118,10 +121,15 @@ public class MRTController {
     @FXML
     protected ListView<AnchorPane> other_setting_list;
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 构造方法
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     public MRTController() {
         workerManager = new WorkerManager() ;
     }
 
+    @FXML
     public void onMenuItemAboutAction(ActionEvent actionEvent) {
         MRTAboutPaneController.showWindow();
     }
@@ -319,9 +327,9 @@ public class MRTController {
 //        configuration.setProxyPort(this.input_proxy_port.getText());
     }
 
-    /*
-    * 部分UI控制
-    * */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 部分有关控件的操作
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void buildTree(){
         if (selectingPath!=null){
@@ -340,9 +348,9 @@ public class MRTController {
         Platform.runLater(() -> labelStatusLeft.setText("就绪"));
     }
 
-    /*
-    * 其他方法
-    * */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 其他方法
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void updateUI(){
 //        this.getInput_proxy_host().setText(MRTApp.configuration.getProxyHost());

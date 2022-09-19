@@ -5,35 +5,57 @@ import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.controlsfx.control.PropertySheet;
 
+/**
+ * 设置面板控制器
+ */
 public class MRTPropertyPaneController extends AnchorPane {
-
-    @FXML
-    public PropertySheet propertySheet ;
 
     @FXML
     public Button buttonApply ;
 
-    @FXML
-    public ToggleGroup toggleStickGroup ;
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+    * 网络设置
+    * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     public ToggleGroup toggleProxyGroup ;
 
+    @FXML
+    public TextField textProxyHost ;
+
+    @FXML
+    public Spinner<Short> textProxyPort ;
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 杂项设置
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @FXML
+    public TextField textDefaultPath ;
+
+    @FXML
+    public ToggleGroup toggleStickGroup ;
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 其他
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     protected Stage stage ;
 
-    public static MRTPropertyPaneController controller ;
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 构造方法
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    public MRTPropertyPaneController() {
+    public MRTPropertyPaneController() {}
 
-    }
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 底部按钮的触发动作
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     public void onApply(){
@@ -51,9 +73,22 @@ public class MRTPropertyPaneController extends AnchorPane {
         stage.close();
     }
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 其他方法
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     void init() {
         System.out.println(toggleProxyGroup.getToggles());
     }
+
+    public MRTPropertyPaneController setStage(Stage stage) {
+        this.stage = stage;
+        return this;
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 静态方法
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public static void showWindow(){
         try {
@@ -71,10 +106,5 @@ public class MRTPropertyPaneController extends AnchorPane {
         } catch (Exception e) {
             throw new MRTRuntimeException(e);
         }
-    }
-
-    public MRTPropertyPaneController setStage(Stage stage) {
-        this.stage = stage;
-        return this;
     }
 }
