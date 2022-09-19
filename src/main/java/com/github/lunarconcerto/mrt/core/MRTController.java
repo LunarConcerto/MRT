@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.lunarconcerto.mrt.core.ControllerUtil.createNewDirectoryChooser;
+
 /**
  * 主面板控制器
  */
@@ -393,19 +395,6 @@ public class MRTController {
         progressBar.setProgress(0);
 
         buildTree();
-    }
-
-    private File createNewDirectoryChooser(){
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("选择一个文件夹");
-        return chooser.showDialog(new Stage());
-    }
-
-    private File createNewDirectoryChooser(FileNode file){
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("选择一个文件夹");
-        chooser.setInitialDirectory(file);
-        return chooser.showDialog(new Stage());
     }
 
     private void addAllToList(@NotNull List<FileNode> fileNodeList){

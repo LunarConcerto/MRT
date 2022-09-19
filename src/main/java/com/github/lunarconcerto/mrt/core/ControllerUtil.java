@@ -2,12 +2,16 @@ package com.github.lunarconcerto.mrt.core;
 
 import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
+import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 class ControllerUtil {
 
@@ -21,6 +25,19 @@ class ControllerUtil {
         } catch (Exception e) {
             throw new MRTRuntimeException(e);
         }
+    }
+
+    static File createNewDirectoryChooser(){
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("选择一个文件夹");
+        return chooser.showDialog(new Stage());
+    }
+
+    static File createNewDirectoryChooser(File file){
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("选择一个文件夹");
+        chooser.setInitialDirectory(file);
+        return chooser.showDialog(new Stage());
     }
 
     static @NotNull Stage newStage(Parent parent, String title){

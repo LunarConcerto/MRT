@@ -24,6 +24,8 @@ public class Configuration {
 
     private boolean dirShowOnly = true ;
 
+    private boolean enableStick = false ;
+
     public void enableProxy(){
         System.getProperties().setProperty("proxySet" , "true");
         System.setProperty("http.proxyHost" , getProxyHost());
@@ -74,6 +76,11 @@ public class Configuration {
 
     public Configuration setDirShowOnly(boolean dirShowOnly) {
         this.dirShowOnly = dirShowOnly;
+        return this;
+    }
+
+    public Configuration setEnableStick(boolean enableStick) {
+        this.enableStick = enableStick;
         return this;
     }
 
