@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.util.List?>
+<?import org.controlsfx.control.PropertySheet?>
 <fx:root maxHeight="0.0" maxWidth="0.0" minHeight="600.0" minWidth="400.0" prefHeight="580.0" prefWidth="400.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
     <AnchorPane maxHeight="500.0" maxWidth="400.0" minHeight="500.0" minWidth="400.0" prefHeight="500.0" prefWidth="400.0">
         <TabPane prefHeight="500.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE">
@@ -44,12 +44,13 @@
                     </Accordion>
                 </AnchorPane>
             </Tab>
-            <Tab text="其他设置" />
+            <Tab text="其他设置">
+                <PropertySheet fx:id="uiProperties"/>
+            </Tab>
         </TabPane>
     </AnchorPane>
 
-   <Button fx:id="buttonApply" layoutX="330.0" layoutY="563.0" minHeight="20.0" minWidth="50.0" mnemonicParsing="false" onAction="#onApply" text="应用" />
-   <Button layoutX="260.0" layoutY="563.0" minHeight="20.0" minWidth="50.0" mnemonicParsing="false" onAction="#onCancel" text="取消" />
+   <Button layoutX="330.0" layoutY="563.0" minHeight="20.0" minWidth="50.0" mnemonicParsing="false" onAction="#onCancel" text="取消" />
    <Button layoutX="190.0" layoutY="563.0" minHeight="20.0" minWidth="50.0" mnemonicParsing="false" onAction="#onConfirm" text="确认" />
    <Separator layoutY="540.0" prefHeight="23.0" prefWidth="400.0" />
 </fx:root>

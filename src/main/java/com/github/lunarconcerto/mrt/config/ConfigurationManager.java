@@ -4,16 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lunarconcerto.mrt.core.MRTPropertyPaneController;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import com.github.lunarconcerto.mrt.util.TimeUtil;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Properties;
 
+@Getter
 public class ConfigurationManager {
 
     private final Properties properties = new Properties();
 
     private Configuration configuration ;
+
+    private final HashMap<String, Property<?>> propertyHashMap = new HashMap<>();
 
     public static final File propertiesPath = new File(FileUtil.getUserPath() + "//.settings.prop");
 
@@ -24,10 +29,6 @@ public class ConfigurationManager {
     }
 
     private ConfigurationManager() {}
-
-    public Properties getProperties(){
-        return properties ;
-    }
 
     protected InputStream openInputStream(){
         try {
@@ -96,7 +97,20 @@ public class ConfigurationManager {
         save();
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
+    public void registerProperty(Property<?> property){
+        if (property!=null){
+            this.propertyHashMap.put(property.getKey(), property);
+        }
     }
+
+    public void unregisterProperty(Property<?> property){
+        if (property!=null){
+            this.propertyHashMap.remove(property.getKey());
+        }
+    }
+
+    public void unregisterProperty(String key){
+        this.propertyHashMap.remove(key);
+    }
+
 }

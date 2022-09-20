@@ -3,6 +3,7 @@ package com.github.lunarconcerto.mrt.core;
 
 import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
+import com.github.lunarconcerto.mrt.config.Property;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.fxml.FXML;
@@ -11,16 +12,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.controlsfx.control.PropertySheet;
 
 import java.io.File;
+import java.util.Properties;
 
 /**
  * 设置面板控制器
  */
 public class MRTPropertyPaneController extends AnchorPane {
-
-    @FXML
-    public Button buttonApply ;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
     * 网络设置
@@ -55,6 +55,9 @@ public class MRTPropertyPaneController extends AnchorPane {
      * 其他
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    @FXML
+    public PropertySheet uiProperties ;
+
     protected Stage stage ;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -68,18 +71,13 @@ public class MRTPropertyPaneController extends AnchorPane {
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    public void onApply(){
-        buttonApply.setDisable(true);
-
-    }
-
-    @FXML
     public void onCancel(){
         stage.close();
     }
 
     @FXML
     public void onConfirm(){
+        saveToConfig();
         stage.close();
     }
 
@@ -94,8 +92,6 @@ public class MRTPropertyPaneController extends AnchorPane {
 
         textProxyHost.setDisable(true);
         textProxyPort.setDisable(true);
-
-        resetApplyButton();
     }
 
     @FXML
@@ -105,8 +101,6 @@ public class MRTPropertyPaneController extends AnchorPane {
 
         textProxyHost.setDisable(false);
         textProxyPort.setDisable(false);
-
-        resetApplyButton();
     }
 
     @FXML
@@ -117,21 +111,15 @@ public class MRTPropertyPaneController extends AnchorPane {
         if (defaultPath != null){
             textDefaultPath.setText(defaultPath.getPath());
         }
-
-        resetApplyButton();
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 其他方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    @FXML
-    public void resetApplyButton(){
-        buttonApply.setDisable(false);
-    }
-
     void init() {
-        buttonApply.setDisable(true);
+        uiProperties.setMode(PropertySheet.Mode.CATEGORY);
+
         Configuration configuration = ConfigurationManager.getManager().getConfiguration();
         //—————————————————————————————————
         //代理设置
@@ -151,10 +139,17 @@ public class MRTPropertyPaneController extends AnchorPane {
         //置顶
         //—————————————————————————————————
         toggleStickGroup.selectToggle(configuration.isEnableStick() ? stickTrue : stickFalse);
+        //—————————————————————————————————
+        //其他设置
+        //—————————————————————————————————
+        for (Property<?> value : ConfigurationManager.getManager().getPropertyHashMap().values()) {
+            uiProperties.getItems().add(value);
+        }
     }
 
     public Configuration saveToConfig(){
         Configuration configuration = ConfigurationManager.getManager().getConfiguration();
+        Properties properties = configuration.getCustomProperties();
 
         configuration.setDefaultPath(textDefaultPath.getText());
 
@@ -165,6 +160,10 @@ public class MRTPropertyPaneController extends AnchorPane {
         }else {
             configuration.setEnableProxy(false);
         }
+
+        uiProperties.getItems().stream()
+                .filter(item -> item instanceof Property<?>)
+                .forEach(item -> properties.setProperty(((Property<?>) item).getKey(), String.valueOf(item.getValue())));
         
         return configuration ;
     }
