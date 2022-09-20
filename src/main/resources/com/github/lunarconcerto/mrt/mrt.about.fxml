@@ -33,10 +33,6 @@
             </graphic>
         </Label>
         <Hyperlink layoutX="100.0" layoutY="501.0" onAction="#onLink2" text="LunarConcerto" />
-        <Label layoutX="554.0" layoutY="436.0" prefHeight="30.0" prefWidth="216.0" text="如果这个软件对你有帮助，可以点下面" />
-        <Label layoutX="357.0" layoutY="466.0" prefHeight="30.0" prefWidth="197.0" />
-        <Label layoutX="554.0" layoutY="466.0" prefHeight="30.0" prefWidth="216.0" text="请我喝一瓶可乐，为我提供更新的动力~" />
-        <Button layoutX="620.0" layoutY="500.0" mnemonicParsing="false" onAction="#onContributeButtonAction" prefHeight="23.0" prefWidth="84.0" text="捐赠" />
     </AnchorPane>
 </fx:root>
 

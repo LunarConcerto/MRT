@@ -35,10 +35,6 @@ import static com.github.lunarconcerto.mrt.core.ControllerUtil.createNewDirector
 @Log4j(topic = "controller")
 public class MRTController {
 
-
-    @FXML
-    public ListView<AnchorPane> ruleSetterUp;
-
     /**
      * 当前选择的路径
      */
@@ -48,11 +44,6 @@ public class MRTController {
      * 当前文件树建造者
      */
     protected FileTreeBuilder fileTreeBuilder ;
-
-    /**
-     * 多线程管理器
-     */
-    protected WorkerManager workerManager ;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 控件
@@ -90,46 +81,18 @@ public class MRTController {
     @FXML
     protected ScrollPane name_field_pane;
 
-    /*
-    * 文件选择列表右键菜单的元素
-    * */
-
     // 文件树视图中右键选择的[仅显示文件夹]菜单按钮
     @FXML
     protected CheckMenuItem menuItemDirOnly;
 
-    /*
-    * [设置]页面中的元素
-    * */
-
     @FXML
-    protected TextField input_proxy_host;
-
-    @FXML
-    protected TextField input_proxy_port;
-
-    @FXML
-    protected TextField input_default_file_path;
-
-    @FXML
-    protected Button button_select_default_path;
-
-    @FXML
-    protected CheckBox enable_proxy;
-
-    @FXML
-    protected CheckBox enable_preview;
-
-    @FXML
-    protected ListView<AnchorPane> other_setting_list;
+    public ListView<AnchorPane> ruleSetterUp;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 构造方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    public MRTController() {
-        workerManager = new WorkerManager() ;
-    }
+    public MRTController() {}
 
     @FXML
     public void onMenuItemAboutAction(ActionEvent actionEvent) {
@@ -159,36 +122,13 @@ public class MRTController {
 
     @FXML
     public void onStartButtonAction(){
-/*        List<FileNode> fileNodeList = selected_file_list.getItems().stream().toList();
-        Rule rule = combe_box_rename_rule.getSelectionModel().getSelectedItem();
 
-        if (fileNodeList.isEmpty()){
-            printToUIConsole("未选择要进行处理的文件夹/文件");
-            return;
-        }
-
-        if (rule instanceof EmptyRule){
-            printToUIConsole("未选择要使用的重命名规则");
-            return;
-        }
-
-        workerManager.startWork(() -> {
-            Platform.runLater(()->changeStatusLabel("运行中"));
-
-            List<RenameResult> result = rule.run(fileNodeList , progress_bar);
-
-            Platform.runLater(() -> progress_bar.setProgress(0));
-
-            RenameProgress progress = new RenameProgress(result);
-            progress.run(progress_bar);
-            Platform.runLater(this::reset);
-        });*/
     }
 
 
-    /*
-    * 文件树选择菜单触发
-    * */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 选择文件控件的操作
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     public void onTreeMenuSelectAction(){
@@ -223,9 +163,9 @@ public class MRTController {
         updateUI();
     }
 
-    /*
-    * 已选文件列表菜单触发
-    * */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 已选文件列表控件操作
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     public void onListMenuRemoveAction(){
@@ -241,23 +181,9 @@ public class MRTController {
         listViewSelectedFiles.refresh();
     }
 
-    /*
-    * 命名设置菜单触发
-    * */
-
-    @FXML
-    public void onAddNewNameField(ActionEvent actionEvent) {
-        NameFieldManager.getInstance().addEmptyPane();
-    }
-
-    @FXML
-    public void onClearNameField(ActionEvent actionEvent){
-        NameFieldManager.getInstance().clearAllPane();
-    }
-
-    /*
-    * UI控制台菜单触发
-    * */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * UI日志表单的操作
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     public void onUILoggerCopy(){
@@ -272,73 +198,14 @@ public class MRTController {
         }
     }
 
-
-    /*
-    * 设置面板部分触发
-    * */
-
-    @FXML
-    public void onSelectionTabChange() {
-        collectSetting();
-
-        ConfigurationManager.getManager().save();
-    }
-
-    @FXML
-    public void onSelectDefaultPathButtonAction(){
-        File choosingFile = createNewDirectoryChooser();
-        if (choosingFile == null){
-            return;
-        }
-
-        MRTApp.configuration.setDefaultPath(choosingFile.getPath());
-        ConfigurationManager.getManager().save();
-    }
-
-    public void onChangeProxyStatus() {
-        boolean enableProxy = enable_proxy.isSelected();
-        if (enableProxy){
-            MRTApp.configuration.setEnableProxy(true).enableProxy();
-        }else {
-            MRTApp.configuration.setEnableProxy(false).disableProxy();
-        }
-
-        collectSetting();
-        updateProxyInputField();
-
-        ConfigurationManager.getManager().save();
-    }
-
-    @FXML
-    public void onProxyHostInput(){
-        MRTApp.configuration.setProxyHost(input_proxy_host.getText());
-    }
-
-    @FXML
-    public void onProxyPortInput(){
-        MRTApp.configuration.setProxyPort(input_proxy_port.getText());
-    }
-
-
-    /**
-     * 该方法用于主动保存某些保存不太即时的设置项
-     */
-    public void collectSetting(){
-//        Configuration configuration = MRTApp.configuration;
-//        configuration.setProxyHost(this.input_proxy_host.getText());
-//        configuration.setProxyPort(this.input_proxy_port.getText());
-    }
-
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 部分有关控件的操作
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void buildTree(){
         if (selectingPath!=null){
-            workerManager.startWork(() -> {
-                fileTreeBuilder = new FileTreeBuilder(treeViewFileSelector, selectingPath);
-                fileTreeBuilder.buildTree(selectingPath);
-            });
+            fileTreeBuilder = new FileTreeBuilder(treeViewFileSelector, selectingPath);
+            fileTreeBuilder.buildTree(selectingPath);
         }
     }
 
@@ -366,27 +233,6 @@ public class MRTController {
 
         this.buildTree();
 
-    }
-
-    public void updateProxyInputField(){
-        boolean enableProxy = MRTApp.configuration.isEnableProxy();
-        if (enableProxy){
-            this.input_proxy_host.setEditable(true);
-            this.input_proxy_port.setEditable(true);
-
-            this.input_proxy_host.setDisable(false);
-            this.input_proxy_port.setDisable(false);
-
-            this.enable_proxy.setSelected(true);
-        }else {
-            this.input_proxy_host.setEditable(false);
-            this.input_proxy_port.setEditable(false);
-
-            this.input_proxy_host.setDisable(true);
-            this.input_proxy_port.setDisable(true);
-
-            this.enable_proxy.setSelected(false);
-        }
     }
 
     public void reset(){

@@ -1,7 +1,6 @@
 package com.github.lunarconcerto.mrt.core;
 
 import com.github.lunarconcerto.mrt.component.ClipboardDialog;
-import com.github.lunarconcerto.mrt.component.ContributeDialog;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.fxml.FXML;
@@ -52,17 +51,6 @@ public class MRTAboutPaneController extends AnchorPane {
 
         try {
             Dialog<String> dialog = ClipboardDialog.getDialog(url);
-
-            dialog.show();
-        } catch (IOException e) {
-            throw new MRTRuntimeException(e);
-        }
-    }
-
-    @FXML
-    public void onContributeButtonAction(){
-        try {
-            Dialog<String> dialog = ContributeDialog.getDialog();
 
             dialog.show();
         } catch (IOException e) {

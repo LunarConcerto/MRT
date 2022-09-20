@@ -4,7 +4,6 @@ import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTException;
-import com.github.lunarconcerto.mrt.component.Preview;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -74,10 +73,7 @@ public class MRTApp extends Application {
 
 
     private static void closeHandler(WindowEvent event){
-        controller.collectSetting();
-
         ConfigurationManager.getManager().save(configuration);
-        Preview.getPreview().close();
     }
 
     private static void errorHandler(Thread t, @NotNull Throwable e){

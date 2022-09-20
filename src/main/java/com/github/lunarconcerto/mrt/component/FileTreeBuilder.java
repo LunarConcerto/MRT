@@ -49,19 +49,20 @@ public class FileTreeBuilder {
         this.treeView = treeView;
     }
 
-    public TreeView<FileNode> buildTree(){
+    public void buildTree(){
         if (file==null){
-            return null ;
+            return;
         }
-        build();
 
-        return treeView ;
+        Worker.startWork(this::build);
     }
 
-    public TreeView<FileNode> buildTree(FileNode file){
-        this.file = file ;
-        Platform.runLater(this::build);
-        return treeView ;
+    public void buildTree(@NotNull FileNode file){
+        if (file.exists()){
+            this.file = file ;
+
+            Worker.startWork(this::build);
+        }
     }
 
     private void build(){
@@ -70,7 +71,9 @@ public class FileTreeBuilder {
         TreeItem<FileNode> root = new TreeItem<>(file);
         root.setGraphic(getFolderIconNode());
 
-        treeView.setRoot(root);
+        Platform.runLater(() -> {
+            treeView.setRoot(root);
+        });
 
         buildChild(root);
         MRTApp.printToUiLogger("读取了%s个文件".formatted(loadedFileAmount));
@@ -79,24 +82,22 @@ public class FileTreeBuilder {
     }
 
     private void buildChild(@NotNull TreeItem<FileNode> root){
-
         for (FileNode fileNode : Objects.requireNonNull(root.getValue().listFiles())) {
             if (fileNode != null) {
                 if (MRTApp.configuration.isDirShowOnly() && !fileNode.isDirectory()) {
                     continue;
                 }
-
                 TreeItem<FileNode> item = new TreeItem<>(fileNode);
-                root.getChildren().add(item);
-                item.getValue().setLevel(root.getValue().getLevel() + 1);
-
-                ifContinueAndSetIcon(item, fileNode);
+                Platform.runLater(() -> {
+                    root.getChildren().add(item);
+                    item.getValue().setLevel(root.getValue().getLevel() + 1);
+                    ifContinueAndSetIcon(item, fileNode);
+                });
                 loadedFileAmount++;
                 Platform.runLater(() -> {
                     MRTApp.controller.getProgressBar().setProgress( (double) fileSizeLimit / loadedFileAmount);
+                    ifPause();
                 });
-
-                ifPause();
             }
         }
     }
