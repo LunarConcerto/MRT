@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.PropertySheet;
 
 import java.io.File;
@@ -124,6 +125,7 @@ public class MRTPropertyPaneController extends AnchorPane {
         //—————————————————————————————————
         //代理设置
         //—————————————————————————————————
+        textProxyHost.setText(configuration.getProxyHost());
         if (configuration.isEnableProxy()) {
             toggleProxyGroup.selectToggle(toggleHttpProxy);
             onEnableHttpProxy();

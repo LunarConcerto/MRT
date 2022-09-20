@@ -21,7 +21,7 @@
                                     <TextField fx:id="textProxyHost" layoutX="100.0" layoutY="80.0" prefHeight="23.0" prefWidth="260.0" promptText="***.***.***.***" />
                                     <Label layoutX="14.0" layoutY="84.0" text="主机名:" />
                                     <Label layoutX="14.0" layoutY="124.0" text="端口号:" />
-                                    <Spinner fx:id="textProxyPort" layoutX="100.0" layoutY="120.0" />
+                                    <Spinner min="0" max="65536" initialValue="0" fx:id="textProxyPort" layoutX="100.0" layoutY="120.0" />
                                 </AnchorPane>
                             </TitledPane>
                             <TitledPane text="杂项">
