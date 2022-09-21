@@ -59,8 +59,7 @@
                 <Menu mnemonicParsing="false" text="文件">
                     <items>
                         <MenuItem fx:id="menuItemSelectFile" mnemonicParsing="false" onAction="#onMenuItemSelectFilePathAction" text="打开..." />
-                        <Menu mnemonicParsing="false" text="打开最近的路径" />
-                        <MenuItem mnemonicParsing="false" text="关闭" />
+                        <Menu fx:id="menuHistoryPath" onAction="#onHistoryPathMenuShow" mnemonicParsing="false" text="打开最近的路径" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#onMenuItemPropertyAction" text="设置..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -189,7 +188,19 @@
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
                                     <children>
-                                        <ListView fx:id="ruleFillingSetter" prefHeight="321.0" prefWidth="279.0" />
+                                        <ListView fx:id="ruleFillingSetter" prefHeight="321.0" prefWidth="279.0">
+                                            <contextMenu>
+                                                <ContextMenu>
+                                                    <items>
+                                                        <MenuItem text="新建"/>
+                                                        <MenuItem text="删除"/>
+                                                        <MenuItem text="上移"/>
+                                                        <MenuItem text="下移"/>
+                                                        <MenuItem text="清空"/>
+                                                    </items>
+                                                </ContextMenu>
+                                            </contextMenu>
+                                        </ListView>
                                         <Label layoutX="144.0" layoutY="270.0" prefHeight="37.0" prefWidth="121.0" text="填充规则定义" textFill="#00000043">
                                             <font>
                                                 <Font name="Microsoft YaHei" size="20.0" />
@@ -199,7 +210,19 @@
                                 </AnchorPane>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="279.0">
                                     <children>
-                                        <ListView fx:id="ruleReplaceSetter" prefHeight="321.0" prefWidth="279.0" />
+                                        <ListView fx:id="ruleReplaceSetter" prefHeight="321.0" prefWidth="279.0">
+                                            <contextMenu>
+                                                <ContextMenu>
+                                                    <items>
+                                                        <MenuItem text="新建"/>
+                                                        <MenuItem text="删除"/>
+                                                        <MenuItem text="上移"/>
+                                                        <MenuItem text="下移"/>
+                                                        <MenuItem text="清空"/>
+                                                    </items>
+                                                </ContextMenu>
+                                            </contextMenu>
+                                        </ListView>
                                         <Label layoutX="144.0" layoutY="14.0" prefHeight="37.0" prefWidth="121.0" text="替换规则定义" textFill="#00000043">
                                             <font>
                                                 <Font name="Microsoft YaHei" size="20.0" />

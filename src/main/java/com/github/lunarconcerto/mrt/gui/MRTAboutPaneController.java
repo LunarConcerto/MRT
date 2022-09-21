@@ -24,7 +24,6 @@ public class MRTAboutPaneController extends AnchorPane {
 
     void init() throws IOException {
         this.imageCafe.setImage(new Image(FileUtil.getResourceAsStream("cafe.jpg")));
-
     }
 
     /*

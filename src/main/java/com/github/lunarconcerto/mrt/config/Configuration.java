@@ -6,6 +6,8 @@ import lombok.Getter;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Getter
@@ -26,7 +28,17 @@ public class Configuration {
 
     private boolean enableStick = false ;
 
+    private List<String> historyPaths = new ArrayList<>();
+
     public Configuration() {}
+
+    public void addHistoryPath(String path) {
+        if (historyPaths.size() > 10){
+            historyPaths.remove(historyPaths.size()-1);
+        }
+
+        historyPaths.add(path);
+    }
 
     public void applyConfig() {
         if (enableProxy) enableProxy();
@@ -93,6 +105,11 @@ public class Configuration {
 
     public Configuration setEnableProxy(boolean enableProxy) {
         this.enableProxy = enableProxy;
+        return this;
+    }
+
+    public Configuration setHistoryPaths(List<String> historyPaths) {
+        this.historyPaths = historyPaths;
         return this;
     }
 }

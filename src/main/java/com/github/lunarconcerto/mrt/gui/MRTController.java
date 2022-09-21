@@ -1,10 +1,13 @@
 package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.component.*;
+import com.github.lunarconcerto.mrt.config.ConfigurationManager;
+import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -80,7 +83,7 @@ public class MRTController {
      * @see com.github.lunarconcerto.mrt.rule.RuleType
      */
     @FXML
-    public ListView<AnchorPane> ruleFillingSetter;
+    public ListView<RuleDefiner> ruleFillingSetter;
 
     /**
      * 右下，列表视图
@@ -89,11 +92,17 @@ public class MRTController {
      * @see com.github.lunarconcerto.mrt.rule.RuleType
      */
     @FXML
-    public ListView<AnchorPane> ruleReplaceSetter;
+    public ListView<RuleDefiner> ruleReplaceSetter;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 菜单项
      * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * 历史打开路径按钮
+     */
+    @FXML
+    protected Menu menuHistoryPath;
 
     /**
      * 树视图中仅显示文件夹
@@ -119,9 +128,38 @@ public class MRTController {
 
     public MRTController() {}
 
+    protected void init(){
+        getTreeViewFileSelector().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        getListViewSelectedFiles().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        getUiLogger().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        statusLabelSetDefault();
+
+        updateUI();
+
+        ruleFillingSetter.setFixedCellSize(40);
+        ruleReplaceSetter.setFixedCellSize(40);
+
+        loadHistoryPath();
+    }
+
+    private void loadHistoryPath(){
+        menuHistoryPath.getItems().clear();
+
+        List<String> paths = ConfigurationManager.getManager().getConfiguration().getHistoryPaths();
+        if (paths!=null){
+            paths.forEach(this::addHistoryPath);
+        }
+    }
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 顶部菜单栏按钮触发方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    @FXML
+    public void onHistoryPathMenuShow(Event event) {
+
+    }
 
     @FXML
     public void onMenuItemAboutAction(ActionEvent actionEvent) {
@@ -146,6 +184,7 @@ public class MRTController {
 
         selectingPath = new FileNode(choosingFile);
         log.debug("选择的文件路径为:" + selectingPath.getFullName() );
+        recordHistoryPath(choosingFile.getPath());
         buildTree();
     }
 
@@ -162,13 +201,13 @@ public class MRTController {
     @FXML
     public void onTreeMenuSelectAction(){
         List<FileNode> nodeList = getSelectedTreeNodeList();
-        addAllToList(nodeList);
+        addAllToSelectedList(nodeList);
     }
 
     @FXML
     public void onTreeMenuSelectAllAction(){
         List<FileNode> fileNodeList = getRootChildrenNodeList();
-        addAllToList(fileNodeList);
+        addAllToSelectedList(fileNodeList);
         treeViewFileSelector.getSelectionModel().selectAll();
     }
 
@@ -178,7 +217,7 @@ public class MRTController {
                 .stream()
                 .filter(fileNode -> !getSelectedTreeNodeList().contains(fileNode))
                 .collect(Collectors.toList());
-        addAllToList(targetList);
+        addAllToSelectedList(targetList);
     }
 
     @FXML
@@ -207,14 +246,14 @@ public class MRTController {
     public void onListMenuRemoveAction(){
         listViewSelectedFiles.getItems().removeAll(listViewSelectedFiles.getSelectionModel().getSelectedItems());
 
-        listViewSelectedFiles.refresh();
+        refreshSelectedFileIndex();
     }
 
     @FXML
     public void onListMenuRemoveAllAction(){
         listViewSelectedFiles.getItems().clear();
 
-        listViewSelectedFiles.refresh();
+        refreshSelectedFileIndex();
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -263,7 +302,7 @@ public class MRTController {
         buildTree();
     }
 
-    private void addAllToList(@NotNull List<FileNode> fileNodeList){
+    private void addAllToSelectedList(@NotNull List<FileNode> fileNodeList){
         ObservableList<FileContainer> listItems = listViewSelectedFiles.getItems();
         int addedItems = 0;
         for (FileNode fileNode : fileNodeList) {
@@ -279,7 +318,34 @@ public class MRTController {
                 addedItems++ ;
             }
         }
+
+        refreshSelectedFileIndex();
         printToUILogger("将%s个项目加入到待处理列表".formatted(addedItems));
+    }
+
+    private void recordHistoryPath(String path){
+        File file = new File(path);
+        if (!file.exists()){
+            return;
+        }
+
+        ConfigurationManager.getManager().getConfiguration().addHistoryPath(path);
+        loadHistoryPath();
+    }
+
+    public void addHistoryPath(String path){
+        MenuItem item = new MenuItem(path);
+        item.setOnAction(event -> {
+            selectingPath = new FileNode(item.getText());
+            buildTree();
+        });
+        menuHistoryPath.getItems().add(0, item);
+    }
+
+    private void refreshSelectedFileIndex(){
+        listViewSelectedFiles.getItems()
+                .forEach(item -> item.setIndex(listViewSelectedFiles.getItems().indexOf(item)));
+        listViewSelectedFiles.refresh();
     }
 
     private boolean isChild(@NotNull TreeItem<FileNode> parent , @NotNull TreeItem<FileNode> child){
@@ -345,7 +411,7 @@ public class MRTController {
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return "[" + index + "]" + node.toString();
         }
 

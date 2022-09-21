@@ -56,17 +56,9 @@ public class MRTApp extends Application {
     }
 
     private static void initAfterUILoad() throws IOException {
-        controller.getTreeViewFileSelector().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        controller.getListViewSelectedFiles().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        controller.getUiLogger().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        controller.init();
 
-        controller.statusLabelSetDefault();
         configuration.applyConfig();
-
-        controller.updateUI();
-
-        controller.ruleFillingSetter.setFixedCellSize(40);
-        controller.ruleReplaceSetter.setFixedCellSize(40);
     }
 
 

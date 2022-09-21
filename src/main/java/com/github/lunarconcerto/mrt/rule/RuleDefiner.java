@@ -6,10 +6,18 @@ import java.io.Serializable;
 
 public abstract class RuleDefiner extends AnchorPane implements Serializable {
 
+    int index ;
+
     abstract NameEditor createNameEditor();
 
-    abstract String saveToString();
+    abstract String serialize();
 
-    abstract void loadFromString(String text);
+    public int getIndex() {
+        return index;
+    }
 
+    public RuleDefiner setIndex(int index) {
+        this.index = index;
+        return this;
+    }
 }

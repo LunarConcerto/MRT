@@ -1,10 +1,13 @@
 package com.github.lunarconcerto.mrt.gui;
 
+import com.github.lunarconcerto.mrt.MRTStarter;
+import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,10 +40,10 @@ public class ClipboardDialog extends AnchorPane {
     public static @NotNull ClipboardDialog load(String s) throws IOException {
         ClipboardDialog dialog = new ClipboardDialog();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(ClipboardDialog.class.getResource("clipboard.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MRTStarter.class.getResource("component/clipboard.fxml"));
         fxmlLoader.setRoot(dialog);
         fxmlLoader.setController(dialog);
-        fxmlLoader.load() ;
+        fxmlLoader.load();
 
         dialog.text.setText(s);
 
