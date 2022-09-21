@@ -26,6 +26,13 @@ public class Configuration {
 
     private boolean enableStick = false ;
 
+    public Configuration() {}
+
+    public void applyConfig() {
+        if (enableProxy) enableProxy();
+        else disableProxy();
+    }
+
     public void enableProxy(){
         System.getProperties().setProperty("proxySet" , "true");
         System.setProperty("http.proxyHost" , getProxyHost());

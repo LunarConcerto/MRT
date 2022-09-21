@@ -6,14 +6,15 @@ import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.config.Property;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.util.FileUtil;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.controlsfx.control.PropertySheet;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Properties;
@@ -37,7 +38,7 @@ public class MRTPropertyPaneController extends AnchorPane {
     public TextField textProxyHost ;
 
     @FXML
-    public Spinner<Short> textProxyPort ;
+    public Spinner<Integer> textProxyPort ;
 
     @FXML
     public RadioButton stickTrue , stickFalse;
@@ -78,7 +79,10 @@ public class MRTPropertyPaneController extends AnchorPane {
 
     @FXML
     public void onConfirm(){
-        saveToConfig();
+        Configuration configuration = saveToConfig();
+        ConfigurationManager.getManager().save();
+
+        configuration.applyConfig();
         stage.close();
     }
 
@@ -126,6 +130,8 @@ public class MRTPropertyPaneController extends AnchorPane {
         //代理设置
         //—————————————————————————————————
         textProxyHost.setText(configuration.getProxyHost());
+        textProxyPort.increment(Integer.parseInt(configuration.getProxyPort()));
+        textProxyPort.getEditor().textProperty().addListener(this::portChangedListener);
         if (configuration.isEnableProxy()) {
             toggleProxyGroup.selectToggle(toggleHttpProxy);
             onEnableHttpProxy();
@@ -193,6 +199,19 @@ public class MRTPropertyPaneController extends AnchorPane {
             stage.show();
         } catch (Exception e) {
             throw new MRTRuntimeException(e);
+        }
+    }
+
+    private void portChangedListener(ObservableValue<? extends String> observable, String oldValue, @NotNull String newValue) {
+        if (newValue.isEmpty()) {
+            textProxyPort.getEditor().setText("0");
+            return;
+        }
+
+        try {
+            Integer.parseInt(newValue);
+        } catch (NumberFormatException e) {
+            textProxyPort.getEditor().setText(oldValue);
         }
     }
 }

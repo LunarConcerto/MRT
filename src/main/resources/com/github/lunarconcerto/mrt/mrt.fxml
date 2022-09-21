@@ -32,20 +32,33 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<VBox minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.core.MRTController">
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.core.MRTController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="文件">
                     <items>
-                        <MenuItem fx:id="menuItemSelectFile" mnemonicParsing="false" onAction="#onSelectFilePathButtonAction" text="打开..." />
+                        <MenuItem fx:id="menuItemSelectFile" mnemonicParsing="false" onAction="#onMenuItemSelectFilePathAction" text="打开..." />
                         <Menu mnemonicParsing="false" text="打开最近的路径" />
                         <MenuItem mnemonicParsing="false" text="关闭" />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -56,7 +69,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="运行">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="开始运行" />
+                        <MenuItem fx:id="menuItemStartProgress" mnemonicParsing="false" text="开始运行" />
                         <MenuItem mnemonicParsing="false" text="撤销结果" />
                     </items>
                 </Menu>
@@ -176,8 +189,8 @@
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
                                     <children>
-                                        <ListView fx:id="ruleSetterUp" prefHeight="321.0" prefWidth="279.0" />
-                                        <Label layoutX="167.0" layoutY="270.0" prefHeight="37.0" prefWidth="98.0" text="规则定义1" textFill="#00000043">
+                                        <ListView fx:id="ruleFillingSetter" prefHeight="321.0" prefWidth="279.0" />
+                                        <Label layoutX="144.0" layoutY="270.0" prefHeight="37.0" prefWidth="121.0" text="填充规则定义" textFill="#00000043">
                                             <font>
                                                 <Font name="Microsoft YaHei" size="20.0" />
                                             </font>
@@ -186,8 +199,8 @@
                                 </AnchorPane>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="279.0">
                                     <children>
-                                        <ListView fx:id="ruleSetterDown" prefHeight="321.0" prefWidth="279.0" />
-                                        <Label layoutX="167.0" layoutY="14.0" prefHeight="37.0" prefWidth="98.0" text="规则定义2" textFill="#00000043">
+                                        <ListView fx:id="ruleReplaceSetter" prefHeight="321.0" prefWidth="279.0" />
+                                        <Label layoutX="144.0" layoutY="14.0" prefHeight="37.0" prefWidth="121.0" text="替换规则定义" textFill="#00000043">
                                             <font>
                                                 <Font name="Microsoft YaHei" size="20.0" />
                                             </font>

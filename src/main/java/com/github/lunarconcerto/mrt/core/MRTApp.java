@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
@@ -61,14 +60,12 @@ public class MRTApp extends Application {
         controller.getUiLogger().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         controller.statusLabelSetDefault();
-        configuration.enableProxy();
+        configuration.applyConfig();
 
         controller.updateUI();
 
-        AnchorPane pane = new AnchorPane();
-        pane.setMinSize(100 , 100);
-        controller.ruleSetterUp.setFixedCellSize(40);
-        controller.ruleSetterUp.getItems().add(pane);
+        controller.ruleFillingSetter.setFixedCellSize(40);
+        controller.ruleReplaceSetter.setFixedCellSize(40);
     }
 
 

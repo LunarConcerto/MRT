@@ -65,7 +65,7 @@
                             </ContextMenu>
                         </contextMenu>
                     </ListView>
-                    <Button fx:id="button_start" layoutX="286.0" layoutY="358.0" mnemonicParsing="false" onAction="#onStartButtonAction" prefHeight="50.0" prefWidth="100.0" text="运行">
+                    <Button fx:id="menuItemStartProgress" layoutX="286.0" layoutY="358.0" mnemonicParsing="false" onAction="#onStartButtonAction" prefHeight="50.0" prefWidth="100.0" text="运行">
                         <graphic>
                             <FontIcon fill="black" iconLiteral="fa-play" />
                         </graphic>

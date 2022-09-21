@@ -1,19 +1,13 @@
 package com.github.lunarconcerto.mrt.core;
 
-import com.github.lunarconcerto.mrt.config.ConfigurationManager;
-import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.component.*;
-import com.github.lunarconcerto.mrt.field.NameFieldManager;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.jetbrains.annotations.NotNull;
@@ -40,16 +34,13 @@ public class MRTController {
      */
     protected FileNode selectingPath ;
 
-    /**
-     * 当前文件树建造者
-     */
     protected FileTreeBuilder fileTreeBuilder ;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 控件
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    // GUI模拟控制台(仅可打印消息)
+    // UI日志
     @FXML
     protected ListView<String> uiLogger;
 
@@ -59,7 +50,7 @@ public class MRTController {
 
     // [运行]按钮
     @FXML
-    protected Button button_start;
+    protected MenuItem menuItemStartProgress;
 
     // 左侧显示文件层次的树视图
     @FXML
@@ -77,22 +68,27 @@ public class MRTController {
     @FXML
     protected ProgressBar progressBar;
 
-    // 右侧用于设置命名规则的面板
-    @FXML
-    protected ScrollPane name_field_pane;
-
     // 文件树视图中右键选择的[仅显示文件夹]菜单按钮
     @FXML
     protected CheckMenuItem menuItemDirOnly;
 
+    //填充型规则定义表
     @FXML
-    public ListView<AnchorPane> ruleSetterUp;
+    public ListView<AnchorPane> ruleFillingSetter;
+
+    //替换型规则定义表
+    @FXML
+    public ListView<AnchorPane> ruleReplaceSetter;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 构造方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public MRTController() {}
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 顶部菜单栏按钮触发方法
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     public void onMenuItemAboutAction(ActionEvent actionEvent) {
@@ -110,7 +106,7 @@ public class MRTController {
     }
 
     @FXML
-    public void onSelectFilePathButtonAction(){
+    public void onMenuItemSelectFilePathAction(){
         File choosingFile = selectingPath != null ? createNewDirectoryChooser(selectingPath) : createNewDirectoryChooser();
 
         if (choosingFile==null) return;
@@ -127,7 +123,7 @@ public class MRTController {
 
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 选择文件控件的操作
+     * 树视图(选择文件界面)中的相关操作
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
@@ -163,6 +159,13 @@ public class MRTController {
         updateUI();
     }
 
+    public void buildTree(){
+        if (selectingPath!=null){
+            fileTreeBuilder = new FileTreeBuilder(treeViewFileSelector, selectingPath);
+            fileTreeBuilder.buildTree(selectingPath);
+        }
+    }
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 已选文件列表控件操作
      * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -182,7 +185,7 @@ public class MRTController {
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * UI日志表单的操作
+     * UI日志的操作
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
@@ -199,15 +202,8 @@ public class MRTController {
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 部分有关控件的操作
+     * 其他控件操作
      * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    public void buildTree(){
-        if (selectingPath!=null){
-            fileTreeBuilder = new FileTreeBuilder(treeViewFileSelector, selectingPath);
-            fileTreeBuilder.buildTree(selectingPath);
-        }
-    }
 
     public void changeStatusLabel(String text){
         Platform.runLater(() -> labelStatusLeft.setText(text));
@@ -222,17 +218,8 @@ public class MRTController {
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void updateUI(){
-//        this.getInput_proxy_host().setText(MRTApp.configuration.getProxyHost());
-//        this.getInput_proxy_port().setText(MRTApp.configuration.getProxyPort());
-//
-//        this.getInput_default_file_path().setText(MRTApp.configuration.getDefaultPath());
         this.setSelectingPath(new FileNode(new File(MRTApp.configuration.getDefaultPath())));
-//
-//        if (MRTApp.configuration.isDirShowOnly()) this.getDir_only().setSelected(true);
-//        this.updateProxyInputField();
-
         this.buildTree();
-
     }
 
     public void reset(){
