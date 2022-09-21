@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.mrt.core;
+package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.component.*;
 import com.github.lunarconcerto.mrt.util.FileNode;
@@ -9,18 +9,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import lombok.Data;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.lunarconcerto.mrt.core.ControllerUtil.createNewDirectoryChooser;
+import static com.github.lunarconcerto.mrt.gui.ControllerUtil.createNewDirectoryChooser;
 
 /**
  * 主面板控制器
@@ -40,45 +39,79 @@ public class MRTController {
      * 控件
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    // UI日志
-    @FXML
-    protected ListView<String> uiLogger;
-
-    // [选择文件夹]按钮
-    @FXML
-    protected MenuItem menuItemSelectFile;
-
-    // [运行]按钮
-    @FXML
-    protected MenuItem menuItemStartProgress;
-
-    // 左侧显示文件层次的树视图
+    /**
+     * 左侧，树视图
+     * 展示当前打开的目录下的所有文件/文件夹，以供选择。
+     */
     @FXML
     protected TreeView<FileNode> treeViewFileSelector;
 
-    // 中间上方显示已显示文件的列表视图
+    /**
+     * 中上，列表视图，
+     * 相当于等待进行重命名处理的文件列表。
+     */
     @FXML
-    protected ListView<FileNode> listViewSelectedFiles;
+    protected ListView<FileContainer> listViewSelectedFiles;
 
-    // 左下方显示当前状态的标签
+    /**
+     * 中下，列表视图
+     * 用来代替命令行的UI日志显示。
+     */
+    @FXML
+    protected ListView<String> uiLogger;
+
+    /**
+     * 左底，标签
+     * 显示当前应用程序状态用。
+     */
     @FXML
     protected Label labelStatusLeft;
 
-    // 中间进度条
+    /**
+     * 中底，进度条
+     */
     @FXML
     protected ProgressBar progressBar;
 
-    // 文件树视图中右键选择的[仅显示文件夹]菜单按钮
-    @FXML
-    protected CheckMenuItem menuItemDirOnly;
-
-    //填充型规则定义表
+    /**
+     * 右上，列表视图
+     * 用来定义[填充]类型的文件名规则
+     *
+     * @see com.github.lunarconcerto.mrt.rule.RuleType
+     */
     @FXML
     public ListView<AnchorPane> ruleFillingSetter;
 
-    //替换型规则定义表
+    /**
+     * 右下，列表视图
+     * 用来定义[替换]类型的文件名规则
+     *
+     * @see com.github.lunarconcerto.mrt.rule.RuleType
+     */
     @FXML
     public ListView<AnchorPane> ruleReplaceSetter;
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * 菜单项
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * 树视图中仅显示文件夹
+     */
+    @FXML
+    protected CheckMenuItem menuItemDirOnly;
+
+    /**
+     * 打开目录
+     */
+    @FXML
+    protected MenuItem menuItemSelectFile;
+
+    /**
+     * 开始运行
+     */
+    @FXML
+    protected MenuItem menuItemStartProgress;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 构造方法
@@ -231,22 +264,22 @@ public class MRTController {
     }
 
     private void addAllToList(@NotNull List<FileNode> fileNodeList){
-        ObservableList<FileNode> listItems = listViewSelectedFiles.getItems();
+        ObservableList<FileContainer> listItems = listViewSelectedFiles.getItems();
         int addedItems = 0;
         for (FileNode fileNode : fileNodeList) {
             boolean exists = false ;
-            for (FileNode listItem : listItems) {
-                if (fileNode==listItem){
+            for (FileContainer listItem : listItems) {
+                if (fileNode==listItem.node){
                     exists = true ;
                     break;
                 }
             }
             if (!exists){
-                listItems.add(fileNode);
+                listItems.add(new FileContainer(listItems.size(), fileNode));
                 addedItems++ ;
             }
         }
-        printToUILogger("将%s个文件加入到待处理列表".formatted(addedItems));
+        printToUILogger("将%s个项目加入到待处理列表".formatted(addedItems));
     }
 
     private boolean isChild(@NotNull TreeItem<FileNode> parent , @NotNull TreeItem<FileNode> child){
@@ -292,6 +325,30 @@ public class MRTController {
             uiLogger.getItems().add(formatter.format(new Date()) + " : " + text + "\n");
             uiLogger.scrollTo(uiLogger.getItems().size());
         });
+    }
+
+
+    @Getter
+    public static final class FileContainer {
+
+        private int index;
+
+        private final FileNode node;
+
+        FileContainer(int index, FileNode node) {
+            this.index = index;
+            this.node = node;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + index + "]" + node.toString();
+        }
+
 
     }
 

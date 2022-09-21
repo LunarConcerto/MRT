@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.mrt.component;
+package com.github.lunarconcerto.mrt.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

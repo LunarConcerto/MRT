@@ -1,6 +1,5 @@
-package com.github.lunarconcerto.mrt.core;
+package com.github.lunarconcerto.mrt.gui;
 
-import com.github.lunarconcerto.mrt.component.ClipboardDialog;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.fxml.FXML;

@@ -9,7 +9,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.control.Button?>
 
-<!--        fx:controller="com.github.lunarconcerto.mrt.core.MRTAboutPaneController" -->
+<!--        fx:controller="com.github.lunarconcerto.mrt.gui.MRTAboutPaneController" -->
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <AnchorPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
 

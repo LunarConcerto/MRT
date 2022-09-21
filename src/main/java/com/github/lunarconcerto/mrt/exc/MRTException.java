@@ -1,6 +1,6 @@
 package com.github.lunarconcerto.mrt.exc;
 
-import com.github.lunarconcerto.mrt.core.MRTApp;
+import com.github.lunarconcerto.mrt.gui.MRTApp;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;

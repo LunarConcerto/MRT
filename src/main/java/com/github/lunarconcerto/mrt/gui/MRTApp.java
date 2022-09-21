@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.mrt.core;
+package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.config.Configuration;
@@ -6,6 +6,7 @@ import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTException;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.application.Application;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SelectionMode;

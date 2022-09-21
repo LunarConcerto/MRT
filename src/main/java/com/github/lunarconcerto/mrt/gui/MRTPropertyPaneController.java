@@ -1,4 +1,4 @@
-package com.github.lunarconcerto.mrt.core;
+package com.github.lunarconcerto.mrt.gui;
 
 
 import com.github.lunarconcerto.mrt.config.Configuration;

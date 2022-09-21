@@ -1,8 +1,7 @@
-package com.github.lunarconcerto.mrt.core;
+package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
-import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

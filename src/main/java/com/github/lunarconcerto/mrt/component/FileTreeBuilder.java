@@ -1,6 +1,6 @@
 package com.github.lunarconcerto.mrt.component;
 
-import com.github.lunarconcerto.mrt.core.MRTApp;
+import com.github.lunarconcerto.mrt.gui.MRTApp;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.scene.control.TreeItem;

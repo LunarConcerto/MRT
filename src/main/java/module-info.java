@@ -22,11 +22,10 @@ module com.github.lunarconcerto.mrt {
     exports com.github.lunarconcerto.mrt.config;
     exports com.github.lunarconcerto.mrt.component;
     exports com.github.lunarconcerto.mrt.rule;
-    exports com.github.lunarconcerto.mrt.core;
-    exports com.github.lunarconcerto.mrt.rule.impl.dlsite.onsei;
+    exports com.github.lunarconcerto.mrt.gui;
 
     opens com.github.lunarconcerto.mrt to javafx.fxml;
     opens com.github.lunarconcerto.mrt.config to javafx.fxml;
     opens com.github.lunarconcerto.mrt.component to javafx.fxml;
-    opens com.github.lunarconcerto.mrt.core to javafx.fxml;
+    opens com.github.lunarconcerto.mrt.gui to javafx.fxml;
 }

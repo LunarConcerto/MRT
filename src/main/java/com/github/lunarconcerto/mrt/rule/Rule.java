@@ -1,6 +1,6 @@
 package com.github.lunarconcerto.mrt.rule;
 
-public interface IRule {
+public interface Rule {
 
     String getName();
 
