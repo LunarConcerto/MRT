@@ -1,5 +1,6 @@
 module com.github.lunarconcerto.mrt {
     requires javafx.controls;
+    requires javafx.web;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;

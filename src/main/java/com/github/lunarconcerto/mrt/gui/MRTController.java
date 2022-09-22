@@ -3,6 +3,7 @@ package com.github.lunarconcerto.mrt.gui;
 import com.github.lunarconcerto.mrt.component.*;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
+import com.github.lunarconcerto.mrt.rule.RuleType;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -277,7 +278,13 @@ public class MRTController {
      * 规则定义面板操作
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    public void onCreateNewRule(Event actionEvent) {
+    @FXML
+    public void onCreateNewFillingRule(ActionEvent actionEvent) {
+        MRTRuleSelectorPaneController.showWindow(RuleType.FILLING);
+    }
+
+    @FXML
+    public void onDeleteFillingRule(ActionEvent actionEvent) {
 
     }
 

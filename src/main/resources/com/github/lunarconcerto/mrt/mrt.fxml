@@ -192,8 +192,8 @@
                                             <contextMenu>
                                                 <ContextMenu>
                                                     <items>
-                                                        <MenuItem onAction="#onCreateNewRule" text="新建"/>
-                                                        <MenuItem text="删除"/>
+                                                        <MenuItem onAction="#onCreateNewFillingRule" text="新建"/>
+                                                        <MenuItem onAction="#onDeleteFillingRule" text="删除"/>
                                                         <MenuItem text="上移"/>
                                                         <MenuItem text="下移"/>
                                                         <MenuItem text="清空"/>

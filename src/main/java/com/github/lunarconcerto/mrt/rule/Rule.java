@@ -30,4 +30,5 @@ public interface Rule {
      */
     RuleDefiner createDefiner(String serializedString);
 
+
 }
