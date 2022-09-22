@@ -21,7 +21,7 @@ public class MRTApp extends Application {
 
     public static final String NAME = "MRT 文件批量重命名工具";
 
-    public static final String VERSION = "version-0.2";
+    public static final String VERSION = "version 1.0";
 
     public static MRTController controller ;
 
@@ -32,7 +32,6 @@ public class MRTApp extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MRTStarter.class.getResource("mrt.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         controller = fxmlLoader.getController();
-
         initStage(stage , scene);
         initAfterUILoad();
     }

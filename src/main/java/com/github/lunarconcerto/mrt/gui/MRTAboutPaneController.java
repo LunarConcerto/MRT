@@ -14,17 +14,12 @@ import java.io.IOException;
 
 public class MRTAboutPaneController extends AnchorPane {
 
-    @FXML
-    protected ImageView imageCafe;
-
 
     public MRTAboutPaneController() {
 
     }
 
-    void init() throws IOException {
-        this.imageCafe.setImage(new Image(FileUtil.getResourceAsStream("cafe.jpg")));
-    }
+    void init() {}
 
     /*
      * 关于页面触发
