@@ -9,6 +9,16 @@ public interface Rule {
      */
     String getName();
 
+
+    /**
+     * 显示在选择器上的对该规则的描述。
+     * <p>
+     * 可使用Html格式
+     */
+    default String getDescription(){
+        return "<h1>No description</h1>" ;
+    }
+
     /**
      * 定义该规则的类型
      *
