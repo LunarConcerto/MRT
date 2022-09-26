@@ -1,6 +1,6 @@
 package com.github.lunarconcerto.mrt.rule.impl;
 
-import com.github.lunarconcerto.mrt.component.FillingObjectContainer;
+import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
@@ -85,8 +85,8 @@ public class PureText implements Rule {
     record PureTextNameEditor(String text) implements NameEditor {
 
         @Override
-            public void doEdit(@NotNull FillingObjectContainer filler) {
-                filler.append(text);
+            public void doEdit(@NotNull RenameTargetContainer builder) {
+                builder.append(text);
             }
 
     }

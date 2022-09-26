@@ -1,9 +1,9 @@
 package com.github.lunarconcerto.mrt.rule;
 
-import com.github.lunarconcerto.mrt.component.FillingObjectContainer;
+import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 
 public interface NameEditor {
 
-    void doEdit(FillingObjectContainer filler);
+    void doEdit(RenameTargetContainer builder);
 
 }

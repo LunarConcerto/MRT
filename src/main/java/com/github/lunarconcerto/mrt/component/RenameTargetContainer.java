@@ -5,7 +5,7 @@ import com.github.lunarconcerto.mrt.util.FileNode;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class FillingObjectContainer {
+public class RenameTargetContainer {
 
     protected final FileNode targetFileNode;
 
@@ -17,13 +17,13 @@ public class FillingObjectContainer {
 
     protected HashMap<String, Object> cache ;
 
-    public FillingObjectContainer(FileNode targetFileNode) {
+    public RenameTargetContainer(FileNode targetFileNode) {
         this.targetFileNode = targetFileNode;
 
         init();
     }
 
-    public FillingObjectContainer(FileNode targetFileNode, int index) {
+    public RenameTargetContainer(FileNode targetFileNode, int index) {
         this.targetFileNode = targetFileNode;
         this.index = index;
 
@@ -36,7 +36,7 @@ public class FillingObjectContainer {
         newNameBuilder = new StringBuilder();
     }
 
-    public FillingObjectContainer putCache(String key, Object value){
+    public RenameTargetContainer putCache(String key, Object value){
         this.cache.put(key, value);
         return this ;
     }
@@ -46,42 +46,71 @@ public class FillingObjectContainer {
         return Optional.of((T) this.cache.get(key));
     }
 
-    public FillingObjectContainer append(int i){
+    /* * * * * * * * * * * * * * * * * * * * * * * *
+    * 内部StringBuilder的再封装
+    *
+    * append
+    * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public RenameTargetContainer append(int i){
         newNameBuilder.append(i);
         return this ;
     }
 
-    public FillingObjectContainer append(short i){
+    public RenameTargetContainer append(short i){
         newNameBuilder.append(i);
         return this ;
     }
 
-    public FillingObjectContainer append(long i){
+    public RenameTargetContainer append(long i){
         newNameBuilder.append(i);
         return this ;
     }
 
-    public FillingObjectContainer append(float i){
+    public RenameTargetContainer append(float i){
         newNameBuilder.append(i);
         return this ;
     }
 
-    public FillingObjectContainer append(double i){
+    public RenameTargetContainer append(double i){
         newNameBuilder.append(i);
         return this ;
     }
 
-    public FillingObjectContainer append(char c){
+    public RenameTargetContainer append(char c){
         newNameBuilder.append(c);
         return this ;
     }
 
-    public FillingObjectContainer append(String str){
+    public RenameTargetContainer append(String str){
         newNameBuilder.append(str);
         return this ;
     }
 
-    public FillingObjectContainer setIndex(int index) {
+    /* * * * * * * * * * * * * * * * * * * * * * * *
+     * 内部StringBuilder的再封装
+     *
+     * replace
+     * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public RenameTargetContainer replace(String target, String replacement){
+        newNameBuilder = new StringBuilder(newNameBuilder.toString().replace(target, replacement));
+        return this ;
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * *
+     * 其他
+     * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public boolean hasChild(){
+        return targetFileNode.isDirectory() && targetFileNode.listFiles().length > 0 ;
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * *
+     * Setter / Getter
+     * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public RenameTargetContainer setIndex(int index) {
         this.index = index;
         return this;
     }

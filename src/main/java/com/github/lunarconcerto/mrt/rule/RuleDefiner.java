@@ -32,6 +32,17 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
      */
     protected int nextComponentDistance = 15;
 
+    /**
+     * 创建该 {@link RuleDefiner} 的对象,
+     * 即对应的 {@link Rule} 实现类,
+     * 保留该对象的主要原因在于序列化时的定位。
+     */
+    protected Rule parentRule;
+
+    public RuleDefiner(Rule parentRule) {
+        this.parentRule = parentRule;
+    }
+
     public abstract NameEditor createNameEditor();
 
     public abstract String serialize();
@@ -101,11 +112,16 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
         return this;
     }
 
+    public Rule getParentRule() {
+        return parentRule;
+    }
+
     public static class EmptyRuleDefiner extends RuleDefiner {
 
         static int index = 0 ;
 
         public EmptyRuleDefiner() {
+            super(null);
             Label label = new Label("EMPTY RULE - " + index);
             addComponent(label);
 
