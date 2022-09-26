@@ -4,12 +4,11 @@ import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTException;
+import com.github.lunarconcerto.mrt.rule.RuleManager;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.application.Application;
-import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -19,11 +18,11 @@ import java.io.IOException;
 
 public class MRTApp extends Application {
 
-    public static final String NAME = "MRT 文件批量重命名工具";
+    public static final String NAME = "MRT.文件批量重命名工具";
 
-    public static final String VERSION = "version 1.0";
+    public static final String VERSION = "[v]1.0";
 
-    public static MRTController controller ;
+    public static MRTController mainController ;
 
     public static Configuration configuration ;
 
@@ -31,14 +30,14 @@ public class MRTApp extends Application {
     public void start(@NotNull Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MRTStarter.class.getResource("mrt.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        controller = fxmlLoader.getController();
+        mainController = fxmlLoader.getController();
         initStage(stage , scene);
         initAfterUILoad();
     }
 
     private static void initStage(@NotNull Stage stage, Scene scene) throws IOException {
         stage.setResizable(false);
-        stage.setTitle(NAME + " —— " + VERSION);
+        stage.setTitle(NAME + "    " + VERSION);
         stage.setScene(scene);
         stage.setOnCloseRequest(MRTApp::closeHandler);
         stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
@@ -51,11 +50,11 @@ public class MRTApp extends Application {
         manager.load();
         configuration = manager.getConfiguration() ;
 
-        Thread.setDefaultUncaughtExceptionHandler(MRTApp::errorHandler);
+        RuleManager.getInstance();
     }
 
     private static void initAfterUILoad() throws IOException {
-        controller.init();
+        mainController.init();
 
         configuration.applyConfig();
     }
@@ -65,15 +64,10 @@ public class MRTApp extends Application {
         ConfigurationManager.getManager().save(configuration);
     }
 
-    private static void errorHandler(Thread t, @NotNull Throwable e){
-        printToUiLogger(MRTException.buildErrorText(e));
-        e.printStackTrace();
-    }
-
 
     public static void printToUiLogger(String text){
-        if (controller!=null) {
-            controller.printToUILogger(text);
+        if (mainController !=null) {
+            mainController.printToUILogger(text);
         }
     }
 }

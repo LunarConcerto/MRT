@@ -1,0 +1,19 @@
+.list-cell:filled:selected, .list-cell:filled:focused{
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-text-fill: black ;
+}
+
+.list-cell {
+    -fx-text-fill: black;
+    -fx-cell-size: 40 ;
+}
+
+.list-cell:odd , .list-cell:even {
+    -fx-background-color: white;
+    -fx-border-color: rgba(0, 0, 0, 0.1);
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-text-fill: rgb(0, 0, 0);
+}

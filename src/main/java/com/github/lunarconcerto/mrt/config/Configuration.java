@@ -112,4 +112,16 @@ public class Configuration {
         this.historyPaths = historyPaths;
         return this;
     }
+
+    public void registerProperty(Property<?> property){
+        ConfigurationManager.getManager().registerProperty(property);
+    }
+
+    public void unregisterProperty(Property<?> property){
+        ConfigurationManager.getManager().unregisterProperty(property);
+    }
+
+    public void unregisterProperty(String key){
+        ConfigurationManager.getManager().unregisterProperty(key);
+    }
 }

@@ -2,6 +2,8 @@ package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.component.*;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
+import com.github.lunarconcerto.mrt.exc.MRTRuleException;
+import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.RuleType;
 import com.github.lunarconcerto.mrt.util.FileNode;
@@ -11,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -32,15 +33,17 @@ import static com.github.lunarconcerto.mrt.gui.ControllerUtil.createNewDirectory
 @Log4j(topic = "controller")
 public class MRTController {
 
+    public static int ruleSetterListCellSize = 48 ;
+
     /**
      * 当前选择的路径
      */
-    protected FileNode selectingPath ;
+    protected FileNode selectedPath;
 
     protected FileTreeBuilder fileTreeBuilder ;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 控件
+     * 控件变量
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
@@ -124,7 +127,7 @@ public class MRTController {
     protected MenuItem menuItemStartProgress;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 构造方法
+     * 构造方法 / 初始化方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public MRTController() {}
@@ -138,8 +141,8 @@ public class MRTController {
 
         updateUI();
 
-        ruleFillingSetter.setFixedCellSize(40);
-        ruleReplaceSetter.setFixedCellSize(40);
+        ruleFillingSetter.setFixedCellSize(ruleSetterListCellSize);
+        ruleReplaceSetter.setFixedCellSize(ruleSetterListCellSize);
 
         loadHistoryPath();
     }
@@ -154,7 +157,8 @@ public class MRTController {
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 顶部菜单栏按钮触发方法
+     * FXML EventHandler method
+     * 顶部菜单栏按钮
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
@@ -163,28 +167,28 @@ public class MRTController {
     }
 
     @FXML
-    public void onMenuItemAboutAction(ActionEvent actionEvent) {
+    protected void onMenuItemAboutAction(ActionEvent actionEvent) {
         MRTAboutPaneController.showWindow();
     }
 
     @FXML
-    public void onMenuItemPropertyAction(ActionEvent actionEvent) {
+    protected void onMenuItemPropertyAction(ActionEvent actionEvent) {
         MRTPropertyPaneController.showWindow();
     }
 
     @FXML
-    public void onMenuItemExitAction(ActionEvent actionEvent) {
+    protected void onMenuItemExitAction(ActionEvent actionEvent) {
         System.exit(0);
     }
 
     @FXML
-    public void onMenuItemSelectFilePathAction(){
-        File choosingFile = selectingPath != null ? createNewDirectoryChooser(selectingPath) : createNewDirectoryChooser();
+    protected void onMenuItemSelectFilePathAction(){
+        File choosingFile = selectedPath != null ? createNewDirectoryChooser(selectedPath) : createNewDirectoryChooser();
 
         if (choosingFile==null) return;
 
-        selectingPath = new FileNode(choosingFile);
-        log.debug("选择的文件路径为:" + selectingPath.getFullName() );
+        selectedPath = new FileNode(choosingFile);
+        log.debug("选择的文件路径为:" + selectedPath.getFullName() );
         recordHistoryPath(choosingFile.getPath());
         buildTree();
     }
@@ -196,24 +200,25 @@ public class MRTController {
 
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 树视图(选择文件界面)中的相关操作
+     * FXML EventHandler method
+     * 树视图(选择文件界面)
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    public void onTreeMenuSelectAction(){
+    protected void onTreeMenuSelectAction(){
         List<FileNode> nodeList = getSelectedTreeNodeList();
         addAllToSelectedList(nodeList);
     }
 
     @FXML
-    public void onTreeMenuSelectAllAction(){
+    protected void onTreeMenuSelectAllAction(){
         List<FileNode> fileNodeList = getRootChildrenNodeList();
         addAllToSelectedList(fileNodeList);
         treeViewFileSelector.getSelectionModel().selectAll();
     }
 
     @FXML
-    public void onTreeMenuReverseSelectAction(){
+    protected void onTreeMenuReverseSelectAction(){
         List<FileNode> targetList = getRootChildrenNodeList()
                 .stream()
                 .filter(fileNode -> !getSelectedTreeNodeList().contains(fileNode))
@@ -222,7 +227,7 @@ public class MRTController {
     }
 
     @FXML
-    public void onTreeMenuRefreshAction(){
+    protected void onTreeMenuRefreshAction(){
         buildTree();
     }
 
@@ -232,37 +237,32 @@ public class MRTController {
         updateUI();
     }
 
-    public void buildTree(){
-        if (selectingPath!=null){
-            fileTreeBuilder = new FileTreeBuilder(treeViewFileSelector, selectingPath);
-            fileTreeBuilder.buildTree(selectingPath);
-        }
-    }
-
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 已选文件列表控件操作
+     * FXML EventHandler method
+     * 已选文件列表
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    public void onListMenuRemoveAction(){
+    protected void onListMenuRemoveAction(){
         listViewSelectedFiles.getItems().removeAll(listViewSelectedFiles.getSelectionModel().getSelectedItems());
 
         refreshSelectedFileIndex();
     }
 
     @FXML
-    public void onListMenuRemoveAllAction(){
+    protected void onListMenuRemoveAllAction(){
         listViewSelectedFiles.getItems().clear();
 
         refreshSelectedFileIndex();
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * UI日志的操作
+     * FXML EventHandler method
+     * UI日志
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    public void onUILoggerCopy(){
+    protected void onUILoggerCopy(){
         String s = uiLogger.getSelectionModel().getSelectedItems().stream().toList().toString();
 
         try {
@@ -275,21 +275,131 @@ public class MRTController {
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 规则定义面板操作
+     * FXML EventHandler method
+     * 规则定义面板
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    public void onCreateNewFillingRule(ActionEvent actionEvent) {
+    protected void onCreateNewFillingRule(ActionEvent actionEvent) {
         MRTRuleSelectorPaneController.showWindow(RuleType.FILLING);
     }
 
     @FXML
-    public void onDeleteFillingRule(ActionEvent actionEvent) {
+    protected void onDeleteFillingRule(ActionEvent actionEvent) {
+        deleteRule(ruleFillingSetter);
+    }
 
+    @FXML
+    protected void onMoveUpFillingRule(ActionEvent actionEvent) {
+        moveUpRule(ruleFillingSetter);
+    }
+
+    @FXML
+    protected void onMoveDownFillingRule(ActionEvent actionEvent) {
+        moveDownRule(ruleFillingSetter);
+    }
+
+    @FXML
+    protected void onClearFillingRule(ActionEvent actionEvent) {
+        clearRule(ruleFillingSetter);
+    }
+
+    @FXML
+    protected void onCreateNewReplaceRule(ActionEvent actionEvent) {
+        MRTRuleSelectorPaneController.showWindow(RuleType.REPLACE);
+    }
+
+    @FXML
+    protected void onDeleteReplaceRule(ActionEvent actionEvent) {
+        deleteRule(ruleReplaceSetter);
+    }
+
+    @FXML
+    protected void onMoveUpReplaceRule(ActionEvent actionEvent) {
+        moveUpRule(ruleReplaceSetter);
+    }
+
+    @FXML
+    protected void onMoveDownReplaceRule(ActionEvent actionEvent) {
+        moveDownRule(ruleReplaceSetter);
+    }
+
+    @FXML
+    protected void onClearReplaceRule(ActionEvent actionEvent) {
+        clearRule(ruleReplaceSetter);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 其他控件操作
+     * Control Method
+     * 规则定义面板
+     * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    public void addRule(Rule rule){
+        if (rule==null){ return; }
+        if (rule.getType()!=null) {
+            addRule(rule, -1);
+        }else {
+            throw new MRTRuleException(MRTRuleException.ErrorType.VER_UNDEFINED,
+                    rule, "规则类型(RuleType)为空.");
+        }
+    }
+
+    public void addRule(@NotNull Rule rule, int index){
+        RuleDefiner definer = rule.createDefiner();
+        if (definer!=null){
+            addRule(rule, definer, index);
+        }else {
+            throw new MRTRuleException(MRTRuleException.ErrorType.VER_UNDEFINED,
+                    rule, "规则定义器(RuleDefiner)为空.");
+        }
+    }
+
+    void addRule(@NotNull Rule rule, RuleDefiner definer, int index){
+        RuleType type = rule.getType();
+        switch (type) {
+            case FILLING -> addRule(ruleFillingSetter, definer, index);
+            case REPLACE -> addRule(ruleReplaceSetter, definer, index);
+        }
+    }
+
+    void addRule(@NotNull ListView<RuleDefiner> listView, RuleDefiner definer, int index){
+        ObservableList<RuleDefiner> viewItems = listView.getItems();
+        if (index!=-1){
+            viewItems.add(index, definer);
+        }else {
+            viewItems.add(definer);
+        }
+    }
+
+    void deleteRule(ListView<RuleDefiner> listView) {
+        getSelectedItem(listView).ifPresent(
+                ruleDefiner -> {
+                    listView.getItems().remove(ruleDefiner);
+                }
+        );
+    }
+
+    void moveUpRule(@NotNull ListView<RuleDefiner> listView) {
+        int i = listView.getSelectionModel().getSelectedIndex();
+        if (i!=0){
+            Collections.swap(listView.getItems() , i , i-1);
+        }
+    }
+
+    void moveDownRule(@NotNull ListView<RuleDefiner> listView) {
+        int i = listView.getSelectionModel().getSelectedIndex();
+        if (i!=listView.getItems().size()){
+            Collections.swap(listView.getItems() , i , i+1);
+        }
+    }
+
+    void clearRule(@NotNull ListView<RuleDefiner> listView) {
+        listView.getItems().clear();
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Control Method
+     * 其他控件
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void changeStatusLabel(String text){
@@ -300,12 +410,24 @@ public class MRTController {
         Platform.runLater(() -> labelStatusLeft.setText("就绪"));
     }
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * *
-     * 其他方法
-     * * * * * * * * * * * * * * * * * * * * * * * * * */
+    public void buildTree(){
+        if (selectedPath !=null){
+            fileTreeBuilder = new FileTreeBuilder(treeViewFileSelector, selectedPath);
+            fileTreeBuilder.buildTree(selectedPath);
+        }
+    }
+
+    public <T> Optional<T> getSelectedItem(@NotNull ListView<T> listView){
+        return Optional.ofNullable(listView.getSelectionModel().getSelectedItem());
+    }
+
+    public <T> List<T> getSelectedItems(@NotNull ListView<T> listView){
+        ObservableList<T> items = listView.getSelectionModel().getSelectedItems();
+        return items != null ? new ArrayList<>(items) : new ArrayList<>();
+    }
 
     public void updateUI(){
-        this.setSelectingPath(new FileNode(new File(MRTApp.configuration.getDefaultPath())));
+        this.setSelectedPath(new FileNode(new File(MRTApp.configuration.getDefaultPath())));
         this.buildTree();
     }
 
@@ -351,7 +473,7 @@ public class MRTController {
     public void addHistoryPath(String path){
         MenuItem item = new MenuItem(path);
         item.setOnAction(event -> {
-            selectingPath = new FileNode(item.getText());
+            selectedPath = new FileNode(item.getText());
             buildTree();
         });
         menuHistoryPath.getItems().add(0, item);
@@ -391,20 +513,14 @@ public class MRTController {
         return result ;
     }
 
-    private @NotNull List<TreeItem<FileNode>> getSelectedTreeItemList(){
-        return treeViewFileSelector
-                .getSelectionModel()
-                .getSelectedItems()
-                .stream()
-                .toList();
-    }
-
     public static final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 
     public void printToUILogger(String text){
         Platform.runLater(() -> {
             uiLogger.getItems().add(formatter.format(new Date()) + " : " + text + "\n");
-            uiLogger.scrollTo(uiLogger.getItems().size());
+            int i = uiLogger.getItems().size();
+            uiLogger.scrollTo(i);
+            uiLogger.getSelectionModel().clearAndSelect(i-1);
         });
     }
 
@@ -427,7 +543,7 @@ public class MRTController {
 
         @Override
         public @NotNull String toString() {
-            return "[" + index + "]" + node.toString();
+            return "[" + index + "] " + node.toString();
         }
 
 

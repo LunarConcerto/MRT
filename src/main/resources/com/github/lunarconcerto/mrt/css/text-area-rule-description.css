@@ -1,0 +1,8 @@
+.text-area {
+    -fx-opacity: 1.0;
+}
+
+.text-area:focused {
+    -fx-focus-color: -fx-control-inner-background ;
+    -fx-faint-focus-color: -fx-control-inner-background ;
+}

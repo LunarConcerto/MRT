@@ -1,6 +1,5 @@
 module com.github.lunarconcerto.mrt {
     requires javafx.controls;
-    requires javafx.web;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
@@ -12,6 +11,7 @@ module com.github.lunarconcerto.mrt {
     requires org.jsoup;
     requires log4j;
     requires lombok;
+    requires io.github.classgraph;
 
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;

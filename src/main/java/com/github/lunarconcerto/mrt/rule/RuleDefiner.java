@@ -1,16 +1,96 @@
 package com.github.lunarconcerto.mrt.rule;
 
+import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public abstract class RuleDefiner extends AnchorPane implements Serializable {
 
-    int index ;
+    public static int labelCharSize = 12 ;
 
-    abstract NameEditor createNameEditor();
+    /**
+     * 表示该面板,
+     * 在MRT主面板的 {@link com.github.lunarconcerto.mrt.gui.MRTController#ruleFillingSetter} , {@link com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter}
+     * 中所处的索引值。
+     * <p>
+     * 该索引值将决定此处定义的规则在何时被触发。
+     */
+    protected int index ;
 
-    abstract String serialize();
+    /**
+     * 上一个组件的结尾坐标。
+     */
+    protected int lastComponentLocationX = 0 ;
+
+    /**
+     * 组件之间相差的距离
+     */
+    protected int nextComponentDistance = 15;
+
+    public abstract NameEditor createNameEditor();
+
+    public abstract String serialize();
+
+
+    public void addLabel(String text){
+        Label label = new Label(text);
+
+        int width = text.length() * labelCharSize ;
+
+        label.setLayoutY(13);
+        label.setLayoutX(lastComponentLocationX + nextComponentDistance) ;
+        label.setMaxWidth(width);
+        label.setPrefWidth(width);
+
+        lastComponentLocationX += nextComponentDistance + width;
+        addComponent(label);
+    }
+
+    public <T> ChoiceBox<T> addChoiceBox(double width , T[] contents){
+        ChoiceBox<T> box = new ChoiceBox<>();
+
+        box.setLayoutY(7);
+        box.setLayoutX(lastComponentLocationX + nextComponentDistance);
+        box.setPrefWidth(width);
+        box.setMaxWidth(width);
+        Arrays.stream(contents).forEach(content -> box.getItems().add(content));
+
+        lastComponentLocationX += nextComponentDistance + width ;
+        addComponent(box);
+
+        return box;
+    }
+
+    public TextField addTextField(String preText, double width){
+        TextField textField = new TextField(preText);
+
+        textField.setLayoutY(9);
+        textField.setLayoutX(lastComponentLocationX + nextComponentDistance);
+        textField.setPrefWidth(width);
+        textField.setMaxWidth(width);
+
+        lastComponentLocationX += nextComponentDistance + width ;
+        addComponent(textField);
+
+        return textField;
+    }
+
+    public TextField addTextField(double width){
+        return addTextField("" , width);
+    }
+
+    public TextField addTextField(){
+        return addTextField(100);
+    }
+
+    public void addComponent(Node node){
+        this.getChildren().add(node);
+    }
 
     public int getIndex() {
         return index;
@@ -20,4 +100,28 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
         this.index = index;
         return this;
     }
+
+    public static class EmptyRuleDefiner extends RuleDefiner {
+
+        static int index = 0 ;
+
+        public EmptyRuleDefiner() {
+            Label label = new Label("EMPTY RULE - " + index);
+            addComponent(label);
+
+            index++;
+        }
+
+        @Override
+        public NameEditor createNameEditor() {
+            return container -> {};
+        }
+
+        @Override
+        public String serialize() {
+            return "";
+        }
+
+    }
+
 }

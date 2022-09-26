@@ -95,7 +95,7 @@ public class FileTreeBuilder {
                 });
                 loadedFileAmount++;
                 Platform.runLater(() -> {
-                    MRTApp.controller.getProgressBar().setProgress( (double) fileSizeLimit / loadedFileAmount);
+                    MRTApp.mainController.getProgressBar().setProgress( (double) fileSizeLimit / loadedFileAmount);
                     ifPause();
                 });
             }

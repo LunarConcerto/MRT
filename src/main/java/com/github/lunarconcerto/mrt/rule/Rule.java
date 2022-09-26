@@ -1,42 +1,65 @@
 package com.github.lunarconcerto.mrt.rule;
 
+import com.github.lunarconcerto.mrt.config.Configuration;
+
 public interface Rule {
 
-    void init();
+    /**
+     * 在 {@link Rule} 被实例化后调用,
+     * <p>
+     * 在该方法中，可以为该 {@link Rule} 保存配置，
+     * 以及添加配置词条到配置面板
+     * @param configuration 当前程序已加载的配置类.
+     * @see Configuration
+     * @see com.github.lunarconcerto.mrt.config.ConfigurationManager
+     */
+    void init(Configuration configuration);
 
     /**
-     * 显示在UI上的名字
+     * 显示在 {@link com.github.lunarconcerto.mrt.gui.MRTRuleSelectorPaneController}
+     * 面板上的名字。
+     *
+     * @see com.github.lunarconcerto.mrt.gui.MRTRuleSelectorPaneController
      */
     String getName();
 
 
     /**
-     * 显示在选择器上的对该规则的描述。
-     * <p>
-     * 可使用Html格式
+     * 显示在 {@link com.github.lunarconcerto.mrt.gui.MRTRuleSelectorPaneController}
+     * 面板上的，对该规则的描述。
+     *
+     * @see com.github.lunarconcerto.mrt.gui.MRTRuleSelectorPaneController
      */
     default String getDescription(){
-        return "<h1>No description</h1>" ;
+        return "暂无描述." ;
     }
 
     /**
-     * 定义该规则的类型
+     * 定义该规则的类型。
+     * 不同类型的规则，被调用的时机不同。
      *
      * @see RuleType
      */
     RuleType getType();
 
     /**
-     * 在UI中再对规则进行定义的面板
+     * 在主面板中再对规则进行细节自定义的面板
      *
      * @see RuleDefiner
+     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleFillingSetter
+     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter
      */
     RuleDefiner createDefiner();
 
     /**
-     * 在UI中再对规则进行定义的面板
-     *
+     * 在主面板中再对规则进行细节自定义的面板
+     * <p>
+     * 该方法输入一个从 {@link RuleDefiner#serialize() } 方法
+     * 获取的序列化数据,
+     * 故该方法的实现, 需要返回一个反序列化的 {@link RuleDefiner}.
      * @see RuleDefiner
+     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleFillingSetter
+     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter
      */
     RuleDefiner createDefiner(String serializedString);
 
