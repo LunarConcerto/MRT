@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.github.lunarconcerto.mrt.gui.ControllerUtil.createNewDirectoryChooser;
 
@@ -375,6 +376,7 @@ public class MRTController {
         getSelectedItem(listView).ifPresent(
                 ruleDefiner -> {
                     listView.getItems().remove(ruleDefiner);
+                    resetRuleDefinerIndex(listView);
                 }
         );
     }
@@ -383,6 +385,7 @@ public class MRTController {
         int i = listView.getSelectionModel().getSelectedIndex();
         if (i!=0){
             Collections.swap(listView.getItems() , i , i-1);
+            resetRuleDefinerIndex(listView);
         }
     }
 
@@ -390,7 +393,13 @@ public class MRTController {
         int i = listView.getSelectionModel().getSelectedIndex();
         if (i!=listView.getItems().size()){
             Collections.swap(listView.getItems() , i , i+1);
+            resetRuleDefinerIndex(listView);
         }
+    }
+
+    void resetRuleDefinerIndex(@NotNull ListView<RuleDefiner> listView){
+        ObservableList<RuleDefiner> definers = listView.getItems();
+        IntStream.range(0, definers.size()).forEachOrdered(i -> definers.get(i).setIndex(i));
     }
 
     void clearRule(@NotNull ListView<RuleDefiner> listView) {
@@ -480,8 +489,9 @@ public class MRTController {
     }
 
     private void refreshSelectedFileIndex(){
-        listViewSelectedFiles.getItems()
-                .forEach(item -> item.setIndex(listViewSelectedFiles.getItems().indexOf(item)));
+        ObservableList<FileContainer> items = listViewSelectedFiles.getItems();
+        IntStream.range(0, items.size())
+                .forEachOrdered(i -> items.get(i).setIndex(i));
         listViewSelectedFiles.refresh();
     }
 

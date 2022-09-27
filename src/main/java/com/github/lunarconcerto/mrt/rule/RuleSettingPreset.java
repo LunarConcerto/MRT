@@ -26,7 +26,9 @@ public class RuleSettingPreset {
             Rule rule = definer.getParentRule();
             if (rule!=null){
                 preset.add(RuleSettingInfo.createNewInfo(definer.getParentRule().getClass().getName(),
-                        definer.serialize()));
+                        definer.serialize(),
+                        definer.getIndex())
+                );
             }else {
                 preset.add(emptyRuleSettingInfo());
             }
@@ -45,7 +47,7 @@ public class RuleSettingPreset {
 
     @Contract(" -> new")
     public static @NotNull RuleSettingInfo emptyRuleSettingInfo(){
-        return new RuleSettingInfo("empty" , "empty");
+        return new RuleSettingInfo("empty" , "empty", -1);
     }
 
     @Data
@@ -57,9 +59,11 @@ public class RuleSettingPreset {
 
         protected String serializeData ;
 
-        @Contract("_, _ -> new")
-        public static @NotNull RuleSettingInfo createNewInfo(String ruleClassName, String serializeData){
-            return new RuleSettingInfo(ruleClassName, serializeData);
+        protected int index ;
+
+        @Contract("_, _, _ -> new")
+        public static @NotNull RuleSettingInfo createNewInfo(String ruleClassName, String serializeData, int index){
+            return new RuleSettingInfo(ruleClassName, serializeData, index);
         }
 
         @Contract(" -> new")

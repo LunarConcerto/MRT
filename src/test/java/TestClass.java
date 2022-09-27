@@ -10,37 +10,11 @@ import java.net.URLClassLoader;
 public class TestClass {
 
     @Test
-    void method1() throws URISyntaxException, MalformedURLException {
-        String path = "com/github/lunarconcerto/mrt/rule";
-
-        URL url = MRTStarter.class.getClassLoader().getResource(path);
-
-        assert url != null;
-
-        File root = new File(url.toURI());
-
-        File[] files = root.listFiles();
-
-        assert files != null;
-
-        for (File file : files) {
-            try (URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()})) {
-                Class<?> aClass = loader.loadClass(file.getName());
-                System.out.println(1);
-                System.out.println(aClass.getName());
-                System.out.println(aClass.getTypeName());
-            }catch (Exception e){
-
-            }
-
-
-        }
+    void method1() {
     }
 
     @Test
     void test2() {
-
-
 
     }
 }
