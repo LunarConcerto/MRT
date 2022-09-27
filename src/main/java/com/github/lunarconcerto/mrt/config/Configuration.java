@@ -1,9 +1,12 @@
 package com.github.lunarconcerto.mrt.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.lunarconcerto.mrt.rule.RuleDefiner;
+import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import lombok.Getter;
 import org.apache.log4j.PropertyConfigurator;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +34,10 @@ public class Configuration {
     private List<String> historyPaths = new ArrayList<>();
 
     public Configuration() {}
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Some Config Control
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void addHistoryPath(String path) {
         if (historyPaths.size() > 10){
@@ -73,6 +80,10 @@ public class Configuration {
         }
     }
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    * Setter / Getter
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     public Configuration setCustomProperties(Properties customProperties) {
         this.customProperties = customProperties;
         return this;
@@ -112,6 +123,10 @@ public class Configuration {
         this.historyPaths = historyPaths;
         return this;
     }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * PropertyRegistry
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     public void registerProperty(Property<?> property){
         ConfigurationManager.getManager().registerProperty(property);

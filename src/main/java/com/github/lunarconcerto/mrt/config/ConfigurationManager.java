@@ -1,13 +1,20 @@
 package com.github.lunarconcerto.mrt.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.lunarconcerto.mrt.rule.RuleDefiner;
+import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import com.github.lunarconcerto.mrt.util.TimeUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 @Getter
@@ -17,9 +24,11 @@ public class ConfigurationManager {
 
     private Configuration configuration ;
 
+    private List<RuleSettingPreset> presetList = new ArrayList<>();
+
     private final HashMap<String, Property<?>> propertyHashMap = new HashMap<>();
 
-    public static final File propertiesPath = new File(FileUtil.getUserPath() + "//.settings.prop");
+    public static final File propertiesFile = new File(FileUtil.getUserPath() + "//.settings.prop");
 
     private static final ConfigurationManager manager = new ConfigurationManager();
 
@@ -31,7 +40,7 @@ public class ConfigurationManager {
 
     protected InputStream openInputStream(){
         try {
-            return new FileInputStream(propertiesPath);
+            return new FileInputStream(propertiesFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -40,7 +49,7 @@ public class ConfigurationManager {
 
     protected OutputStream openOutputStream(){
         try {
-            return new FileOutputStream(propertiesPath);
+            return new FileOutputStream(propertiesFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -48,48 +57,85 @@ public class ConfigurationManager {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void load(){
-        if (!propertiesPath.exists()){
+    protected void ensurePropertiesFileExists(){
+        if (!propertiesFile.exists()) {
             try {
-                propertiesPath.createNewFile();
+                propertiesFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public void load(){
+        ensurePropertiesFileExists();
         try {
             properties.load(openInputStream());
+
             loadObjectConfig();
+            loadPreset();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void loadObjectConfig(){
-        try {
+
+    protected void loadObjectConfig() throws JsonProcessingException {
+        String jsonConfig = properties.getProperty("mrt.objects.config");
+        if (jsonConfig!=null && !jsonConfig.isEmpty()){
             ObjectMapper mapper = new ObjectMapper();
-            String jsonConfig = properties.getProperty("mrt.objects.config");
-            if (jsonConfig!=null && !jsonConfig.isEmpty()){
-                configuration = mapper.readValue(jsonConfig, Configuration.class);
-            }else {
-                configuration = new Configuration();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            configuration = mapper.readValue(jsonConfig, Configuration.class);
+        }else {
+            configuration = new Configuration();
+        }
+    }
+
+    protected void loadPreset() throws JsonProcessingException {
+        String jsonConfig = properties.getProperty("mrt.rule.preset");
+        if (jsonConfig!=null && !jsonConfig.isEmpty()){
+            ObjectMapper mapper = new ObjectMapper();
+            presetList = mapper.readValue(jsonConfig, new TypeReference<>() {});
         }
     }
 
     public void save(){
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String configStr = mapper.writeValueAsString(configuration);
+            saveObjectConfig();
+            savePreset();
 
-            properties.setProperty("mrt.objects.config" , configStr);
             properties.store(openOutputStream() , "RenameTools properties , last change:"+
                     TimeUtil.getFormattedNowTime());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    protected void saveObjectConfig() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        String configStr = mapper.writeValueAsString(configuration);
+
+        properties.setProperty("mrt.objects.config" , configStr);
+    }
+
+    protected void savePreset() throws JsonProcessingException {
+        if (!presetList.isEmpty()){
+            ObjectMapper mapper = new ObjectMapper();
+
+            String value = mapper.writeValueAsString(presetList);
+            properties.setProperty("mrt.rule.preset", value);
+        }
+    }
+
+    public void addPreset(String presetName, @NotNull List<RuleDefiner> definers){
+        RuleSettingPreset preset = RuleSettingPreset.createNewPreset(presetName, definers);
+        presetList.add(preset);
+    }
+
+    public void addPreset(RuleSettingPreset preset){
+        presetList.add(preset);
+    }
+
 
     public void save(@NotNull Configuration configuration){
         this.configuration = configuration;

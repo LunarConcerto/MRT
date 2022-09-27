@@ -1,5 +1,6 @@
 package com.github.lunarconcerto.mrt.rule;
 
+import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -122,20 +123,26 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
 
         public EmptyRuleDefiner() {
             super(null);
-            Label label = new Label("EMPTY RULE - " + index);
-            addComponent(label);
+            addLabel("I am useless rule pane No." + index);
 
             index++;
         }
 
         @Override
         public NameEditor createNameEditor() {
-            return container -> {};
+            return new EmptyNameEditor();
         }
 
         @Override
         public String serialize() {
-            return "";
+            return "" + index;
+        }
+
+        static class EmptyNameEditor implements NameEditor{
+
+            @Override
+            public void doEdit(RenameTargetContainer builder) {}
+
         }
 
     }

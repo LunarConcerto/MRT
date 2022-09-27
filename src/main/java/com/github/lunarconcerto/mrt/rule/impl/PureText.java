@@ -33,12 +33,12 @@ public class PureText implements Rule {
 
     @Override
     public RuleDefiner createDefiner() {
-        return new PureTextDefiner();
+        return new PureTextDefiner(this);
     }
 
     @Override
     public RuleDefiner createDefiner(String serializedString) {
-        return new PureTextDefiner(serializedString);
+        return new PureTextDefiner(this, serializedString);
     }
 
     static class PureTextDefiner extends RuleDefiner {
@@ -47,14 +47,13 @@ public class PureText implements Rule {
 
         protected TextField textField ;
 
-        public PureTextDefiner() {
-            init();
+        public PureTextDefiner(Rule parentRule) {
+            super(parentRule);
         }
 
-        public PureTextDefiner(String text) {
+        public PureTextDefiner(Rule parentRule, String text) {
+            super(parentRule);
             this.text = text;
-
-            init();
         }
 
         void init(){
