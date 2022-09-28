@@ -3,10 +3,7 @@ package com.github.lunarconcerto.mrt.gui;
 import com.github.lunarconcerto.mrt.component.*;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTRuleException;
-import com.github.lunarconcerto.mrt.rule.Rule;
-import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
-import com.github.lunarconcerto.mrt.rule.RuleType;
+import com.github.lunarconcerto.mrt.rule.*;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -161,7 +158,7 @@ public class MRTController {
     }
 
     private void loadDefaultPreset(){
-        List<RuleSettingPreset> presetList = ConfigurationManager.getManager().getPresetList();
+        List<SerializableRulePreset> presetList = ConfigurationManager.getManager().getPresetList();
 
         presetList.stream()
                 .filter(preset -> preset.getPresetName().equals("default"))
@@ -428,33 +425,11 @@ public class MRTController {
         resetRuleDefinerIndex(listView);
     }
 
-    void loadFromPreset(@NotNull RuleSettingPreset preset){
-        for (RuleSettingPreset.RuleSettingInfo info : preset.getInfos()) {
-            try {
-                Class<?> ruleClass = Class.forName(info.getRuleClassName());
-                Rule instance = (Rule) ruleClass.getConstructor().newInstance();
+    void loadFromPreset(@NotNull SerializableRulePreset preset){
+        RuleDefinerPreset definerPreset = PresetLoader.load(preset);
 
-                loadRuleDefinerFromSettingInfo(info, instance);
-            }catch (ClassNotFoundException e){
-                throw new MRTRuleException(MRTRuleException.ErrorType.CLASS_NOT_FOUND, "无法找到类" + info.getRuleClassName());
-            }catch (NoSuchMethodException e){
-                throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, "无可用构造函数" + info.getRuleClassName());
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException ignored) {
-
-            }
-        }
-    }
-
-    void loadRuleDefinerFromSettingInfo(RuleSettingPreset.@NotNull RuleSettingInfo info, Rule rule){
-        RuleDefiner definer;
-        String data = info.getSerializeData();
-        if (data!=null && !data.isEmpty()){
-            definer = rule.createDefiner(data);
-        }else {
-            definer = rule.createDefiner();
-        }
-
-        addRuleDefiner(definer, rule.getType(), info.getIndex());
+        definerPreset.addToFillingListView(ruleFillingSetter);
+        definerPreset.addToReplaceListView(ruleReplaceSetter);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *

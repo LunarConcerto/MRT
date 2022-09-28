@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
+import com.github.lunarconcerto.mrt.rule.SerializableRulePreset;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import com.github.lunarconcerto.mrt.util.TimeUtil;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class ConfigurationManager {
 
     private Configuration configuration ;
 
-    private List<RuleSettingPreset> presetList = new ArrayList<>();
+    private List<SerializableRulePreset> presetList = new ArrayList<>();
 
     private final HashMap<String, Property<?>> propertyHashMap = new HashMap<>();
 
@@ -124,18 +124,18 @@ public class ConfigurationManager {
     }
 
     public void addPreset(String presetName, @NotNull List<RuleDefiner> definers){
-        RuleSettingPreset preset = RuleSettingPreset.createNewPreset(presetName, definers);
+        SerializableRulePreset preset = SerializableRulePreset.createNewPreset(presetName, definers);
 
         checkPresetIfExistThanRemove(preset);
         presetList.add(preset);
     }
 
-    public void addPreset(RuleSettingPreset preset){
+    public void addPreset(SerializableRulePreset preset){
         checkPresetIfExistThanRemove(preset);
         presetList.add(preset);
     }
 
-    void checkPresetIfExistThanRemove(RuleSettingPreset newPreset){
+    void checkPresetIfExistThanRemove(SerializableRulePreset newPreset){
         presetList.removeIf(existPreset -> existPreset.getPresetName().equals(newPreset.getPresetName()));
     }
 
@@ -161,7 +161,7 @@ public class ConfigurationManager {
         this.propertyHashMap.remove(key);
     }
 
-    public List<RuleSettingPreset> getPresetList() {
+    public List<SerializableRulePreset> getPresetList() {
         return presetList;
     }
 }

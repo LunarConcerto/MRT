@@ -1,12 +1,9 @@
 package com.github.lunarconcerto.mrt.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import lombok.Getter;
 import org.apache.log4j.PropertyConfigurator;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;

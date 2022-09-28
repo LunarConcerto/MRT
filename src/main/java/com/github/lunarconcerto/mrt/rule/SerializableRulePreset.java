@@ -6,20 +6,21 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RuleSettingPreset {
+public class SerializableRulePreset implements Serializable {
 
     protected String presetName ;
 
     protected List<RuleSettingInfo> infos ;
 
-    public static @NotNull RuleSettingPreset createNewPreset(String presetName, @NotNull List<RuleDefiner> definers){
-        RuleSettingPreset preset = new RuleSettingPreset();
+    public static @NotNull SerializableRulePreset createNewPreset(String presetName, @NotNull List<RuleDefiner> definers){
+        SerializableRulePreset preset = new SerializableRulePreset();
         preset.setPresetName(presetName);
 
         for (RuleDefiner definer : definers) {
