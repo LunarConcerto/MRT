@@ -11,11 +11,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Getter
 public class ConfigurationManager {
@@ -129,11 +125,18 @@ public class ConfigurationManager {
 
     public void addPreset(String presetName, @NotNull List<RuleDefiner> definers){
         RuleSettingPreset preset = RuleSettingPreset.createNewPreset(presetName, definers);
+
+        checkPresetIfExistThanRemove(preset);
         presetList.add(preset);
     }
 
     public void addPreset(RuleSettingPreset preset){
+        checkPresetIfExistThanRemove(preset);
         presetList.add(preset);
+    }
+
+    void checkPresetIfExistThanRemove(RuleSettingPreset newPreset){
+        presetList.removeIf(existPreset -> existPreset.getPresetName().equals(newPreset.getPresetName()));
     }
 
 
@@ -158,4 +161,7 @@ public class ConfigurationManager {
         this.propertyHashMap.remove(key);
     }
 
+    public List<RuleSettingPreset> getPresetList() {
+        return presetList;
+    }
 }

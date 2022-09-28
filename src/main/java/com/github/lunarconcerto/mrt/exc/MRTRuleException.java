@@ -19,13 +19,20 @@ public class MRTRuleException extends MRTException {
         MRTApp.printToUiLogger(errorMessage);
     }
 
+    public MRTRuleException(ErrorType type, String message) {
+        String errorMessage = "%s \n,\n  由于 %s,%s".formatted(ERROR_MESSAGE, type.getIllustrate(), message);
+
+        MRTApp.printToUiLogger(errorMessage);
+    }
+
 
     public enum ErrorType {
 
         VER_UNDEFINED("未定义变量") ,
 
-        NO_ACCESSIBLE_CONTAINER("无可用构造函数");
+        NO_ACCESSIBLE_CONTAINER("无可用构造函数"),
 
+        CLASS_NOT_FOUND("找不到类")
         ;
 
         final String illustrate ;

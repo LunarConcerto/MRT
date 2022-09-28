@@ -4,9 +4,12 @@ import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTException;
+import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.RuleManager;
+import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -15,6 +18,8 @@ import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MRTApp extends Application {
 
@@ -61,7 +66,26 @@ public class MRTApp extends Application {
 
 
     private static void closeHandler(WindowEvent event){
+        savePreset();
+
         ConfigurationManager.getManager().save(configuration);
+    }
+
+    private static void savePreset(){
+        List<RuleDefiner> fillingRules = mainController.ruleFillingSetter.getItems();
+
+        List<RuleDefiner> collect = new ArrayList<>();
+        if (!fillingRules.isEmpty()){
+            collect.addAll(fillingRules);
+        }
+
+        List<RuleDefiner> replaceRules = mainController.ruleReplaceSetter.getItems();
+        if (!replaceRules.isEmpty()){
+            collect.addAll(replaceRules);
+        }
+
+        RuleSettingPreset defaultPreset = RuleSettingPreset.createNewPreset("default", collect);
+        ConfigurationManager.getManager().addPreset(defaultPreset);
     }
 
 

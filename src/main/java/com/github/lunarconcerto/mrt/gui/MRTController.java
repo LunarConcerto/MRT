@@ -5,6 +5,7 @@ import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTRuleException;
 import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
+import com.github.lunarconcerto.mrt.rule.RuleSettingPreset;
 import com.github.lunarconcerto.mrt.rule.RuleType;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -146,6 +148,7 @@ public class MRTController {
         ruleReplaceSetter.setFixedCellSize(ruleSetterListCellSize);
 
         loadHistoryPath();
+        loadDefaultPreset();
     }
 
     private void loadHistoryPath(){
@@ -155,6 +158,15 @@ public class MRTController {
         if (paths!=null){
             paths.forEach(this::addHistoryPath);
         }
+    }
+
+    private void loadDefaultPreset(){
+        List<RuleSettingPreset> presetList = ConfigurationManager.getManager().getPresetList();
+
+        presetList.stream()
+                .filter(preset -> preset.getPresetName().equals("default"))
+                .findFirst()
+                .ifPresent(this::loadFromPreset);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -348,27 +360,10 @@ public class MRTController {
     public void addRule(@NotNull Rule rule, int index){
         RuleDefiner definer = rule.createDefiner();
         if (definer!=null){
-            addRule(rule, definer, index);
+            addRuleDefiner(definer, rule.getType(), index);
         }else {
             throw new MRTRuleException(MRTRuleException.ErrorType.VER_UNDEFINED,
                     rule, "规则定义器(RuleDefiner)为空.");
-        }
-    }
-
-    void addRule(@NotNull Rule rule, RuleDefiner definer, int index){
-        RuleType type = rule.getType();
-        switch (type) {
-            case FILLING -> addRule(ruleFillingSetter, definer, index);
-            case REPLACE -> addRule(ruleReplaceSetter, definer, index);
-        }
-    }
-
-    void addRule(@NotNull ListView<RuleDefiner> listView, RuleDefiner definer, int index){
-        ObservableList<RuleDefiner> viewItems = listView.getItems();
-        if (index!=-1){
-            viewItems.add(index, definer);
-        }else {
-            viewItems.add(definer);
         }
     }
 
@@ -399,11 +394,67 @@ public class MRTController {
 
     void resetRuleDefinerIndex(@NotNull ListView<RuleDefiner> listView){
         ObservableList<RuleDefiner> definers = listView.getItems();
-        IntStream.range(0, definers.size()).forEachOrdered(i -> definers.get(i).setIndex(i));
+        IntStream.range(0, definers.size())
+                .forEachOrdered(i -> definers.get(i).setIndex(i));
     }
 
     void clearRule(@NotNull ListView<RuleDefiner> listView) {
         listView.getItems().clear();
+    }
+
+    void addRuleDefiner(RuleDefiner ruleDefiner, @NotNull RuleType type){
+        addRuleDefiner(ruleDefiner, type, -1);
+    }
+
+    void addRuleDefiner(RuleDefiner ruleDefiner, @NotNull RuleType type, int index){
+        switch (type){
+            case FILLING -> {
+                addRuleDefiner(ruleFillingSetter, ruleDefiner, index);
+            }
+            case REPLACE -> {
+                addRuleDefiner(ruleReplaceSetter, ruleDefiner, index);
+            }
+        }
+    }
+
+    void addRuleDefiner(@NotNull ListView<RuleDefiner> listView, RuleDefiner definer, int index){
+        ObservableList<RuleDefiner> viewItems = listView.getItems();
+        if (index!=-1){
+            viewItems.add(index, definer);
+        }else {
+            viewItems.add(definer);
+        }
+
+        resetRuleDefinerIndex(listView);
+    }
+
+    void loadFromPreset(@NotNull RuleSettingPreset preset){
+        for (RuleSettingPreset.RuleSettingInfo info : preset.getInfos()) {
+            try {
+                Class<?> ruleClass = Class.forName(info.getRuleClassName());
+                Rule instance = (Rule) ruleClass.getConstructor().newInstance();
+
+                loadRuleDefinerFromSettingInfo(info, instance);
+            }catch (ClassNotFoundException e){
+                throw new MRTRuleException(MRTRuleException.ErrorType.CLASS_NOT_FOUND, "无法找到类" + info.getRuleClassName());
+            }catch (NoSuchMethodException e){
+                throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, "无可用构造函数" + info.getRuleClassName());
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException ignored) {
+
+            }
+        }
+    }
+
+    void loadRuleDefinerFromSettingInfo(RuleSettingPreset.@NotNull RuleSettingInfo info, Rule rule){
+        RuleDefiner definer;
+        String data = info.getSerializeData();
+        if (data!=null && !data.isEmpty()){
+            definer = rule.createDefiner(data);
+        }else {
+            definer = rule.createDefiner();
+        }
+
+        addRuleDefiner(definer, rule.getType(), info.getIndex());
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *

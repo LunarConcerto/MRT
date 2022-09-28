@@ -6,6 +6,9 @@ import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.RuleType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventType;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,16 +52,24 @@ public class PureText implements Rule {
 
         public PureTextDefiner(Rule parentRule) {
             super(parentRule);
+
+            init();
         }
 
         public PureTextDefiner(Rule parentRule, String text) {
             super(parentRule);
             this.text = text;
+
+            init();
         }
 
         void init(){
             this.addLabel("拼接字符: ");
             textField = this.addTextField();
+            textField.textProperty().addListener((observable, oldValue, newValue) -> text = newValue);
+            if (!text.isEmpty()){
+                textField.setText(text);
+            }
         }
 
         @Override
