@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Worker {
 
-    public static void startWork(Runnable runnable) {
+    public static Task<Void> startWork(Runnable runnable) {
         Task<Void> backgroundTask = new Task<>() {
             @Contract(pure = true)
             @Override
@@ -23,6 +23,7 @@ public class Worker {
         Thread backgroundThread = new Thread(backgroundTask);
         backgroundThread.setDaemon(true);
         backgroundThread.start();
+        return backgroundTask ;
     }
 
 }

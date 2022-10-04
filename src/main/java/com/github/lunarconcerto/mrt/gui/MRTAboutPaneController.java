@@ -60,7 +60,6 @@ public class MRTAboutPaneController extends AnchorPane {
             controller.init();
             Stage stage = ControllerUtil.newStage(parent, "关于", 800, 600);
 
-            stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
             stage.show();
         }catch (Exception e){
             throw new MRTRuntimeException(e);

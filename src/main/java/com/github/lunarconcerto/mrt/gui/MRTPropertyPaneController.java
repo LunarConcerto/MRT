@@ -194,8 +194,6 @@ public class MRTPropertyPaneController extends AnchorPane {
             controller.setStage(stage);
             controller.init();
 
-            stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
-            stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
             throw new MRTRuntimeException(e);

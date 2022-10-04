@@ -131,8 +131,6 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
 
             controller.setStage(stage).setType(type).init();
 
-            stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
-            stage.setResizable(false);
             isExist = true ;
             stage.show();
         } catch (Exception e) {

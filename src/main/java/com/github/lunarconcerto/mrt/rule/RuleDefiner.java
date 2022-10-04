@@ -48,6 +48,8 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
 
     public abstract String serialize();
 
+    public abstract String toSampleText();
+
 
     public void addLabel(String text){
         Label label = new Label(text);
@@ -136,6 +138,11 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
         @Override
         public String serialize() {
             return "" + index;
+        }
+
+        @Override
+        public String toSampleText() {
+            return "";
         }
 
         static class EmptyNameEditor implements NameEditor{

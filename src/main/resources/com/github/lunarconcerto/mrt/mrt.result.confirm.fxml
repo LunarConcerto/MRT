@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root maxHeight="0.0" maxWidth="0.0" minHeight="600.0" minWidth="600.0" prefHeight="580.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+        <TableView fx:id="resultTable" editable="true" layoutX="20.0" layoutY="10.0" prefHeight="590.0" prefWidth="580.0">
+            <columns>
+                <TableColumn fx:id="sourceNameColumn" editable="false" maxWidth="590.0" prefWidth="290.0" resizable="false" text="原文件名" />
+                <TableColumn fx:id="newNameColumn" maxWidth="590.0" prefWidth="290.0" resizable="false" text="新文件名" />
+            </columns>
+        </TableView>
+    </AnchorPane>
+</fx:root>

@@ -172,11 +172,6 @@ public class MRTController {
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    public void onHistoryPathMenuShow(Event event) {
-
-    }
-
-    @FXML
     protected void onMenuItemAboutAction(ActionEvent actionEvent) {
         MRTAboutPaneController.showWindow();
     }

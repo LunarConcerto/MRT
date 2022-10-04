@@ -5,6 +5,7 @@ import com.github.lunarconcerto.mrt.rule.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class PresetLoader {
 
@@ -19,18 +20,21 @@ public class PresetLoader {
     }
 
     public RuleDefinerPreset loadRuleDefinersFromPreset(@NotNull SerializableRulePreset preset){
-        for (SerializableRulePreset.RuleSettingInfo info : preset.getInfos()) {
-            try {
-                Class<?> ruleClass = Class.forName(info.getRuleClassName());
-                Rule instance = (Rule) ruleClass.getConstructor().newInstance();
+        List<SerializableRulePreset.RuleSettingInfo> infos = preset.getInfos();
+        if (infos!=null && !infos.isEmpty()){
+            for (SerializableRulePreset.RuleSettingInfo info : infos) {
+                try {
+                    Class<?> ruleClass = Class.forName(info.getRuleClassName());
+                    Rule instance = (Rule) ruleClass.getConstructor().newInstance();
 
-                loadRuleDefinerFromSettingInfo(info, instance);
-            }catch (ClassNotFoundException e){
-                throw new MRTRuleException(MRTRuleException.ErrorType.CLASS_NOT_FOUND, "无法找到类" + info.getRuleClassName());
-            }catch (NoSuchMethodException e){
-                throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, "无可用构造函数" + info.getRuleClassName());
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException ignored) {
+                    loadRuleDefinerFromSettingInfo(info, instance);
+                }catch (ClassNotFoundException e){
+                    throw new MRTRuleException(MRTRuleException.ErrorType.CLASS_NOT_FOUND, "无法找到类" + info.getRuleClassName());
+                }catch (NoSuchMethodException e){
+                    throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, "无可用构造函数" + info.getRuleClassName());
+                } catch (InvocationTargetException | InstantiationException | IllegalAccessException ignored) {
 
+                }
             }
         }
         return this.preset ;

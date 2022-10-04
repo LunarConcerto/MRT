@@ -47,8 +47,7 @@
                     <items>
                         <MenuItem fx:id="menuItemSelectFile" mnemonicParsing="false"
                                   onAction="#onMenuItemSelectFilePathAction" text="打开..."/>
-                        <Menu fx:id="menuHistoryPath" mnemonicParsing="false" onAction="#onHistoryPathMenuShow"
-                              text="打开最近的路径"/>
+                        <Menu fx:id="menuHistoryPath" mnemonicParsing="false" text="打开最近的路径"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" onAction="#onMenuItemPropertyAction" text="设置..."/>
                         <SeparatorMenuItem mnemonicParsing="false"/>

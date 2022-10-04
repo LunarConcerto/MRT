@@ -82,6 +82,11 @@ public class PureText implements Rule {
             return text ;
         }
 
+        @Override
+        public String toSampleText() {
+            return text ;
+        }
+
         public String getText() {
             return text;
         }

@@ -1,11 +1,14 @@
 package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.MRTStarter;
+import com.github.lunarconcerto.mrt.component.RenameProgress;
+import com.github.lunarconcerto.mrt.component.RenameResult;
 import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.RuleManager;
 import com.github.lunarconcerto.mrt.rule.SerializableRulePreset;
+import com.github.lunarconcerto.mrt.util.FileNode;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MRTApp extends Application {
 
@@ -58,15 +62,33 @@ public class MRTApp extends Application {
 
     private static void initAfterUILoad() throws IOException {
         mainController.init();
-
         configuration.applyConfig();
+
+        testWindow();
+    }
+
+    private static void testWindow(){
+        List<RenameResult> resultList = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            resultList.add(new RenameResult()
+                    .setTargetSourceName("foo" + i)
+                    .setTargetNewName("bar" + i)
+                    .setTargetFileNode(new FileNode("114514" + i)));
+        }
+
+        MRTResultConfirmPaneController.getDialog(resultList).showAndWait()
+                .ifPresent(list -> {
+                    System.out.println(1);
+                });
     }
 
 
     private static void closeHandler(WindowEvent event){
         saveDefaultPreset();
-
         ConfigurationManager.getManager().save(configuration);
+
+        System.exit(0);
     }
 
     private static void saveDefaultPreset(){

@@ -3,14 +3,16 @@ package com.github.lunarconcerto.mrt.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.SerializableRulePreset;
-import com.github.lunarconcerto.mrt.util.FileUtil;
 import com.github.lunarconcerto.mrt.util.TimeUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 @Getter
@@ -20,11 +22,17 @@ public class ConfigurationManager {
 
     private Configuration configuration ;
 
-    private List<SerializableRulePreset> presetList = new ArrayList<>();
+    private List<SerializableRulePreset> presetList ;
 
     private final HashMap<String, Property<?>> propertyHashMap = new HashMap<>();
 
-    public static final File propertiesFile = new File(FileUtil.getUserPath() + "//.settings.prop");
+    public static final String userDir = System.getProperty("user.dir");
+
+    public static final File propertiesFile = new File(userDir + "/data/mrt.properties");
+
+    public static final File configFile = new File(userDir + "/data/mrt_config.json");
+
+    public static final File presetFile = new File(userDir + "/data/mrt_preset.json");
 
     private static final ConfigurationManager manager = new ConfigurationManager();
 
@@ -36,7 +44,7 @@ public class ConfigurationManager {
 
     protected InputStream openInputStream(){
         try {
-            return new FileInputStream(propertiesFile);
+            return new FileInputStream(ConfigurationManager.propertiesFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -45,18 +53,25 @@ public class ConfigurationManager {
 
     protected OutputStream openOutputStream(){
         try {
-            return new FileOutputStream(propertiesFile);
+            return new FileOutputStream(ConfigurationManager.propertiesFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return null ;
     }
 
+    protected void ensureDirectoryExists(){
+        File file = new File(userDir + "/data");
+        if (!file.exists()){
+            boolean b = file.mkdir();
+        }
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    protected void ensurePropertiesFileExists(){
-        if (!propertiesFile.exists()) {
+    protected void ensureFileExists(){
+        if (!ConfigurationManager.propertiesFile.exists()) {
             try {
-                propertiesFile.createNewFile();
+                ConfigurationManager.propertiesFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -65,7 +80,8 @@ public class ConfigurationManager {
 
 
     public void load(){
-        ensurePropertiesFileExists();
+        ensureDirectoryExists();
+        ensureFileExists();
         try {
             properties.load(openInputStream());
 
@@ -78,7 +94,7 @@ public class ConfigurationManager {
 
 
     protected void loadObjectConfig() throws JsonProcessingException {
-        String jsonConfig = properties.getProperty("mrt.objects.config");
+        String jsonConfig = getJson(configFile);
         if (jsonConfig!=null && !jsonConfig.isEmpty()){
             ObjectMapper mapper = new ObjectMapper();
             configuration = mapper.readValue(jsonConfig, Configuration.class);
@@ -88,14 +104,29 @@ public class ConfigurationManager {
     }
 
     protected void loadPreset() throws JsonProcessingException {
-        String jsonConfig = properties.getProperty("mrt.rule.preset");
+        String jsonConfig = getJson(presetFile);
         if (jsonConfig!=null && !jsonConfig.isEmpty()){
             ObjectMapper mapper = new ObjectMapper();
             presetList = mapper.readValue(jsonConfig, new TypeReference<>() {});
+        }else {
+            presetList = new ArrayList<>();
+        }
+    }
+
+    protected String getJson(@NotNull File file){
+        if (file.exists()){
+            try {
+                return String.join("", Files.readAllLines(file.toPath()));
+            } catch (IOException e) {
+                throw new MRTRuntimeException(e);
+            }
+        }else {
+            return null ;
         }
     }
 
     public void save(){
+        ensureDirectoryExists();
         try {
             saveObjectConfig();
             savePreset();
@@ -107,20 +138,27 @@ public class ConfigurationManager {
         }
     }
 
-    protected void saveObjectConfig() throws JsonProcessingException {
+    protected void saveObjectConfig() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String configStr = mapper.writeValueAsString(configuration);
 
-        properties.setProperty("mrt.objects.config" , configStr);
+        saveJson(configFile, configStr);
     }
 
-    protected void savePreset() throws JsonProcessingException {
+    protected void savePreset() throws IOException {
         if (!presetList.isEmpty()){
             ObjectMapper mapper = new ObjectMapper();
 
             String value = mapper.writeValueAsString(presetList);
-            properties.setProperty("mrt.rule.preset", value);
+            saveJson(presetFile, value);
         }
+    }
+
+    protected void saveJson(@NotNull File file, String content) throws IOException {
+        if (!file.exists()){
+            boolean b = file.createNewFile();
+        }
+        Files.write(file.toPath(), Collections.singleton(content), StandardCharsets.UTF_8);
     }
 
     public void addPreset(String presetName, @NotNull List<RuleDefiner> definers){

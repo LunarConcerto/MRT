@@ -2,15 +2,18 @@ package com.github.lunarconcerto.mrt.gui;
 
 import com.github.lunarconcerto.mrt.MRTStarter;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
+import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 
 class ControllerUtil {
 
@@ -27,28 +30,23 @@ class ControllerUtil {
     }
 
     static File createNewDirectoryChooser(){
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("选择一个文件夹");
-        return chooser.showDialog(new Stage());
+        return createNewDirectoryChooser(null);
     }
 
     static File createNewDirectoryChooser(File file){
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("选择一个文件夹");
-        chooser.setInitialDirectory(file);
+        if (file!=null){
+            chooser.setInitialDirectory(file);
+        }
         return chooser.showDialog(new Stage());
     }
 
-    static @NotNull Stage newStage(Parent parent, String title){
+    static @NotNull Stage newStage(Parent parent, String title, int width, int height) throws IOException {
         Stage stage = new Stage();
         stage.setTitle(title);
-        stage.setScene(new Scene(parent));
-        return stage ;
-    }
-
-    static @NotNull Stage newStage(Parent parent, String title, int width, int height){
-        Stage stage = new Stage();
-        stage.setTitle(title);
+        stage.getIcons().add(new Image(FileUtil.getResourceAsStream("icon.cafe.png")));
+        stage.setResizable(false);
         stage.setScene(new Scene(parent, width, height));
         return stage ;
     }
