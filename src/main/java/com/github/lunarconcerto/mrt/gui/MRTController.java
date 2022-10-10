@@ -120,12 +120,6 @@ public class MRTController {
     @FXML
     protected MenuItem menuItemSelectFile;
 
-    /**
-     * 开始运行
-     */
-    @FXML
-    protected MenuItem menuItemStartProgress;
-
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 构造方法 / 初始化方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -200,9 +194,18 @@ public class MRTController {
 
     @FXML
     public void onStartButtonAction(){
+        if (listViewSelectedFiles.getItems().isEmpty()){
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.setTitle("运行失败");
+            dialog.setContentText("不能开始运行，因为您未指定要进行处理的文件/文件夹。");
+            ButtonType type = new ButtonType("确认" , ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().add(type);
+            dialog.show();
+
+            return;
+        }
 
     }
-
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * FXML EventHandler method

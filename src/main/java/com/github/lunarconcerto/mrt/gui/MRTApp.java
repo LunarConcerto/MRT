@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.controlsfx.control.Notifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -68,19 +69,8 @@ public class MRTApp extends Application {
     }
 
     private static void testWindow(){
-        List<RenameResult> resultList = new ArrayList<>();
+        ;
 
-        for (int i = 0; i < 100; i++) {
-            resultList.add(new RenameResult()
-                    .setTargetSourceName("foo" + i)
-                    .setTargetNewName("bar" + i)
-                    .setTargetFileNode(new FileNode("114514" + i)));
-        }
-
-        MRTResultConfirmPaneController.getDialog(resultList).showAndWait()
-                .ifPresent(list -> {
-
-                });
     }
 
 

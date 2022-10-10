@@ -56,7 +56,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="运行">
                     <items>
-                        <MenuItem fx:id="menuItemStartProgress" mnemonicParsing="false" text="开始运行"/>
+                        <MenuItem onAction="#onStartButtonAction" mnemonicParsing="false" text="开始运行"/>
                         <MenuItem mnemonicParsing="false" text="撤销结果"/>
                     </items>
                 </Menu>

@@ -6,17 +6,13 @@ import com.github.lunarconcerto.mrt.gui.MRTResultConfirmPaneController;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.controlsfx.control.Notifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RenameProgress {
 
@@ -56,7 +52,12 @@ public class RenameProgress {
 
     protected void doRename(@NotNull List<RenameResult> results){
         MRTApp.mainController.changeStatusLabel("文件操作中...");
-        results.forEach(this::doRename);
+        for (int i = 0, resultsSize = results.size(); i < resultsSize; i++) {
+            doRename(results.get(i));
+            setBarProgress((((i + 1) / (float) resultsSize) / 0.5) + 0.5);
+        }
+
+        completeProgress();
     }
 
     protected void doRename(@NotNull RenameResult result){
@@ -69,6 +70,14 @@ public class RenameProgress {
         }
     }
 
+    protected void completeProgress(){
+        Notifications.create()
+                .title("完成")
+                .text("分配的重命名任务已全部完成。")
+                .showInformation()
+        ;
+    }
+
     protected List<RenameResult> buildTargetNewName(@NotNull List<RenameTargetContainer> targetList){
         List<RenameResult> list = new ArrayList<>();
         for (int i = 0, targetListSize = targetList.size(); i < targetListSize; i++) {
@@ -76,10 +85,7 @@ public class RenameProgress {
             RenameResult buildTargetNewName = buildTargetNewName(renameTargetContainer);
             list.add(buildTargetNewName);
 
-            int finalI = i;
-            Platform.runLater(() -> bar.setProgress(
-                    ((finalI + 1) / (float) targetListSize) / 0.5
-            ));
+            setBarProgress(((i + 1) / (float) targetListSize) / 0.5);
         }
         return list;
     }
@@ -107,7 +113,7 @@ public class RenameProgress {
         return result ;
     }
 
-    protected void setBarProgress(double progress){
+    protected void setBarProgress(final double progress){
         Platform.runLater(() -> {
             bar.setProgress(progress);
         });
