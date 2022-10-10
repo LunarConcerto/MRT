@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +50,23 @@ public class RenameProgress {
     }
 
     protected void showResultConfirmPane(List<RenameResult> results){
+        MRTResultConfirmPaneController.getDialog(results).showAndWait()
+                .ifPresent(this::doRename);
+    }
 
+    protected void doRename(@NotNull List<RenameResult> results){
+        MRTApp.mainController.changeStatusLabel("文件操作中...");
+        results.forEach(this::doRename);
+    }
+
+    protected void doRename(@NotNull RenameResult result){
+        boolean isSusses =
+                result.getTargetFileNode().renameTo(new File(result.getTargetNewName()));
+        if (!isSusses){
+            MRTApp.printToUiLogger(
+                    "对" + result.getTargetSourceName() + "的重命名失败.\n"
+            );
+        }
     }
 
     protected List<RenameResult> buildTargetNewName(@NotNull List<RenameTargetContainer> targetList){

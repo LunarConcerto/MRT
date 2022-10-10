@@ -79,7 +79,7 @@ public class MRTApp extends Application {
 
         MRTResultConfirmPaneController.getDialog(resultList).showAndWait()
                 .ifPresent(list -> {
-                    System.out.println(1);
+
                 });
     }
 
