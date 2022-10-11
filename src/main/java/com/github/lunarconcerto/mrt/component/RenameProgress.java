@@ -1,5 +1,6 @@
 package com.github.lunarconcerto.mrt.component;
 
+import com.github.lunarconcerto.mrt.gui.Dialogs;
 import com.github.lunarconcerto.mrt.gui.MRTApp;
 import com.github.lunarconcerto.mrt.gui.MRTController;
 import com.github.lunarconcerto.mrt.gui.MRTResultConfirmPaneController;
@@ -57,8 +58,13 @@ public class RenameProgress {
     }
 
     protected void showResultConfirmPane(List<RenameResult> results){
-        MRTResultConfirmPaneController.getDialog(results).showAndWait()
-                .ifPresent(this::doRename);
+        Platform.runLater(() -> {
+            MRTResultConfirmPaneController.getDialog(results)
+                    .showAndWait()
+                    .ifPresentOrElse(this::doRename, () -> {
+                        Dialogs.showWarning("运行结束", "结果已取消");
+                    });
+        });
     }
 
     protected void doRename(@NotNull List<RenameResult> results){

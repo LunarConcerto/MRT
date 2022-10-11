@@ -204,7 +204,6 @@ public class MRTController {
             return;
         }
 
-
         createNewProgress().start();
     }
 
