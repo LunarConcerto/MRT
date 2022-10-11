@@ -8,6 +8,7 @@ import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 import org.controlsfx.control.Notifications;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -21,6 +22,16 @@ public class RenameProgress {
     protected List<FileNode> renameTarget ;
 
     protected ProgressBar bar ;
+
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull RenameProgress newRenameProgress(@NotNull List<FileNode> renameTarget){
+        return new RenameProgress(renameTarget);
+    }
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull RenameProgress newRenameProgress(@NotNull List<FileNode> renameTarget, ProgressBar bar){
+        return new RenameProgress(renameTarget, bar);
+    }
 
     public RenameProgress(List<FileNode> renameTarget) {
         this.renameTarget = renameTarget;

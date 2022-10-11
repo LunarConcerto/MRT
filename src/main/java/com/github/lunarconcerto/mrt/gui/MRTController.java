@@ -195,16 +195,30 @@ public class MRTController {
     @FXML
     public void onStartButtonAction(){
         if (listViewSelectedFiles.getItems().isEmpty()){
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setTitle("运行失败");
-            dialog.setContentText("不能开始运行，因为您未指定要进行处理的文件/文件夹。");
-            ButtonType type = new ButtonType("确认" , ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().add(type);
-            dialog.show();
-
+            Dialogs.showInformation("运行失败" ,"不能开始运行，因为您未指定要进行处理的文件/文件夹。");
             return;
         }
 
+        if (ruleReplaceSetter.getItems().isEmpty() && ruleFillingSetter.getItems().isEmpty()){
+            Dialogs.showInformation("运行失败" , "不能开始运行，因为您未指定构建新文件名的规则和操作。");
+            return;
+        }
+
+
+        createNewProgress().start();
+    }
+
+    protected RenameProgress createNewProgress(){
+        return RenameProgress.newRenameProgress(listViewSelectedFiles.getItems()
+                        .stream()
+                        .map(FileContainer::getNode)
+                        .collect(Collectors.toCollection(ArrayList::new)), progressBar
+        ).setReplaceEditorList(this.ruleReplaceSetter.getItems().stream()
+                .map(RuleDefiner::createNameEditor)
+                .collect(Collectors.toCollection(ArrayList::new))
+        ).setFillingEditorList(this.ruleFillingSetter.getItems().stream()
+                .map(RuleDefiner::createNameEditor)
+                .collect(Collectors.toCollection(ArrayList::new)));
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *

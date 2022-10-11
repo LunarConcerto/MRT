@@ -15,13 +15,21 @@ public class NameChecker {
 
     private NameChecker() {}
 
+    public static boolean isInvalidFileNameString(@NotNull String str){
+        return Arrays.stream(INVALID_CHAR)
+                .anyMatch(str::contains);
+    }
+
+    public static boolean isValidFileNameString(@NotNull String str){
+        return !isInvalidFileNameString(str);
+    }
+
     public static boolean isInvalidFileName(@Nullable String name){
         if (name==null || name.isBlank() || name.isEmpty()){
             return true ;
         }
 
-        return Arrays.stream(INVALID_CHAR)
-                .anyMatch(name::contains);
+        return isInvalidFileNameString(name);
     }
 
     public static boolean isValidFileName(@Nullable String name){

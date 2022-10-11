@@ -1,11 +1,17 @@
 package com.github.lunarconcerto.mrt.rule;
 
 import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
+import com.github.lunarconcerto.mrt.gui.PopOvers;
+import com.github.lunarconcerto.mrt.util.NameChecker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import org.controlsfx.control.PopOver;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -87,6 +93,14 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
         textField.setLayoutX(lastComponentLocationX + nextComponentDistance);
         textField.setPrefWidth(width);
         textField.setMaxWidth(width);
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (NameChecker.isInvalidFileNameString(newValue)){
+                textField.setText(oldValue);
+                PopOvers.showPopOver(textField , " 文件名不能包含下列任何字符: " ,
+                        "     \\ / : * ? \" < > |");
+            }
+        });
 
         lastComponentLocationX += nextComponentDistance + width ;
         addComponent(textField);
