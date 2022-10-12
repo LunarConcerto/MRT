@@ -71,9 +71,7 @@ public class FileTreeBuilder {
         TreeItem<FileNode> root = new TreeItem<>(file);
         root.setGraphic(getFolderIconNode());
 
-        Platform.runLater(() -> {
-            treeView.setRoot(root);
-        });
+        Platform.runLater(() -> treeView.setRoot(root));
 
         buildChild(root);
         MRTApp.printToUiLogger("读取了%s个文件".formatted(loadedFileAmount));

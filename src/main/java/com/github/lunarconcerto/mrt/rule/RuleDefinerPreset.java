@@ -30,11 +30,13 @@ public class RuleDefinerPreset {
         addToListView(list, fillingRuleList);
     }
 
-    public void addToReplaceListView(ListView<RuleDefiner> list){
+    public void addToReplaceListView(@NotNull ListView<RuleDefiner> list){
+        list.getItems().clear();
         addToListView(list, replaceRuleList);
     }
 
-    void addToListView(ListView<RuleDefiner> list, @NotNull List<RuleDefiner> definerList){
+    void addToListView(@NotNull ListView<RuleDefiner> list, @NotNull List<RuleDefiner> definerList){
+        list.getItems().clear();
         definerList.forEach(definer -> list.getItems().add(definer.getIndex(), definer));
     }
 

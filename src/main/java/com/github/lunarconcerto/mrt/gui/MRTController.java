@@ -187,28 +187,45 @@ public class MRTController {
     @FXML
     protected void onMenuItemOpenDefaultFilePath(){
         selectedPath = new FileNode(ConfigurationManager.getManager().getConfiguration().getDefaultPath());
-        buildTree();
+        if (selectedPath.exists()){
+            buildTree();
+        }else {
+            Dialogs.showError("打开路径失败" ,
+                    "默认的文件路径不存在，您的路径设置可能有误，请检查设置...->杂项->默认打开路径。");
+        }
     }
 
     @FXML
     protected void onMenuItemLoadPreset(){
-        MRTPresetSelectorPaneController.showWindow();
+        MRTPresetSelectorPaneController.showLoadWindow();
+    }
+
+    @FXML
+    protected void OnMenuItemDeletePreset(){
+        MRTPresetSelectorPaneController.showDeleteWindow();
     }
 
     @FXML
     protected void OnMenuItemSavePreset(){
+        String input = Dialogs.showTextInput("保存预设",
+                "请为该预设起一个名字 :",
+                "preset" + ConfigurationManager.getManager().getPresetList().size());
 
+
+        ConfigurationManager.getManager().addPreset(saveRuleToPreset(input));
+
+        Dialogs.showInformation("保存预设" , "保存成功！");
     }
 
     @FXML
     protected void onMenuItemRunProgress(){
         if (listViewSelectedFiles.getItems().isEmpty()){
-            Dialogs.showInformation("运行失败" ,"不能开始运行，因为您未指定要进行处理的文件/文件夹。");
+            Dialogs.showError("运行失败" ,"不能开始运行，因为您未指定要进行处理的文件/文件夹。");
             return;
         }
 
         if (ruleReplaceSetter.getItems().isEmpty() && ruleFillingSetter.getItems().isEmpty()){
-            Dialogs.showInformation("运行失败" , "不能开始运行，因为您未指定构建新文件名的规则和操作。");
+            Dialogs.showError("运行失败" , "不能开始运行，因为您未指定构建新文件名的规则和操作。");
             return;
         }
 
@@ -474,6 +491,15 @@ public class MRTController {
         ).setFillingEditorList(this.ruleFillingSetter.getItems().stream()
                 .map(RuleDefiner::createNameEditor)
                 .collect(Collectors.toCollection(ArrayList::new)));
+    }
+
+    public SerializableRulePreset saveRuleToPreset(String presetName){
+        List<RuleDefiner> collect = new ArrayList<>();
+
+        if (!ruleFillingSetter.getItems().isEmpty()) collect.addAll(ruleFillingSetter.getItems());
+        if (!ruleReplaceSetter.getItems().isEmpty()) collect.addAll(ruleReplaceSetter.getItems());
+
+        return SerializableRulePreset.createNewPreset(presetName , collect);
     }
 
     public void changeStatusLabel(String text){

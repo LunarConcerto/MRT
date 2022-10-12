@@ -85,20 +85,7 @@ public class MRTApp extends Application {
     }
 
     private static void saveDefaultPreset(){
-        List<RuleDefiner> fillingRules = mainController.ruleFillingSetter.getItems();
-
-        List<RuleDefiner> collect = new ArrayList<>();
-        if (!fillingRules.isEmpty()){
-            collect.addAll(fillingRules);
-        }
-
-        List<RuleDefiner> replaceRules = mainController.ruleReplaceSetter.getItems();
-        if (!replaceRules.isEmpty()){
-            collect.addAll(replaceRules);
-        }
-
-        SerializableRulePreset defaultPreset = SerializableRulePreset.createNewPreset("default", collect);
-        ConfigurationManager.getManager().addPreset(defaultPreset);
+        ConfigurationManager.getManager().addPreset(mainController.saveRuleToPreset("default"));
     }
 
 

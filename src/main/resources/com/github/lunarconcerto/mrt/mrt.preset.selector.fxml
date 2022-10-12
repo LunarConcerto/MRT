@@ -6,7 +6,7 @@
 <fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
     <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                 prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18">
-        <ListView fx:id="presetListView" stylesheets="@css/list-view-common.css" layoutX="14.0" layoutY="10.0"
+        <ListView onMouseClicked="#onSelect" fx:id="presetListView" stylesheets="@css/list-view-common.css" layoutX="14.0" layoutY="10.0"
                   prefHeight="580.0" prefWidth="180.0"/>
         <ListView fx:id="previewFillingRule" stylesheets="@css/list-view-rule-setter.css" layoutX="206.0" layoutY="10.0"
                   prefHeight="260.0" prefWidth="380.0"/>
@@ -15,6 +15,6 @@
         <Button onAction="#onCancel" layoutX="206.0" layoutY="554.0" mnemonicParsing="false" prefHeight="32.0"
                 prefWidth="120.0" text="取消"/>
         <Button onAction="#onConfirm" layoutX="466.0" layoutY="554.0" mnemonicParsing="false" prefHeight="32.0"
-                prefWidth="120.0" text="载入"/>
+                prefWidth="120.0" text="确定"/>
     </AnchorPane>
 </fx:root>

@@ -60,13 +60,11 @@ public class RenameProgress {
     }
 
     protected void showResultConfirmPane(List<RenameResult> results){
-        Platform.runLater(() -> {
-            MRTResultConfirmPaneController.getDialog(results)
-                    .showAndWait()
-                    .ifPresentOrElse( this::doRename , () -> {
-                        Dialogs.showWarning("运行结束", "结果已取消");
-                    });
-        });
+        Platform.runLater(() -> MRTResultConfirmPaneController.getDialog(results)
+                .showAndWait()
+                .ifPresentOrElse( this::doRename , () -> {
+                    Dialogs.showWarning("运行结束", "结果已取消");
+                }));
     }
 
     protected void doRename(@NotNull List<RenameResult> results){
@@ -145,9 +143,7 @@ public class RenameProgress {
     }
 
     protected void setBarProgress(final double progress){
-        Platform.runLater(() -> {
-            bar.setProgress(progress);
-        });
+        Platform.runLater(() -> bar.setProgress(progress));
     }
 
     public RenameProgress setBar(ProgressBar bar) {

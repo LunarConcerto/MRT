@@ -103,9 +103,7 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
             default -> selectRuleIndex = -1 ;
         }
 
-        stage.setOnCloseRequest(event -> {
-            isExist = false;
-        });
+        stage.setOnCloseRequest(event -> isExist = false);
     }
 
     void loadRuleList(){

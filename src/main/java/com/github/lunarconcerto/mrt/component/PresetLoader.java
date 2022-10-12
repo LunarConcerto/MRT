@@ -43,11 +43,12 @@ public class PresetLoader {
     void loadRuleDefinerFromSettingInfo(SerializableRulePreset.@NotNull RuleSettingInfo info, Rule rule){
         RuleDefiner definer;
         String data = info.getSerializeData();
-        if (data!=null && !data.isEmpty()){
-            definer = rule.createDefiner(data);
-        }else {
-            definer = rule.createDefiner();
-        }
+
+        definer = data != null && !data.isEmpty() ?
+                /* 序列化值非空的情况下调用反序列化的创建方法 */
+                rule.createDefiner(data) :
+                rule.createDefiner();
+
         definer.setIndex(info.getIndex());
 
         addToList(definer, rule.getType());

@@ -36,9 +36,7 @@ public class MRTResultConfirmPaneController extends AnchorPane {
         sourceNameColumn.setCellValueFactory(new PropertyValueFactory<>("targetSourceName"));
         newNameColumn.setCellValueFactory(new PropertyValueFactory<>("targetNewName"));
         newNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        newNameColumn.setOnEditCommit(event -> {
-            event.getRowValue().setTargetNewName(event.getNewValue());
-        });
+        newNameColumn.setOnEditCommit(event -> event.getRowValue().setTargetNewName(event.getNewValue()));
 
         resultTable.setItems(FXCollections.observableArrayList(resultList));
     }
@@ -49,9 +47,7 @@ public class MRTResultConfirmPaneController extends AnchorPane {
         Dialog<List<RenameResult>> dialog = new Dialog<>();
         dialog.setTitle("确认当前生成的结果");
         dialog.getDialogPane().setContent(controller);
-        dialog.getDialogPane().getScene().getWindow().setOnCloseRequest(event -> {
-            dialog.close();
-        });
+        dialog.getDialogPane().getScene().getWindow().setOnCloseRequest(event -> dialog.close());
 
         ButtonType confirmType = new ButtonType("确认并继续 >>>", ButtonBar.ButtonData.RIGHT);
         ButtonType cancelType = new ButtonType("<<< 清空并返回", ButtonBar.ButtonData.LEFT);

@@ -63,6 +63,7 @@
                 <Menu mnemonicParsing="false" text="规则">
                     <MenuItem onAction="#onMenuItemLoadPreset" mnemonicParsing="false" text="载入预设"/>
                     <MenuItem onAction="#OnMenuItemSavePreset" mnemonicParsing="false" text="保存预设"/>
+                    <MenuItem onAction="#OnMenuItemDeletePreset" mnemonicParsing="false" text="删除预设"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="帮助">
                     <MenuItem mnemonicParsing="false" text="帮助"/>
@@ -79,7 +80,8 @@
                             <contextMenu>
                                 <ContextMenu>
                                     <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#onTreeMenuSelectAction" text="选择">
+                                        <MenuItem mnemonicParsing="false" onAction="#onTreeMenuSelectAction"
+                                                  text="选择">
                                             <graphic>
                                                 <FontIcon fill="black" iconLiteral="fa-check"/>
                                             </graphic>
@@ -96,7 +98,8 @@
                                                 <FontIcon fill="black" iconLiteral="fa-check-square"/>
                                             </graphic>
                                         </MenuItem>
-                                        <MenuItem mnemonicParsing="false" onAction="#onTreeMenuRefreshAction" text="刷新">
+                                        <MenuItem mnemonicParsing="false" onAction="#onTreeMenuRefreshAction"
+                                                  text="刷新">
                                             <graphic>
                                                 <FontIcon fill="black" iconLiteral="fa-refresh"/>
                                             </graphic>

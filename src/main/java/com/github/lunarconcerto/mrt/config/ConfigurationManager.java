@@ -173,6 +173,10 @@ public class ConfigurationManager {
         presetList.add(preset);
     }
 
+    public void deletePreset(SerializableRulePreset preset){
+        presetList.remove(preset);
+    }
+
     void checkPresetIfExistThanRemove(SerializableRulePreset newPreset){
         presetList.removeIf(existPreset -> existPreset.getPresetName().equals(newPreset.getPresetName()));
     }
