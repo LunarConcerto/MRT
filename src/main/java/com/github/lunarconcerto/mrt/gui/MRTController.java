@@ -207,14 +207,20 @@ public class MRTController {
 
     @FXML
     protected void OnMenuItemSavePreset(){
-        String input = Dialogs.showTextInput("保存预设",
+        String header = "保存预设";
+
+        String input = Dialogs.showTextInput(header,
                 "请为该预设起一个名字 :",
                 "preset" + ConfigurationManager.getManager().getPresetList().size());
 
+        if (input == null){
+            Dialogs.showInformation(header, "取消保存.");
+            return;
+        }
 
         ConfigurationManager.getManager().addPreset(saveRuleToPreset(input));
 
-        Dialogs.showInformation("保存预设" , "保存成功！");
+        Dialogs.showInformation(header, "保存成功！");
     }
 
     @FXML

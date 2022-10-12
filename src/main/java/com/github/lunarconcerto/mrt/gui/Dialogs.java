@@ -40,7 +40,7 @@ public class Dialogs {
         dialog.setContentText(message);
 
         Optional<String> result = dialog.showAndWait();
-        return result.orElse(defaultValue);
+        return result.orElse(null);
     }
 
 }
