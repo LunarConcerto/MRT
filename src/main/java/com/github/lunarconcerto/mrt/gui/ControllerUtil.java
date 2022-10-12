@@ -36,7 +36,7 @@ class ControllerUtil {
     static File createNewDirectoryChooser(File file){
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("选择一个文件夹");
-        if (file!=null){
+        if (file!=null && file.exists()){
             chooser.setInitialDirectory(file);
         }
         return chooser.showDialog(new Stage());

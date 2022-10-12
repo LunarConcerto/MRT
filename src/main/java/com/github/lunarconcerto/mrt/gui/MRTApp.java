@@ -32,7 +32,9 @@ public class MRTApp extends Application {
 
     public static MRTController mainController ;
 
+    public static Stage mainStage ;
     public static Configuration configuration ;
+
 
     @Override
     public void start(@NotNull Stage stage) throws IOException {
@@ -44,6 +46,7 @@ public class MRTApp extends Application {
     }
 
     private static void initStage(@NotNull Stage stage, Scene scene) throws IOException {
+        mainStage = stage ;
         stage.setResizable(false);
         stage.setTitle(NAME + "    " + VERSION);
         stage.setScene(scene);
@@ -62,8 +65,8 @@ public class MRTApp extends Application {
     }
 
     private static void initAfterUILoad() throws IOException {
-        mainController.init();
         configuration.applyConfig();
+        mainController.init();
 
         testWindow();
     }

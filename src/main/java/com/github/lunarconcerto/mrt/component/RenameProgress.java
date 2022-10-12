@@ -8,6 +8,7 @@ import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
+import lombok.extern.log4j.Log4j;
 import org.controlsfx.control.Notifications;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j
 public class RenameProgress {
 
     protected List<NameEditor> fillingEditorList, replaceEditorList ;
@@ -61,13 +63,18 @@ public class RenameProgress {
         Platform.runLater(() -> {
             MRTResultConfirmPaneController.getDialog(results)
                     .showAndWait()
-                    .ifPresentOrElse(this::doRename, () -> {
+                    .ifPresentOrElse( this::doRename , () -> {
                         Dialogs.showWarning("运行结束", "结果已取消");
                     });
         });
     }
 
     protected void doRename(@NotNull List<RenameResult> results){
+        if (results.isEmpty()){
+            Dialogs.showWarning("运行结束", "结果已取消");
+            return;
+        }
+
         MRTApp.mainController.changeStatusLabel("文件操作中...");
         for (int i = 0, resultsSize = results.size(); i < resultsSize; i++) {
             doRename(results.get(i));
@@ -79,15 +86,18 @@ public class RenameProgress {
 
     protected void doRename(@NotNull RenameResult result){
         boolean isSusses =
-                result.getTargetFileNode().renameTo(new File(result.getTargetNewName()));
+                result.getTargetFileNode().renameTo(new File(result.getNewFullName()));
+
         if (!isSusses){
             MRTApp.printToUiLogger(
-                    "对" + result.getTargetSourceName() + "的重命名失败.\n"
+                    "对" + result.getSourceFullName() + "的重命名失败.\n"
             );
         }
     }
 
     protected void completeProgress(){
+        MRTApp.mainController.reset();
+
         Notifications.create()
                 .title("完成")
                 .text("分配的重命名任务已全部完成。")
@@ -104,6 +114,7 @@ public class RenameProgress {
 
             setBarProgress(((i + 1) / (float) targetListSize) / 0.5);
         }
+
         return list;
     }
 
@@ -112,11 +123,14 @@ public class RenameProgress {
         replaceEditorList.stream().filter(editor -> editor.getEditorRuntime() == NameEditor.EditorRuntime.PRE).forEachOrdered(editor -> editor.doEdit(container));
         /* 运行填充型规则 */
         fillingEditorList.forEach(editor -> editor.doEdit(container));
+        /* 对构建的新文件名添加上拓展名 */
+        container.append(container.getTargetExtension());
         /* 后处理的替换型规则 */
         replaceEditorList.stream().filter(editor -> editor.getEditorRuntime() == NameEditor.EditorRuntime.POST).forEachOrdered(editor -> editor.doEdit(container));
+
+        log.debug("对原文件 "+ container.targetFileNode.getFullName() + "构建的新文件名为:" + container.newNameBuilder.toString());
         return new RenameResult()
                 .setTargetNewName(container.newNameBuilder.toString())
-                .setTargetSourceName(container.getTargetSourceName())
                 .setTargetFileNode(container.getTargetFileNode());
     }
 

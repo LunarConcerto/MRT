@@ -33,10 +33,10 @@
                                  <Button onAction="#onSelectDefaultPath" layoutX="335.0" layoutY="10.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="50.0" text="选择..." />
                                  <Label layoutX="14.0" layoutY="44.0" text="窗口置顶:" />
                                   <fx:define>
-                                      <ToggleGroup fx:id="toggleStickGroup" />
+                                      <ToggleGroup fx:id="toggleAlwaysOnTopGroup" />
                                   </fx:define>
-                                  <RadioButton toggleGroup="$toggleStickGroup" fx:id="stickTrue" layoutX="100.0" layoutY="44.0" mnemonicParsing="false" text="启用"/>
-                                  <RadioButton fx:id="stickFalse" layoutX="156.0" layoutY="44.0" mnemonicParsing="false" text="禁用" toggleGroup="$toggleStickGroup" />
+                                  <RadioButton toggleGroup="$toggleAlwaysOnTopGroup" fx:id="alwaysOnTopTrue" layoutX="100.0" layoutY="44.0" mnemonicParsing="false" text="启用"/>
+                                  <RadioButton fx:id="alwaysOnTopFalse" layoutX="156.0" layoutY="44.0" mnemonicParsing="false" text="禁用" toggleGroup="$toggleAlwaysOnTopGroup" />
                               </children>
                            </AnchorPane>
                         </content></TitledPane>

@@ -8,7 +8,6 @@ import com.github.lunarconcerto.mrt.util.FileNode;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import lombok.Data;
@@ -18,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -114,12 +112,6 @@ public class MRTController {
     @FXML
     protected CheckMenuItem menuItemDirOnly;
 
-    /**
-     * 打开目录
-     */
-    @FXML
-    protected MenuItem menuItemSelectFile;
-
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 构造方法 / 初始化方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -133,7 +125,8 @@ public class MRTController {
 
         statusLabelSetDefault();
 
-        updateUI();
+        updateFileTree();
+        initMenuItem();
 
         ruleFillingSetter.setFixedCellSize(ruleSetterListCellSize);
         ruleReplaceSetter.setFixedCellSize(ruleSetterListCellSize);
@@ -187,13 +180,28 @@ public class MRTController {
         if (choosingFile==null) return;
 
         selectedPath = new FileNode(choosingFile);
-        log.debug("选择的文件路径为:" + selectedPath.getFullName() );
         recordHistoryPath(choosingFile.getPath());
         buildTree();
     }
 
     @FXML
-    public void onStartButtonAction(){
+    protected void onMenuItemOpenDefaultFilePath(){
+        selectedPath = new FileNode(ConfigurationManager.getManager().getConfiguration().getDefaultPath());
+        buildTree();
+    }
+
+    @FXML
+    protected void onMenuItemLoadPreset(){
+        MRTPresetSelectorPaneController.showWindow();
+    }
+
+    @FXML
+    protected void OnMenuItemSavePreset(){
+
+    }
+
+    @FXML
+    protected void onMenuItemRunProgress(){
         if (listViewSelectedFiles.getItems().isEmpty()){
             Dialogs.showInformation("运行失败" ,"不能开始运行，因为您未指定要进行处理的文件/文件夹。");
             return;
@@ -207,17 +215,10 @@ public class MRTController {
         createNewProgress().start();
     }
 
-    protected RenameProgress createNewProgress(){
-        return RenameProgress.newRenameProgress(listViewSelectedFiles.getItems()
-                        .stream()
-                        .map(FileContainer::getNode)
-                        .collect(Collectors.toCollection(ArrayList::new)), progressBar
-        ).setReplaceEditorList(this.ruleReplaceSetter.getItems().stream()
-                .map(RuleDefiner::createNameEditor)
-                .collect(Collectors.toCollection(ArrayList::new))
-        ).setFillingEditorList(this.ruleFillingSetter.getItems().stream()
-                .map(RuleDefiner::createNameEditor)
-                .collect(Collectors.toCollection(ArrayList::new)));
+    @FXML
+    //TODO: RepealChange
+    protected void onMenuItemRepealChange(ActionEvent actionEvent) {
+        Dialogs.showInformation("敬请期待" , "该功能尚未完成");
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -255,7 +256,7 @@ public class MRTController {
     @FXML
     public void onDirOnlyButtonAction(){
         MRTApp.configuration.setDirShowOnly(menuItemDirOnly.isSelected());
-        updateUI();
+        updateFileTree();
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -301,7 +302,14 @@ public class MRTController {
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
-    protected void onCreateNewFillingRule(ActionEvent actionEvent) {
+    protected void onAppendNewFillingRule(ActionEvent actionEvent) {
+        ruleFillingSetter.getSelectionModel().clearSelection();
+
+        MRTRuleSelectorPaneController.showWindow(RuleType.FILLING);
+    }
+
+    @FXML
+    protected void onInsertNewFillingRule(ActionEvent actionEvent) {
         MRTRuleSelectorPaneController.showWindow(RuleType.FILLING);
     }
 
@@ -326,7 +334,14 @@ public class MRTController {
     }
 
     @FXML
-    protected void onCreateNewReplaceRule(ActionEvent actionEvent) {
+    protected void onAppendNewReplaceRule(ActionEvent actionEvent) {
+        ruleReplaceSetter.getSelectionModel().clearSelection();
+
+        MRTRuleSelectorPaneController.showWindow(RuleType.REPLACE);
+    }
+
+    @FXML
+    protected void onInsertNewReplaceRule(ActionEvent actionEvent) {
         MRTRuleSelectorPaneController.showWindow(RuleType.REPLACE);
     }
 
@@ -445,8 +460,21 @@ public class MRTController {
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * Control Method
-     * 其他控件
+     * 其他控件操作方法
      * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    protected RenameProgress createNewProgress(){
+        return RenameProgress.newRenameProgress(listViewSelectedFiles.getItems()
+                .stream()
+                .map(FileContainer::getNode)
+                .collect(Collectors.toCollection(ArrayList::new)), progressBar
+        ).setReplaceEditorList(this.ruleReplaceSetter.getItems().stream()
+                .map(RuleDefiner::createNameEditor)
+                .collect(Collectors.toCollection(ArrayList::new))
+        ).setFillingEditorList(this.ruleFillingSetter.getItems().stream()
+                .map(RuleDefiner::createNameEditor)
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
 
     public void changeStatusLabel(String text){
         Platform.runLater(() -> labelStatusLeft.setText(text));
@@ -472,8 +500,11 @@ public class MRTController {
         return items != null ? new ArrayList<>(items) : new ArrayList<>();
     }
 
-    public void updateUI(){
-        this.setSelectedPath(new FileNode(new File(MRTApp.configuration.getDefaultPath())));
+    public void updateFileTree(){
+        if (this.selectedPath == null || !selectedPath.exists()){
+            this.setSelectedPath(new FileNode(new File(MRTApp.configuration.getDefaultPath())));
+        }
+
         this.buildTree();
     }
 
@@ -523,6 +554,10 @@ public class MRTController {
             buildTree();
         });
         menuHistoryPath.getItems().add(0, item);
+    }
+
+    protected void initMenuItem(){
+        menuItemDirOnly.setSelected(ConfigurationManager.getManager().getConfiguration().isDirShowOnly());
     }
 
     private void refreshSelectedFileIndex(){

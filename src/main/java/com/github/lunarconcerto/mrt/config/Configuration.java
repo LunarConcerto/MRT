@@ -1,6 +1,7 @@
 package com.github.lunarconcerto.mrt.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.lunarconcerto.mrt.gui.MRTApp;
 import com.github.lunarconcerto.mrt.util.FileUtil;
 import lombok.Getter;
 import org.apache.log4j.PropertyConfigurator;
@@ -26,7 +27,7 @@ public class Configuration {
 
     private boolean dirShowOnly = true ;
 
-    private boolean enableStick = false ;
+    private boolean alwaysOnTop = false ;
 
     private List<String> historyPaths = new ArrayList<>();
 
@@ -45,8 +46,11 @@ public class Configuration {
     }
 
     public void applyConfig() {
+        /* 代理 */
         if (enableProxy) enableProxy();
         else disableProxy();
+        /* 置顶 */
+        MRTApp.mainStage.setAlwaysOnTop(alwaysOnTop);
     }
 
     public void enableProxy(){
@@ -106,8 +110,8 @@ public class Configuration {
         return this;
     }
 
-    public Configuration setEnableStick(boolean enableStick) {
-        this.enableStick = enableStick;
+    public Configuration setAlwaysOnTop(boolean alwaysOnTop) {
+        this.alwaysOnTop = alwaysOnTop;
         return this;
     }
 

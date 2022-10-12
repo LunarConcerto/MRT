@@ -46,6 +46,11 @@ public class SerializableRulePreset implements Serializable {
         infos.add(info);
     }
 
+    @Override
+    public String toString() {
+        return presetName ;
+    }
+
     @Contract(" -> new")
     public static @NotNull RuleSettingInfo emptyRuleSettingInfo(){
         return new RuleSettingInfo("empty" , "empty", -1);
@@ -71,7 +76,6 @@ public class SerializableRulePreset implements Serializable {
         public static @NotNull RuleSettingInfo createNewInfo(){
             return new RuleSettingInfo();
         }
-
 
     }
 

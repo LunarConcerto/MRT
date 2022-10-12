@@ -1,17 +1,21 @@
 package com.github.lunarconcerto.mrt.component;
 
 import com.github.lunarconcerto.mrt.util.FileNode;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Optional;
 
+@Getter
 public class RenameTargetContainer {
 
     protected final FileNode targetFileNode;
 
     protected int index ;
 
-    protected String targetSourceName;
+    protected String targetSourceName , targetExtension = "" ;
+
+    protected boolean isDir ;
 
     protected StringBuilder newNameBuilder ;
 
@@ -34,6 +38,15 @@ public class RenameTargetContainer {
         targetSourceName = targetFileNode.getName();
         cache = new HashMap<>();
         newNameBuilder = new StringBuilder();
+
+        isDir = targetFileNode.isDirectory();
+        if (!isDir) {
+            int i = targetSourceName.lastIndexOf(".");
+            if (i!=-1){
+                targetExtension = targetSourceName.substring(i);
+            }
+        }
+
     }
 
     public RenameTargetContainer putCache(String key, Object value){

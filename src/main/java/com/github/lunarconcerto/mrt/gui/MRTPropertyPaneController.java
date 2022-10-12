@@ -5,12 +5,10 @@ import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.config.Property;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
-import com.github.lunarconcerto.mrt.util.FileUtil;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
@@ -41,7 +39,7 @@ public class MRTPropertyPaneController extends AnchorPane {
     public Spinner<Integer> textProxyPort ;
 
     @FXML
-    public RadioButton stickTrue , stickFalse;
+    public RadioButton alwaysOnTopTrue, alwaysOnTopFalse;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 杂项设置
@@ -51,7 +49,7 @@ public class MRTPropertyPaneController extends AnchorPane {
     public TextField textDefaultPath ;
 
     @FXML
-    public ToggleGroup toggleStickGroup ;
+    public ToggleGroup toggleAlwaysOnTopGroup;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 其他
@@ -146,7 +144,7 @@ public class MRTPropertyPaneController extends AnchorPane {
         //—————————————————————————————————
         //置顶
         //—————————————————————————————————
-        toggleStickGroup.selectToggle(configuration.isEnableStick() ? stickTrue : stickFalse);
+        toggleAlwaysOnTopGroup.selectToggle(configuration.isAlwaysOnTop() ? alwaysOnTopTrue : alwaysOnTopFalse);
         //—————————————————————————————————
         //其他设置
         //—————————————————————————————————
@@ -160,6 +158,7 @@ public class MRTPropertyPaneController extends AnchorPane {
         Properties properties = configuration.getCustomProperties();
 
         configuration.setDefaultPath(textDefaultPath.getText());
+        configuration.setAlwaysOnTop(alwaysOnTopTrue.isSelected());
 
         if (toggleHttpProxy.isSelected()) {
             configuration.setEnableProxy(true);
@@ -194,6 +193,7 @@ public class MRTPropertyPaneController extends AnchorPane {
             controller.setStage(stage);
             controller.init();
 
+            stage.setAlwaysOnTop(true);
             stage.show();
         } catch (Exception e) {
             throw new MRTRuntimeException(e);

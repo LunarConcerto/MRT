@@ -6,11 +6,14 @@ import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.RuleManager;
 import com.github.lunarconcerto.mrt.rule.RuleType;
 import com.github.lunarconcerto.mrt.util.FileUtil;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -19,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -69,7 +73,7 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
     }
 
     @FXML
-    protected void onSelectRule(MouseEvent e){
+    protected void onSelectRule(@NotNull MouseEvent e){
         if (e.getButton() == MouseButton.PRIMARY){
             showDescription(ruleList.getSelectionModel().getSelectedItem());
         }
@@ -85,7 +89,6 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
 
     void init(){
         ruleList.setCellFactory(new RuleListCellFactory());
-
         loadRuleList();
         if (!ruleList.getItems().isEmpty()) {
             ruleList.getSelectionModel().select(0);
@@ -122,7 +125,7 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
     }
 
     public static void showWindow(RuleType type){
-        if (isExist){return;}
+        if (isExist) return;
         try {
             MRTRuleSelectorPaneController controller = new MRTRuleSelectorPaneController();
 

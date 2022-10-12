@@ -45,8 +45,10 @@
             <menus>
                 <Menu mnemonicParsing="false" text="文件">
                     <items>
-                        <MenuItem fx:id="menuItemSelectFile" mnemonicParsing="false"
+                        <MenuItem mnemonicParsing="false"
                                   onAction="#onMenuItemSelectFilePathAction" text="打开..."/>
+                        <MenuItem mnemonicParsing="false"
+                                  onAction="#onMenuItemOpenDefaultFilePath" text="打开默认的路径"/>
                         <Menu fx:id="menuHistoryPath" mnemonicParsing="false" text="打开最近的路径"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" onAction="#onMenuItemPropertyAction" text="设置..."/>
@@ -55,16 +57,16 @@
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="运行">
-                    <items>
-                        <MenuItem onAction="#onStartButtonAction" mnemonicParsing="false" text="开始运行"/>
-                        <MenuItem mnemonicParsing="false" text="撤销结果"/>
-                    </items>
+                    <MenuItem onAction="#onMenuItemRunProgress" mnemonicParsing="false" text="开始运行"/>
+                    <MenuItem onAction="#onMenuItemRepealChange" mnemonicParsing="false" text="撤销结果"/>
+                </Menu>
+                <Menu mnemonicParsing="false" text="规则">
+                    <MenuItem onAction="#onMenuItemLoadPreset" mnemonicParsing="false" text="载入预设"/>
+                    <MenuItem onAction="#OnMenuItemSavePreset" mnemonicParsing="false" text="保存预设"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="帮助">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="帮助"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onMenuItemAboutAction" text="关于..."/>
-                    </items>
+                    <MenuItem mnemonicParsing="false" text="帮助"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onMenuItemAboutAction" text="关于..."/>
                 </Menu>
             </menus>
         </MenuBar>
@@ -202,7 +204,8 @@
                                             <contextMenu>
                                                 <ContextMenu>
                                                     <items>
-                                                        <MenuItem onAction="#onCreateNewFillingRule" text="插入"/>
+                                                        <MenuItem onAction="#onAppendNewFillingRule" text="追加"/>
+                                                        <MenuItem onAction="#onInsertNewFillingRule" text="插入"/>
                                                         <MenuItem onAction="#onDeleteFillingRule" text="删除"/>
                                                         <MenuItem onAction="#onMoveUpFillingRule" text="上移"/>
                                                         <MenuItem onAction="#onMoveDownFillingRule" text="下移"/>
@@ -228,7 +231,8 @@
                                             <contextMenu>
                                                 <ContextMenu>
                                                     <items>
-                                                        <MenuItem onAction="#onCreateNewReplaceRule" text="插入"/>
+                                                        <MenuItem onAction="#onAppendNewReplaceRule" text="追加"/>
+                                                        <MenuItem onAction="#onInsertNewReplaceRule" text="插入"/>
                                                         <MenuItem onAction="#onDeleteReplaceRule" text="删除"/>
                                                         <MenuItem onAction="#onMoveUpReplaceRule" text="上移"/>
                                                         <MenuItem onAction="#onMoveDownReplaceRule" text="下移"/>
