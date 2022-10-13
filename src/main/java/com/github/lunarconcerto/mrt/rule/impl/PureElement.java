@@ -22,7 +22,7 @@ public class PureElement implements Rule {
 
     @Override
     public String getName() {
-        return "选择元素" ;
+        return "可用元素" ;
     }
 
     @Override
@@ -32,7 +32,11 @@ public class PureElement implements Rule {
 
     @Override
     public String getDescription() {
-        return "使用一些固定的要素，如文件的原名、选择的序号等。";
+        return """
+                使用固定元素:
+                    ①序号 : 该文件选择时的顺序，显示在已选列表中项目的左侧.
+                    ②原名 : 文件的原名.
+               """;
     }
 
     @Override
@@ -63,7 +67,7 @@ public class PureElement implements Rule {
         }
 
         void init(){
-            this.addLabel("选择元素 :");
+            this.addLabel("选择元素:");
             ChoiceBox<Element> box = this.addChoiceBox(100 , Element.values());
 
             box.getSelectionModel().select(element);
