@@ -1,12 +1,1 @@
-{
-  "enableProxy": false,
-  "proxyHost": "127.0.0.1",
-  "proxyPort": "7890",
-  "defaultPath": "E:\\JAVA\\MRT\\src\\test\\file",
-  "dirShowOnly": false,
-  "alwaysOnTop": false,
-  "historyPaths": [
-    "E:\\MRT",
-    "C:\\Users\\LunarConcerto\\Desktop"
-  ]
-}
+{"enableProxy":false,"proxyHost":"127.0.0.1","proxyPort":"7890","defaultPath":"E:\\JAVA\\MRT\\src\\test\\file","dirShowOnly":false,"alwaysOnTop":false,"historyPaths":["E:\\MRT","C:\\Users\\LunarConcerto\\Desktop"]}

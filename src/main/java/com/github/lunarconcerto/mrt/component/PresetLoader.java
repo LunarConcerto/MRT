@@ -51,14 +51,7 @@ public class PresetLoader {
 
         definer.setIndex(info.getIndex());
 
-        addToList(definer, rule.getType());
-    }
-
-    void addToList(RuleDefiner definer, @NotNull RuleType type){
-        switch (type){
-            case FILLING -> preset.getFillingRuleList().add(definer.getIndex(), definer);
-            case REPLACE -> preset.getReplaceRuleList().add(definer.getIndex(), definer);
-        }
+        preset.getRuleDefinerList().add(definer.getIndex(), definer);
     }
 
 }

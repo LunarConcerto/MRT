@@ -10,29 +10,14 @@ import java.util.List;
 @Data
 public class RuleDefinerPreset {
 
-    protected List<RuleDefiner> fillingRuleList;
-
-    protected List<RuleDefiner> replaceRuleList;
+    protected List<RuleDefiner> ruleDefinerList;
 
     public RuleDefinerPreset() {
-        fillingRuleList = new ArrayList<>();
-        replaceRuleList = new ArrayList<>();
+        ruleDefinerList = new ArrayList<>();
     }
 
-    public void addToListView(ListView<RuleDefiner> list, @NotNull RuleType type){
-        switch (type){
-            case FILLING -> addToFillingListView(list);
-            case REPLACE -> addToReplaceListView(list);
-        }
-    }
-
-    public void addToFillingListView(ListView<RuleDefiner> list){
-        addToListView(list, fillingRuleList);
-    }
-
-    public void addToReplaceListView(@NotNull ListView<RuleDefiner> list){
-        list.getItems().clear();
-        addToListView(list, replaceRuleList);
+    public void addToListView(@NotNull ListView<RuleDefiner> list){
+        addToListView(list , ruleDefinerList);
     }
 
     void addToListView(@NotNull ListView<RuleDefiner> list, @NotNull List<RuleDefiner> definerList){

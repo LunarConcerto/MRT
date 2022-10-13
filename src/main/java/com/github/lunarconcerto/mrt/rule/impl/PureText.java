@@ -5,10 +5,6 @@ import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import com.github.lunarconcerto.mrt.rule.RuleType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventType;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,11 +23,6 @@ public class PureText implements Rule {
     @Override
     public String getDescription() {
         return "直接拼接一段恒定不变的文字.";
-    }
-
-    @Override
-    public RuleType getType() {
-        return RuleType.FILLING ;
     }
 
     @Override

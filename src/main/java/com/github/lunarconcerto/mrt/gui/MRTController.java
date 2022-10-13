@@ -31,7 +31,7 @@ import static com.github.lunarconcerto.mrt.gui.ControllerUtil.createNewDirectory
 @Log4j(topic = "controller")
 public class MRTController {
 
-    public static int ruleSetterListCellSize = 48 ;
+    public static int ruleListCellSize = 48 ;
 
     /**
      * 当前选择的路径
@@ -79,22 +79,11 @@ public class MRTController {
     protected ProgressBar progressBar;
 
     /**
-     * 右上，列表视图
-     * 用来定义[填充]类型的文件名规则
-     *
-     * @see com.github.lunarconcerto.mrt.rule.RuleType
+     * 右，列表视图
+     * 用来定义文件名构建规则
      */
     @FXML
-    public ListView<RuleDefiner> ruleFillingSetter;
-
-    /**
-     * 右下，列表视图
-     * 用来定义[替换]类型的文件名规则
-     *
-     * @see com.github.lunarconcerto.mrt.rule.RuleType
-     */
-    @FXML
-    public ListView<RuleDefiner> ruleReplaceSetter;
+    public ListView<RuleDefiner> ruleDefinerShower;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
      * 菜单项
@@ -128,8 +117,7 @@ public class MRTController {
         updateFileTree();
         initMenuItem();
 
-        ruleFillingSetter.setFixedCellSize(ruleSetterListCellSize);
-        ruleReplaceSetter.setFixedCellSize(ruleSetterListCellSize);
+        ruleDefinerShower.setFixedCellSize(ruleListCellSize);
 
         loadHistoryPath();
         loadDefaultPreset();
@@ -230,7 +218,7 @@ public class MRTController {
             return;
         }
 
-        if (ruleReplaceSetter.getItems().isEmpty() && ruleFillingSetter.getItems().isEmpty()){
+        if (ruleDefinerShower.getItems().isEmpty()){
             Dialogs.showError("运行失败" , "不能开始运行，因为您未指定构建新文件名的规则和操作。");
             return;
         }
@@ -326,66 +314,34 @@ public class MRTController {
 
     @FXML
     protected void onAppendNewFillingRule(ActionEvent actionEvent) {
-        ruleFillingSetter.getSelectionModel().clearSelection();
+        ruleDefinerShower.getSelectionModel().clearSelection();
 
-        MRTRuleSelectorPaneController.showWindow(RuleType.FILLING);
+        MRTRuleSelectorPaneController.showWindow();
     }
 
     @FXML
     protected void onInsertNewFillingRule(ActionEvent actionEvent) {
-        MRTRuleSelectorPaneController.showWindow(RuleType.FILLING);
+        MRTRuleSelectorPaneController.showWindow();
     }
 
     @FXML
     protected void onDeleteFillingRule(ActionEvent actionEvent) {
-        deleteRule(ruleFillingSetter);
+        deleteRule(ruleDefinerShower);
     }
 
     @FXML
     protected void onMoveUpFillingRule(ActionEvent actionEvent) {
-        moveUpRule(ruleFillingSetter);
+        moveUpRule(ruleDefinerShower);
     }
 
     @FXML
     protected void onMoveDownFillingRule(ActionEvent actionEvent) {
-        moveDownRule(ruleFillingSetter);
+        moveDownRule(ruleDefinerShower);
     }
 
     @FXML
     protected void onClearFillingRule(ActionEvent actionEvent) {
-        clearRule(ruleFillingSetter);
-    }
-
-    @FXML
-    protected void onAppendNewReplaceRule(ActionEvent actionEvent) {
-        ruleReplaceSetter.getSelectionModel().clearSelection();
-
-        MRTRuleSelectorPaneController.showWindow(RuleType.REPLACE);
-    }
-
-    @FXML
-    protected void onInsertNewReplaceRule(ActionEvent actionEvent) {
-        MRTRuleSelectorPaneController.showWindow(RuleType.REPLACE);
-    }
-
-    @FXML
-    protected void onDeleteReplaceRule(ActionEvent actionEvent) {
-        deleteRule(ruleReplaceSetter);
-    }
-
-    @FXML
-    protected void onMoveUpReplaceRule(ActionEvent actionEvent) {
-        moveUpRule(ruleReplaceSetter);
-    }
-
-    @FXML
-    protected void onMoveDownReplaceRule(ActionEvent actionEvent) {
-        moveDownRule(ruleReplaceSetter);
-    }
-
-    @FXML
-    protected void onClearReplaceRule(ActionEvent actionEvent) {
-        clearRule(ruleReplaceSetter);
+        clearRule(ruleDefinerShower);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -393,20 +349,10 @@ public class MRTController {
      * 规则定义面板
      * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    public void addRule(Rule rule){
-        if (rule==null){ return; }
-        if (rule.getType()!=null) {
-            addRule(rule, -1);
-        }else {
-            throw new MRTRuleException(MRTRuleException.ErrorType.VER_UNDEFINED,
-                    rule, "规则类型(RuleType)为空.");
-        }
-    }
-
     public void addRule(@NotNull Rule rule, int index){
         RuleDefiner definer = rule.createDefiner();
         if (definer!=null){
-            addRuleDefiner(definer, rule.getType(), index);
+            addRuleDefiner(definer, index);
         }else {
             throw new MRTRuleException(MRTRuleException.ErrorType.VER_UNDEFINED,
                     rule, "规则定义器(RuleDefiner)为空.");
@@ -448,19 +394,12 @@ public class MRTController {
         listView.getItems().clear();
     }
 
-    void addRuleDefiner(RuleDefiner ruleDefiner, @NotNull RuleType type){
-        addRuleDefiner(ruleDefiner, type, -1);
+    void addRuleDefiner(RuleDefiner ruleDefiner){
+        addRuleDefiner(ruleDefiner, -1);
     }
 
-    void addRuleDefiner(RuleDefiner ruleDefiner, @NotNull RuleType type, int index){
-        switch (type){
-            case FILLING -> {
-                addRuleDefiner(ruleFillingSetter, ruleDefiner, index);
-            }
-            case REPLACE -> {
-                addRuleDefiner(ruleReplaceSetter, ruleDefiner, index);
-            }
-        }
+    void addRuleDefiner(RuleDefiner ruleDefiner, int index){
+        addRuleDefiner(ruleDefinerShower, ruleDefiner, index);
     }
 
     void addRuleDefiner(@NotNull ListView<RuleDefiner> listView, RuleDefiner definer, int index){
@@ -477,8 +416,7 @@ public class MRTController {
     void loadFromPreset(@NotNull SerializableRulePreset preset){
         RuleDefinerPreset definerPreset = PresetLoader.load(preset);
 
-        definerPreset.addToFillingListView(ruleFillingSetter);
-        definerPreset.addToReplaceListView(ruleReplaceSetter);
+        definerPreset.addToListView(ruleDefinerShower);
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -491,10 +429,7 @@ public class MRTController {
                 .stream()
                 .map(FileContainer::getNode)
                 .collect(Collectors.toCollection(ArrayList::new)), progressBar
-        ).setReplaceEditorList(this.ruleReplaceSetter.getItems().stream()
-                .map(RuleDefiner::createNameEditor)
-                .collect(Collectors.toCollection(ArrayList::new))
-        ).setFillingEditorList(this.ruleFillingSetter.getItems().stream()
+        ).setNameEditorList(this.ruleDefinerShower.getItems().stream()
                 .map(RuleDefiner::createNameEditor)
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
@@ -502,8 +437,7 @@ public class MRTController {
     public SerializableRulePreset saveRuleToPreset(String presetName){
         List<RuleDefiner> collect = new ArrayList<>();
 
-        if (!ruleFillingSetter.getItems().isEmpty()) collect.addAll(ruleFillingSetter.getItems());
-        if (!ruleReplaceSetter.getItems().isEmpty()) collect.addAll(ruleReplaceSetter.getItems());
+        if (!ruleDefinerShower.getItems().isEmpty()) collect.addAll(ruleDefinerShower.getItems());
 
         return SerializableRulePreset.createNewPreset(presetName , collect);
     }

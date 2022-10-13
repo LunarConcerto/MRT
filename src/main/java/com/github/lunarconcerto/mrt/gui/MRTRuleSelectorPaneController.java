@@ -4,18 +4,12 @@ import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
 import com.github.lunarconcerto.mrt.rule.RuleManager;
-import com.github.lunarconcerto.mrt.rule.RuleType;
-import com.github.lunarconcerto.mrt.util.FileUtil;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -47,11 +41,6 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
 
     @FXML
     protected TextArea ruleDescription ;
-
-    /**
-     * 规则类型筛选
-     */
-    RuleType type ;
 
     Stage stage ;
 
@@ -96,25 +85,13 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
         }
 
 
-        switch (type){
-            case FILLING -> selectRuleIndex = MRTApp.mainController.ruleFillingSetter.getSelectionModel().getSelectedIndex();
-            case REPLACE -> selectRuleIndex = MRTApp.mainController.ruleReplaceSetter.getSelectionModel().getSelectedIndex();
-            /* 无选择的话在最后追加 */
-            default -> selectRuleIndex = -1 ;
-        }
+        selectRuleIndex = MRTApp.mainController.ruleDefinerShower.getSelectionModel().getSelectedIndex();
 
         stage.setOnCloseRequest(event -> isExist = false);
     }
 
     void loadRuleList(){
-        switch (type){
-            case FILLING -> addRules(RuleManager.getInstance().getFillingRule());
-            case REPLACE -> addRules(RuleManager.getInstance().getReplaceRule());
-        }
-    }
-
-    void addRules(List<Rule> rules){
-        this.ruleList.getItems().addAll(rules);
+        this.ruleList.getItems().addAll(RuleManager.getInstance().getAllRules());
     }
 
     void close(){
@@ -122,7 +99,7 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
         isExist = false ;
     }
 
-    public static void showWindow(RuleType type){
+    public static void showWindow(){
         if (isExist) return;
         try {
             MRTRuleSelectorPaneController controller = new MRTRuleSelectorPaneController();
@@ -130,18 +107,13 @@ public class MRTRuleSelectorPaneController extends AnchorPane {
             Parent parent = ControllerUtil.loadWindow(controller, "mrt.rule.selector.fxml");
             Stage stage = ControllerUtil.newStage(parent, "选择规则", 600, 400);
 
-            controller.setStage(stage).setType(type).init();
+            controller.setStage(stage).init();
 
             isExist = true ;
             stage.show();
         } catch (Exception e) {
             throw new MRTRuntimeException(e);
         }
-    }
-
-    public MRTRuleSelectorPaneController setType(RuleType type) {
-        this.type = type;
-        return this;
     }
 
     public MRTRuleSelectorPaneController setStage(Stage stage) {

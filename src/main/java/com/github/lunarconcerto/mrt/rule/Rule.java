@@ -35,18 +35,10 @@ public interface Rule {
     }
 
     /**
-     * 定义该规则的类型。
-     * 不同类型的规则，被调用的时机不同。
-     *
-     * @see RuleType
-     */
-    RuleType getType();
-
-    /**
      * 在主面板中再对规则进行细节自定义的面板
      *
      * @see RuleDefiner
-     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleFillingSetter
+     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleDefinerShower
      * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter
      */
     RuleDefiner createDefiner();
@@ -58,7 +50,7 @@ public interface Rule {
      * 获取的序列化数据,
      * 故该方法的实现, 需要返回一个反序列化的 {@link RuleDefiner}.
      * @see RuleDefiner
-     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleFillingSetter
+     * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleDefinerShower
      * @see com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter
      */
     RuleDefiner createDefiner(String serializedString);

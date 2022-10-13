@@ -9,7 +9,6 @@ import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import com.github.lunarconcerto.mrt.rule.RuleType;
 import javafx.scene.control.TextField;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -31,11 +30,6 @@ public class PureReplace implements Rule {
     @Override
     public String getDescription() {
         return "将一段字符替换成另一段字符";
-    }
-
-    @Override
-    public RuleType getType() {
-        return RuleType.REPLACE ;
     }
 
     @Override

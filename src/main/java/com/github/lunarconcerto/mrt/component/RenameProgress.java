@@ -20,7 +20,7 @@ import java.util.List;
 @Log4j
 public class RenameProgress {
 
-    protected List<NameEditor> fillingEditorList, replaceEditorList ;
+    protected List<NameEditor> nameEditorList ;
 
     protected List<FileNode> renameTarget ;
 
@@ -117,14 +117,9 @@ public class RenameProgress {
     }
 
     protected RenameResult buildTargetNewName(@NotNull RenameTargetContainer container){
-        /* 预处理的替换型规则 */
-        replaceEditorList.stream().filter(editor -> editor.getEditorRuntime() == NameEditor.EditorRuntime.PRE).forEachOrdered(editor -> editor.doEdit(container));
-        /* 运行填充型规则 */
-        fillingEditorList.forEach(editor -> editor.doEdit(container));
+        nameEditorList.forEach(editor -> editor.doEdit(container));
         /* 对构建的新文件名添加上拓展名 */
         container.append(container.getTargetExtension());
-        /* 后处理的替换型规则 */
-        replaceEditorList.stream().filter(editor -> editor.getEditorRuntime() == NameEditor.EditorRuntime.POST).forEachOrdered(editor -> editor.doEdit(container));
 
         log.debug("对原文件 "+ container.targetFileNode.getFullName() + "构建的新文件名为:" + container.newNameBuilder.toString());
         return new RenameResult()
@@ -151,13 +146,8 @@ public class RenameProgress {
         return this;
     }
 
-    public RenameProgress setFillingEditorList(List<NameEditor> fillingEditorList) {
-        this.fillingEditorList = fillingEditorList;
-        return this;
-    }
-
-    public RenameProgress setReplaceEditorList(List<NameEditor> replaceEditorList) {
-        this.replaceEditorList = replaceEditorList;
+    public RenameProgress setNameEditorList(List<NameEditor> fillingEditorList) {
+        this.nameEditorList = fillingEditorList;
         return this;
     }
 

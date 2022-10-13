@@ -39,7 +39,7 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<VBox prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.gui.MRTController">
+<VBox prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.lunarconcerto.mrt.gui.MRTController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -162,46 +162,20 @@
                 </AnchorPane>
                 <AnchorPane>
                     <children>
-                        <SplitPane dividerPositions="0.5" orientation="VERTICAL">
-                            <items>
-                                <AnchorPane>
-                                    <children>
-                                        <ListView fx:id="ruleFillingSetter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="299.0" stylesheets="@css/list-view-rule-setter.css">
-                                            <contextMenu>
-                                                <ContextMenu>
-                                                    <items>
-                                                        <MenuItem onAction="#onAppendNewFillingRule" text="追加" />
-                                                        <MenuItem onAction="#onInsertNewFillingRule" text="插入" />
-                                                        <MenuItem onAction="#onDeleteFillingRule" text="删除" />
-                                                        <MenuItem onAction="#onMoveUpFillingRule" text="上移" />
-                                                        <MenuItem onAction="#onMoveDownFillingRule" text="下移" />
-                                                        <MenuItem onAction="#onClearFillingRule" text="清空" />
-                                                    </items>
-                                                </ContextMenu>
-                                            </contextMenu>
-                                        </ListView>
-                                    </children>
-                                </AnchorPane>
-                                <AnchorPane prefWidth="297.0">
-                                    <children>
-                                        <ListView fx:id="ruleReplaceSetter" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="297.0" stylesheets="@css/list-view-rule-setter.css">
-                                            <contextMenu>
-                                                <ContextMenu>
-                                                    <items>
-                                                        <MenuItem onAction="#onAppendNewReplaceRule" text="追加" />
-                                                        <MenuItem onAction="#onInsertNewReplaceRule" text="插入" />
-                                                        <MenuItem onAction="#onDeleteReplaceRule" text="删除" />
-                                                        <MenuItem onAction="#onMoveUpReplaceRule" text="上移" />
-                                                        <MenuItem onAction="#onMoveDownReplaceRule" text="下移" />
-                                                        <MenuItem onAction="#onClearReplaceRule" text="清空" />
-                                                    </items>
-                                                </ContextMenu>
-                                            </contextMenu>
-                                        </ListView>
-                                    </children>
-                                </AnchorPane>
-                            </items>
-                        </SplitPane>
+                            <ListView fx:id="ruleDefinerShower" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="299.0" stylesheets="@css/list-view-rule-setter.css">
+                                <contextMenu>
+                                    <ContextMenu>
+                                        <items>
+                                            <MenuItem onAction="#onAppendNewFillingRule" text="追加" />
+                                            <MenuItem onAction="#onInsertNewFillingRule" text="插入" />
+                                            <MenuItem onAction="#onDeleteFillingRule" text="删除" />
+                                            <MenuItem onAction="#onMoveUpFillingRule" text="上移" />
+                                            <MenuItem onAction="#onMoveDownFillingRule" text="下移" />
+                                            <MenuItem onAction="#onClearFillingRule" text="清空" />
+                                        </items>
+                                    </ContextMenu>
+                                </contextMenu>
+                            </ListView>
                     </children>
                 </AnchorPane>
             </items>

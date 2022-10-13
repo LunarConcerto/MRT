@@ -5,13 +5,9 @@ import com.github.lunarconcerto.mrt.config.Configuration;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
 import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import com.github.lunarconcerto.mrt.rule.RuleType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ChoiceBox;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 public class PureElement implements Rule {
 
@@ -23,11 +19,6 @@ public class PureElement implements Rule {
     @Override
     public String getName() {
         return "可用元素" ;
-    }
-
-    @Override
-    public RuleType getType() {
-        return RuleType.FILLING ;
     }
 
     @Override

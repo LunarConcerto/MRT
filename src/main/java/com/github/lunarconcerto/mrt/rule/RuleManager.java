@@ -14,9 +14,7 @@ import java.util.stream.Collectors;
 
 public class RuleManager {
 
-    protected List<Rule> aliveRules ,
-            fillingRule ,
-            replaceRule ;
+    protected List<Rule> ruleList ;
 
     private static RuleManager instance ;
 
@@ -30,15 +28,10 @@ public class RuleManager {
 
     public RuleManager() {
         loadRules();
-
-        fillingRule = new ArrayList<>();
-        replaceRule = new ArrayList<>();
-
-        sort();
     }
 
     void loadRules(){
-        aliveRules = new ArrayList<>();
+        ruleList = new ArrayList<>();
 
         loadInternalRules();
 
@@ -70,7 +63,7 @@ public class RuleManager {
         for (Class<?> ruleClass : rules) {
             try {
                 Rule rule = (Rule) ruleClass.getConstructor().newInstance();
-                this.aliveRules.add(rule);
+                this.ruleList.add(rule);
             }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e){
                 throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, ruleClass, "无法实例化");
             }
@@ -78,28 +71,11 @@ public class RuleManager {
     }
 
     void initRules(){
-        aliveRules.forEach(rule -> rule.init(ConfigurationManager.getManager().getConfiguration()));
-    }
-
-    void sort(){
-        for (Rule rule : aliveRules) {
-            RuleType type = rule.getType();
-            switch (type) {
-                case REPLACE -> replaceRule.add(rule);
-                case FILLING -> fillingRule.add(rule);
-            }
-        }
+        ruleList.forEach(rule -> rule.init(ConfigurationManager.getManager().getConfiguration()));
     }
 
     public List<Rule> getAllRules() {
-        return aliveRules;
+        return ruleList;
     }
 
-    public List<Rule> getFillingRule() {
-        return fillingRule;
-    }
-
-    public List<Rule> getReplaceRule() {
-        return replaceRule;
-    }
 }

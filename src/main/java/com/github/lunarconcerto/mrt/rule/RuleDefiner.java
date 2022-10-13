@@ -3,15 +3,11 @@ package com.github.lunarconcerto.mrt.rule;
 import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 import com.github.lunarconcerto.mrt.gui.PopOvers;
 import com.github.lunarconcerto.mrt.util.NameChecker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import org.controlsfx.control.PopOver;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -22,7 +18,7 @@ public abstract class RuleDefiner extends AnchorPane implements Serializable {
 
     /**
      * 表示该面板,
-     * 在MRT主面板的 {@link com.github.lunarconcerto.mrt.gui.MRTController#ruleFillingSetter} , {@link com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter}
+     * 在MRT主面板的 {@link com.github.lunarconcerto.mrt.gui.MRTController#ruleDefinerShower} , {@link com.github.lunarconcerto.mrt.gui.MRTController#ruleReplaceSetter}
      * 中所处的索引值。
      * <p>
      * 该索引值将决定此处定义的规则在何时被触发。

@@ -24,7 +24,7 @@ public class MRTPresetSelectorPaneController extends AnchorPane {
     protected ListView<SerializableRulePreset> presetListView ;
 
     @FXML
-    protected ListView<RuleDefiner> previewFillingRule , previewReplaceRule ;
+    protected ListView<RuleDefiner> previewRuleDefiner  ;
 
     @SuppressWarnings("ClassEscapesDefinedScope")
     protected Type type ;
@@ -61,8 +61,7 @@ public class MRTPresetSelectorPaneController extends AnchorPane {
 
     void showPresetPreview(@NotNull SerializableRulePreset preset){
         RuleDefinerPreset definerPreset = preset.toRuleDefinerPreset();
-        definerPreset.addToFillingListView(previewFillingRule);
-        definerPreset.addToReplaceListView(previewReplaceRule);
+        definerPreset.addToListView(previewRuleDefiner);
     }
 
     void init() {
