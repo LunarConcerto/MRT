@@ -5,13 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.lunarconcerto</groupId>
-    <artifactId>MagicalRenameTool</artifactId>
+    <artifactId>MRT</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>MagicalRenameTool</name>
+    <packaging>jar</packaging>
+    <name>MRT</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>5.7.1</junit.version>
+        <junit.version>5.9.0</junit.version>
     </properties>
 
     <dependencies>
@@ -30,6 +31,13 @@
             <artifactId>controlsfx</artifactId>
             <version>11.1.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.jfoenix/jfoenix -->
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>9.0.10</version>
+        </dependency>
+
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
@@ -63,6 +71,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-fontawesome-pack</artifactId>
@@ -84,9 +100,14 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.14.3</version>
+            <version>1.15.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.149</version>
+        </dependency>
 
     </dependencies>
 
@@ -102,26 +123,22 @@
                     <target>17</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M6</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.gluonhq</groupId>
-                <artifactId>gluonfx-maven-plugin</artifactId>
-                <version>1.0.13</version>
-                <configuration>
-                    <mainClass>
-                        com.github.lunarconcerto.magicalrenametool/com.github.lunarconcerto.magicalrenametool.Main
-                    </mainClass>
-                    <graalvmHome>E:\Program Files\JAVA\graalvm-ce-java17-22.1.0</graalvmHome>
-                </configuration>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -134,7 +151,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.github.lunarconcerto.magicalrenametool/com.github.lunarconcerto.magicalrenametool.Main
+                                MRT/com.github.lunarconcerto.mrt.MRTStarter
                             </mainClass>
                         </configuration>
                     </execution>
