@@ -10,7 +10,7 @@
    
 # 如何使用
 
-   请参阅本仓库的Wiki页面 -> <a href="https://github.com/LunarConcerto/MRT/wiki/MRT%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C">MRT使用手册</a>
+   请参阅本仓库的Wiki页面 -> <a href="https://github.com/LunarConcerto/MRT/wiki">MRT使用手册</a>
 
 # 注意事项
 
