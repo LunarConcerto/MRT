@@ -14,23 +14,22 @@ import java.util.stream.Collectors;
 
 public class RuleManager {
 
-    protected List<Rule> ruleList ;
+    private static RuleManager instance;
+    protected List<Rule> ruleList;
 
-    private static RuleManager instance ;
+    public RuleManager() {
+        loadRules();
+    }
 
-    public static RuleManager getInstance(){
-        if (instance==null){
+    public static RuleManager getInstance() {
+        if (instance == null) {
             instance = new RuleManager();
         }
 
         return instance;
     }
 
-    public RuleManager() {
-        loadRules();
-    }
-
-    void loadRules(){
+    void loadRules() {
         ruleList = new ArrayList<>();
 
         loadInternalRules();
@@ -38,22 +37,18 @@ public class RuleManager {
         initRules();
     }
 
-    void loadInternalRules(){
-        String pkg = "com.github.lunarconcerto.mrt.rule.impl" ;
+    void loadInternalRules() {
         try (ScanResult scanResult =
-                     new ClassGraph()
-                             /* 输出Log */
-//                             .verbose()
-                             .enableClassInfo()
-                             .acceptPackages(pkg)
+                     new ClassGraph().enableClassInfo()
+                             .acceptPackages("com.github.lunarconcerto.mrt.rule.impl")
                              .scan()
-        ){
+        ) {
             List<Class<?>> ruleImplList = scanResult.getClassesImplementing(Rule.class.getName())
                     .stream()
                     .map(ClassInfo::loadClass)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            if (!ruleImplList.isEmpty()){
+            if (!ruleImplList.isEmpty()) {
                 instantiationRules(ruleImplList);
             }
         }
@@ -64,13 +59,14 @@ public class RuleManager {
             try {
                 Rule rule = (Rule) ruleClass.getConstructor().newInstance();
                 this.ruleList.add(rule);
-            }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e){
+            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException e) {
                 throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, ruleClass, "无法实例化");
             }
         }
     }
 
-    void initRules(){
+    void initRules() {
         ruleList.forEach(rule -> rule.init(ConfigurationManager.getManager().getConfiguration()));
     }
 

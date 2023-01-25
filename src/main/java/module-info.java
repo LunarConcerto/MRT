@@ -1,15 +1,13 @@
-module com.github.lunarconcerto.mrt {
+open module com.github.lunarconcerto.mrt {
     requires javafx.controls;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
-    requires org.kordamp.ikonli.fontawesome;
 
     requires org.jetbrains.annotations;
     requires org.slf4j;
     requires org.jsoup;
-    requires log4j;
     requires lombok;
     requires io.github.classgraph;
 
@@ -17,17 +15,19 @@ module com.github.lunarconcerto.mrt {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires java.desktop;
-    requires com.jfoenix;
+    requires com.dlsc.preferencesfx;
+    requires MaterialFX;
+    requires com.dustinredmond.fxtrayicon;
+    requires AnimateFX;
 
     exports com.github.lunarconcerto.mrt;
     exports com.github.lunarconcerto.mrt.util;
     exports com.github.lunarconcerto.mrt.config;
-    exports com.github.lunarconcerto.mrt.component;
+    exports com.github.lunarconcerto.mrt.task;
     exports com.github.lunarconcerto.mrt.rule;
-    exports com.github.lunarconcerto.mrt.gui;
+    exports com.github.lunarconcerto.mrt.rule.io;
+    exports com.github.lunarconcerto.mrt.controller;
+    exports com.github.lunarconcerto.mrt.model;
+    exports com.github.lunarconcerto.mrt.control;
 
-    opens com.github.lunarconcerto.mrt to javafx.fxml;
-    opens com.github.lunarconcerto.mrt.config to javafx.fxml;
-    opens com.github.lunarconcerto.mrt.component to javafx.fxml;
-    opens com.github.lunarconcerto.mrt.gui to javafx.fxml;
 }

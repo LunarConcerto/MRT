@@ -1,13 +1,13 @@
 package com.github.lunarconcerto.mrt.rule.impl;
 
-import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 import com.github.lunarconcerto.mrt.config.Configuration;
+import com.github.lunarconcerto.mrt.control.RuleDefiningPane;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
-import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.github.lunarconcerto.mrt.task.FileRenameTargetWrapper;
+import com.github.lunarconcerto.mrt.util.Texts;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class PureRemove implements Rule {
@@ -19,46 +19,44 @@ public class PureRemove implements Rule {
 
     @Override
     public String getName() {
-        return "移除字符";
+        return "删除文字";
     }
 
     @Override
-    public String getDescription() {
-        return """
-                将文件名中的匹配字符全部移除。
-                (注意:作用的对象为该规则为止的
-                        被组成的新名字)
-               """;
+    public Text[] getDescription() {
+        return Texts.texts(
+                Texts.textWithTabNewLine("将文件名中的匹配的文字全部移除."),
+                Texts.textWithTabNewLine("(注意:作用的对象为该规则为止的被组成的新名字)")
+        );
     }
 
     @Override
-    public RuleDefiner createDefiner() {
-        return new PureRemoveDefiner(this);
+    public RuleDefiningPane createDefiningPane() {
+        return new PureRemoveDefiningPane(this);
     }
 
     @Override
-    public RuleDefiner createDefiner(String serializedString) {
-        return new PureRemoveDefiner(this , serializedString);
+    public RuleDefiningPane createDefiningPane(String serializedString) {
+        return new PureRemoveDefiningPane(this, serializedString);
     }
 
-    static class PureRemoveDefiner extends RuleDefiner {
+    static class PureRemoveDefiningPane extends RuleDefiningPane {
 
-        protected String targetText = "" ;
+        protected String targetText = "";
 
-        public PureRemoveDefiner(Rule parentRule) {
+        public PureRemoveDefiningPane(Rule parentRule) {
             super(parentRule);
             init();
         }
 
-        public PureRemoveDefiner(Rule parentRule, String targetText) {
+        public PureRemoveDefiningPane(Rule parentRule, String targetText) {
             super(parentRule);
             this.targetText = targetText;
             init();
         }
 
-        void init(){
-            this.addLabel("删除所有:");
-            TextField textField = this.addTextField(targetText, 100);
+        protected void init() {
+            TextField textField = this.addTextField(targetText, "要删除的文字");
             textField.textProperty().addListener((observable, oldValue, newValue) -> targetText = newValue);
         }
 
@@ -69,7 +67,7 @@ public class PureRemove implements Rule {
 
         @Override
         public String serialize() {
-            return this.targetText ;
+            return this.targetText;
         }
 
         @Override
@@ -80,15 +78,15 @@ public class PureRemove implements Rule {
 
     static class PureRemoveEditor implements NameEditor {
 
-        protected String targetText ;
+        protected String targetText;
 
         public PureRemoveEditor(String targetText) {
             this.targetText = targetText;
         }
 
         @Override
-        public void doEdit(@NotNull RenameTargetContainer builder) {
-            builder.replace(targetText , "");
+        public void doEdit(@NotNull FileRenameTargetWrapper builder) {
+            builder.replace(targetText, "");
         }
 
     }

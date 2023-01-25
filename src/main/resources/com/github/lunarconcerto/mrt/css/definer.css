@@ -1,0 +1,28 @@
+#ruleList {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 4px;
+}
+
+#ruleList .virtual-flow .mfx-list-cell {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: Gray;
+    -fx-background-insets: 0px, 2px;
+}
+
+#ruleList .virtual-flow .mfx-list-cell .data-label {
+    -fx-text-fill: Black;
+}
+
+#ruleList .virtual-flow .mfx-list-cell .user-icon {
+    -mfx-color: white;
+}
+
+#ruleList .virtual-flow .mfx-list-cell .mfx-ripple-generator {
+    -mfx-auto-clip: true;
+}
+
+#ruleList .virtual-flow .mfx-list-cell:selected .mfx-ripple-generator {
+    -mfx-paused: true;
+}

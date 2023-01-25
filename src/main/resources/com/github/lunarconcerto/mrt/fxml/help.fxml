@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="600.0"
+           xmlns="http://javafx.com/javafx/11.0.14-internal"
+           fx:controller="com.github.lunarconcerto.mrt.controller.HelpController">
+    <Label text="建设中">
+        <font>
+            <Font size="96.0"/>
+        </font>
+    </Label>
+</StackPane>
