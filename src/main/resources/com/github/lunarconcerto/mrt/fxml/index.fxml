@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import com.github.lunarconcerto.mrt.control.DirectoryCheckTreeView?>
+<?import com.github.lunarconcerto.mrt.control.RuleDefiningListView?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import io.github.palexdev.materialfx.font.MFXFontIcon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.MasterDetailPane?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/18"
+           stylesheets="@../css/definer.css"
+           fx:controller="com.github.lunarconcerto.mrt.controller.IndexController">
+    <VBox fx:id="mainBox"
+          prefHeight="700.0" prefWidth="900.0"
+          minHeight="300" minWidth="500">
+
+        <MenuBar fx:id="menuBar" VBox.vgrow="ALWAYS">
+            <Menu mnemonicParsing="false" text="%fxml.index.toolbar.file">
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemSelectFilePathAction"
+                          text="%fxml.index.toolbar.open">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-folder-open-outline"/>
+                    </graphic>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemOpenDefaultFilePath"
+                          text="%fxml.index.toolbar.open_default">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-folder-home-outline"/>
+                    </graphic>
+                </MenuItem>
+                <Menu fx:id="menuHistoryPath" mnemonicParsing="false" text="%fxml.index.toolbar.open_recently">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-folder-multiple-outline"/>
+                    </graphic>
+                </Menu>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <CheckMenuItem mnemonicParsing="false" fx:id="menuItemDirOnly"
+                               text="%fxml.index.toolbar.show_dir_only">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-file-hidden"/>
+                    </graphic>
+                </CheckMenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemPropertyAction"
+                          text="%fxml.index.toolbar.setting">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-cog"/>
+                    </graphic>
+                </MenuItem>
+                <SeparatorMenuItem mnemonicParsing="false"/>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemExitAction" text="%fxml.index.toolbar.exit">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2e-exit-to-app"/>
+                    </graphic>
+                </MenuItem>
+            </Menu>
+            <Menu mnemonicParsing="false" text="%fxml.index.toolbar.run">
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemRunProgress"
+                          text="%fxml.index.toolbar.start_rename">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2p-play-circle"/>
+                    </graphic>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemRepealChange"
+                          text="%fxml.index.toolbar.revoke_result">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2r-restart"/>
+                    </graphic>
+                </MenuItem>
+            </Menu>
+            <Menu mnemonicParsing="false" text="%fxml.index.toolbar.rule">
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemLoadPreset"
+                          text="%fxml.index.toolbar.load_preset">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-content-save-settings"/>
+                    </graphic>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemSavePreset"
+                          text="%fxml.index.toolbar.save_preset">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-content-save-cog"/>
+                    </graphic>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemDeletePreset"
+                          text="%fxml.index.toolbar.remove_preset">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-content-save-off"/>
+                    </graphic>
+                </MenuItem>
+            </Menu>
+            <Menu mnemonicParsing="false" text="%fxml.index.toolbar.window">
+                <CheckMenuItem mnemonicParsing="false" fx:id="menuItemAlwaysOnTop"
+                               text="%fxml.index.toolbar.always_on_top"/>
+                <CheckMenuItem mnemonicParsing="false" fx:id="menuItemHideLogger"
+                               text="%fxml.index.toolbar.hide_logger"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="%fxml.index.toolbar.help">
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemHelp"
+                          text="%fxml.index.toolbar.help.help">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2h-help-circle-outline"/>
+                    </graphic>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#onMenuItemAboutAction"
+                          text="%fxml.index.toolbar.about">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2a-alert-circle-outline"/>
+                    </graphic>
+                </MenuItem>
+            </Menu>
+        </MenuBar>
+
+        <SplitPane fx:id="splitVertical" dividerPositions="0.7, 0.3"
+                   orientation="VERTICAL"
+                   prefHeight="${mainBox.height}">
+
+            <SplitPane fx:id="splitHorizontal"
+                       dividerPositions="0.3, 0.7"
+                       prefHeight="${mainBox.height}" prefWidth="${mainBox.width}">
+
+                <DirectoryCheckTreeView fx:id="directoryTree"
+                                        showRoot="false"
+                                        prefHeight="${mainBox.height}" prefWidth="${mainBox.width}"/>
+
+
+                <RuleDefiningListView fx:id="ruleList" depthLevel="LEVEL0"
+                                      prefHeight="${mainBox.height}" prefWidth="${mainBox.width}"/>
+            </SplitPane>
+
+            <fx:define>
+                <MFXTableView fx:id="logMessageTable" footerVisible="false">
+                    <tableColumns>
+                        <MFXTableColumn prefWidth="100" text="%fxml.index.master_detail.time">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2a-av-timer"/>
+                            </graphic>
+                        </MFXTableColumn>
+                        <MFXTableColumn prefWidth="50" text="%fxml.index.master_detail.level">
+                            <graphic>
+                                <MFXFontIcon description="mfx-info"/>
+                            </graphic>
+                        </MFXTableColumn>
+                        <MFXTableColumn prefWidth="${logMessageTable.width}" text="%fxml.index.master_detail.message">
+                            <graphic>
+                                <MFXFontIcon description="mfx-message"/>
+                            </graphic>
+                        </MFXTableColumn>
+                    </tableColumns>
+                    <tooltip>
+                        <Tooltip text="%fxml.index.master_detail.tooltip"/>
+                    </tooltip>
+                </MFXTableView>
+                <TextArea fx:id="logDetail"
+                          editable="false"
+                />
+            </fx:define>
+            <MasterDetailPane fx:id="logger"
+                              prefHeight="${mainBox.height}" prefWidth="${mainBox.width}"
+                              masterNode="$logMessageTable" detailNode="$logDetail"
+                              detailSide="RIGHT"
+                              dividerPosition="0.66"
+            />
+
+        </SplitPane>
+
+        <HBox id="HBox" alignment="CENTER_LEFT"
+              prefHeight="25.0" spacing="5.0"
+              VBox.vgrow="NEVER">
+
+            <padding>
+                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+            </padding>
+
+            <Label text="%fxml.index.label.status" maxHeight="2" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font size="11.0"/>
+                </font>
+                <textFill>
+                    <Color red="0.625" green="0.625" blue="0.625"/>
+                </textFill>
+            </Label>
+
+            <Label fx:id="status" maxHeight="2" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font size="11.0"/>
+                </font>
+                <textFill>
+                    <Color red="0.625" green="0.625" blue="0.625"/>
+                </textFill>
+            </Label>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <MFXProgressBar id="determinateBar"
+                            fx:id="progressBar" progress="0.0"/>
+        </HBox>
+
+    </VBox>
+</StackPane>

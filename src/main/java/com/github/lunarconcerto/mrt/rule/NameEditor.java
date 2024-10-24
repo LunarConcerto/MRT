@@ -1,9 +1,9 @@
 package com.github.lunarconcerto.mrt.rule;
 
-import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
+import com.github.lunarconcerto.mrt.task.FileRenameTargetWrapper;
 
 public interface NameEditor {
 
-    void doEdit(RenameTargetContainer builder);
+    void doEdit(FileRenameTargetWrapper builder);
 
 }

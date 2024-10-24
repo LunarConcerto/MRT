@@ -1,0 +1,43 @@
+<component name="ArtifactManager">
+  <artifact name="mrt">
+    <output-path>$PROJECT_DIR$/target/mrt_1.1.0_build</output-path>
+    <root id="root">
+      <element id="directory" name="lib">
+        <element id="library" level="project" name="Maven: com.dlsc.formsfx:formsfx-core:11.5.0" />
+        <element id="library" level="project" name="Maven: com.dlsc.preferencesfx:preferencesfx-core:11.11.0" />
+        <element id="library" level="project" name="Maven: com.dustinredmond.fxtrayicon:FXTrayIcon:4.0.1" />
+        <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.14.0" />
+        <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.0" />
+        <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.0" />
+        <element id="library" level="project" name="Maven: com.github.leewyatt:rxcontrols:11.0.3" />
+        <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.9" />
+        <element id="library" level="project" name="Maven: io.github.classgraph:classgraph:4.8.154" />
+        <element id="library" level="project" name="Maven: io.github.palexdev:materialfx:11.13.8" />
+        <element id="library" level="project" name="Maven: io.github.palexdev:virtualizedfx:11.2.6" />
+        <element id="library" level="project" name="Maven: io.github.typhon0:AnimateFX:1.2.4" />
+        <element id="library" level="project" name="Maven: it.sauronsoftware:junique:1.0.4" />
+        <element id="library" level="project" name="Maven: org.controlsfx:controlsfx:11.1.2" />
+        <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.15.3" />
+        <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-core:12.3.1" />
+        <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-javafx:12.3.1" />
+        <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-material-pack:12.2.0" />
+        <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-materialdesign2-pack:12.3.1" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-base:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-base:win:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:win:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:win:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:win:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-media:17.0.1" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-media:win:17.0.1" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-swing:19" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-swing:win:19" />
+        <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.24" />
+        <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:2.0.5" />
+        <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:2.0.5" />
+      </element>
+    </root>
+  </artifact>
+</component>

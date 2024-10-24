@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.leewyatt.rxcontrols.controls.RXAvatar?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+           prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+           fx:controller="com.github.lunarconcerto.mrt.controller.AboutController">
+    <GridPane style="-fx-background-color: white;">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="240.0" prefWidth="240.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="383.0" minWidth="10.0" prefWidth="360.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0"
+                    style="-fx-background-color: rgba(0,0,0,0.5); -fx-background-radius: 15;">
+            <GridPane.margin>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+            </GridPane.margin>
+            <RXAvatar layoutX="55.0" layoutY="14.0">
+                <image>
+                    <Image url="@../img/cafe.jpg"/>
+                </image>
+                <effect>
+                    <InnerShadow color="#c9c9c9"/>
+                </effect>
+            </RXAvatar>
+            <Label alignment="CENTER" layoutX="45.0" layoutY="130.0" prefHeight="30.0" prefWidth="120.0"
+                   style="-fx-background-color: #4f4f4f; -fx-background-radius: 10;" text="LunarConcerto"
+                   textFill="WHITE">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </Label>
+            <GridPane layoutX="15.0" layoutY="185.0" prefHeight="160.0" prefWidth="180.0"
+                      style="-fx-background-color: white; -fx-background-radius: 10;">
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+                    <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="30.0"/>
+                    <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="30.0"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+                </rowConstraints>
+                <columnConstraints>
+                    <ColumnConstraints maxWidth="80.0" minWidth="60.0" prefWidth="80.0"/>
+                    <ColumnConstraints maxWidth="100.0" minWidth="100.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <Label text="Github">
+                    <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </GridPane.margin>
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2g-github"/>
+                    </graphic>
+                </Label>
+                <Label text="Github" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </GridPane.margin>
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2g-github"/>
+                    </graphic>
+                </Label>
+                <Hyperlink onAction="#openGithub1" text="LunarConcerto" GridPane.columnIndex="1"/>
+                <Label text="QQ" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </GridPane.margin>
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2q-qqchat"/>
+                    </graphic>
+                </Label>
+                <Hyperlink fx:id="linkQQ" onAction="#openQQ" text="1399265255" GridPane.columnIndex="1"
+                           GridPane.rowIndex="2"/>
+                <Hyperlink onAction="#openGithub2" text="MRT" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            </GridPane>
+        </AnchorPane>
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1"
+              GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets bottom="15.0" right="15.0" top="15.0"/>
+            </GridPane.margin>
+            <Label fx:id="title" text="MRT">
+                <font>
+                    <Font size="28.0"/>
+                </font>
+            </Label>
+            <Label fx:id="version" text="version.">
+                <VBox.margin>
+                    <Insets bottom="5.0" top="5.0"/>
+                </VBox.margin>
+            </Label>
+            <TextFlow lineSpacing="10.0" prefHeight="350.0" prefWidth="345.0">
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%fxml.about.text01"/>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%fxml.about.text02"/>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%fxml.about.text03"/>
+            </TextFlow>
+        </VBox>
+    </GridPane>
+</StackPane>

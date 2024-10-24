@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.github.lunarconcerto.mrt.control.RuleDefiningListView?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           prefHeight="600.0" prefWidth="600.0"
+           fx:controller="com.github.lunarconcerto.mrt.controller.PresetSelectorController">
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="400.0" prefWidth="400.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="600.0" prefHeight="600.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <GridPane GridPane.columnIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="400.0" prefWidth="400.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="540" minHeight="540" prefHeight="540" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <RuleDefiningListView fx:id="ruleList"
+                                  GridPane.rowIndex="0"
+                                  depthLevel="LEVEL0"
+                                  disable="true"
+                                  stylesheets="@../css/definer.css"
+                                  prefHeight="540.0" prefWidth="400.0">
+                <GridPane.margin>
+                    <Insets left="10.0" right="15.0" top="15.0"/>
+                </GridPane.margin>
+            </RuleDefiningListView>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                <GridPane.margin>
+                    <Insets left="10.0" right="15.0"/>
+                </GridPane.margin>
+                <MFXButton mnemonicParsing="false"
+                           prefHeight="30.0" prefWidth="100.0"
+                           buttonType="RAISED"
+                           onAction="#onConfirm"
+                           text="确定">
+                    <HBox.margin>
+                        <Insets bottom="10.0" right="85.0" top="10.0"/>
+                    </HBox.margin>
+                </MFXButton>
+                <MFXButton mnemonicParsing="false"
+                           prefHeight="30.0" prefWidth="100.0"
+                           buttonType="RAISED"
+                           onAction="#onCancel"
+                           text="取消">
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="85.0" top="10.0"/>
+                    </HBox.margin>
+                </MFXButton>
+            </HBox>
+        </GridPane>
+        <ListView fx:id="presetListView"
+                  onMouseClicked="#onSelect"
+                  prefHeight="200.0" prefWidth="200.0">
+            <GridPane.margin>
+                <Insets bottom="15.0" left="15.0" right="10.0" top="15.0"/>
+            </GridPane.margin>
+        </ListView>
+    </GridPane>
+</StackPane>

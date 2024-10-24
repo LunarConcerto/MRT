@@ -1,11 +1,13 @@
 package com.github.lunarconcerto.mrt.rule.impl;
 
-import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 import com.github.lunarconcerto.mrt.config.Configuration;
+import com.github.lunarconcerto.mrt.control.RuleDefiningPane;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
-import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import javafx.scene.control.TextField;
+import com.github.lunarconcerto.mrt.task.FileRenameTargetWrapper;
+import com.github.lunarconcerto.mrt.util.Texts;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 public class PureText implements Rule {
@@ -17,48 +19,47 @@ public class PureText implements Rule {
 
     @Override
     public String getName() {
-        return "输入字符";
+        return "添加文字";
     }
 
     @Override
-    public String getDescription() {
-        return "直接拼接一段恒定不变的文字.";
+    public Text[] getDescription() {
+        return Texts.texts(Texts.textWithTabNewLine("拼接一段文字."));
     }
 
     @Override
-    public RuleDefiner createDefiner() {
-        return new PureTextDefiner(this);
+    public RuleDefiningPane createDefiningPane() {
+        return new PureTextDefiningPane(this);
     }
 
     @Override
-    public RuleDefiner createDefiner(String serializedString) {
-        return new PureTextDefiner(this, serializedString);
+    public RuleDefiningPane createDefiningPane(String serializedString) {
+        return new PureTextDefiningPane(this, serializedString);
     }
 
-    static class PureTextDefiner extends RuleDefiner {
+    static class PureTextDefiningPane extends RuleDefiningPane {
 
         protected String text = "";
 
-        protected TextField textField ;
+        protected MFXTextField textField;
 
-        public PureTextDefiner(Rule parentRule) {
+        public PureTextDefiningPane(Rule parentRule) {
             super(parentRule);
 
             init();
         }
 
-        public PureTextDefiner(Rule parentRule, String text) {
+        public PureTextDefiningPane(Rule parentRule, String text) {
             super(parentRule);
             this.text = text;
 
             init();
         }
 
-        void init(){
-            this.addLabel("拼接字符: ");
-            textField = this.addTextField();
+        protected void init() {
+            textField = this.addTextField(text, "要添加的文字");
             textField.textProperty().addListener((observable, oldValue, newValue) -> text = newValue);
-            if (!text.isEmpty()){
+            if (!text.isEmpty()) {
                 textField.setText(text);
             }
         }
@@ -70,19 +71,19 @@ public class PureText implements Rule {
 
         @Override
         public String serialize() {
-            return text ;
+            return text;
         }
 
         @Override
         public String toSampleText() {
-            return text ;
+            return text;
         }
 
         public String getText() {
             return text;
         }
 
-        public PureTextDefiner setText(String text) {
+        public PureTextDefiningPane setText(String text) {
             this.text = text;
             return this;
         }
@@ -91,9 +92,9 @@ public class PureText implements Rule {
     record PureTextNameEditor(String text) implements NameEditor {
 
         @Override
-            public void doEdit(@NotNull RenameTargetContainer builder) {
-                builder.append(text);
-            }
+        public void doEdit(@NotNull FileRenameTargetWrapper builder) {
+            builder.append(text);
+        }
 
     }
 

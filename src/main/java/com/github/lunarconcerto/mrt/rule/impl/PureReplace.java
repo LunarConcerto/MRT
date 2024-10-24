@@ -3,13 +3,15 @@ package com.github.lunarconcerto.mrt.rule.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.lunarconcerto.mrt.component.RenameTargetContainer;
 import com.github.lunarconcerto.mrt.config.Configuration;
+import com.github.lunarconcerto.mrt.control.RuleDefiningPane;
 import com.github.lunarconcerto.mrt.exc.MRTRuntimeException;
 import com.github.lunarconcerto.mrt.rule.NameEditor;
 import com.github.lunarconcerto.mrt.rule.Rule;
-import com.github.lunarconcerto.mrt.rule.RuleDefiner;
-import javafx.scene.control.TextField;
+import com.github.lunarconcerto.mrt.task.FileRenameTargetWrapper;
+import com.github.lunarconcerto.mrt.util.Texts;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.scene.text.Text;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,40 +26,42 @@ public class PureReplace implements Rule {
 
     @Override
     public String getName() {
-        return "替换字符串" ;
+        return "替换文字";
     }
 
     @Override
-    public String getDescription() {
-        return "将一段字符替换成另一段字符";
+    public Text[] getDescription() {
+        return Texts.texts(Texts.textWithTabNewLine("将一段文字替换成另一段文字"));
     }
 
     @Override
-    public RuleDefiner createDefiner() {
-        return new PureReplaceDefiner(this);
+    public RuleDefiningPane createDefiningPane() {
+        return new PureReplaceDefiningPane(this);
     }
 
     @Override
-    public RuleDefiner createDefiner(@NotNull String serializedString) {
+    public RuleDefiningPane createDefiningPane(@NotNull String serializedString) {
         try {
-            List<String> value = new ObjectMapper().readValue(serializedString, new TypeReference<>() {});
-            return new PureReplaceDefiner(this, value.get(0), value.get(1));
+            List<String> value = new ObjectMapper().readValue(serializedString, new TypeReference<>() {
+            });
+            return new PureReplaceDefiningPane(this, value.get(0), value.get(1));
         } catch (JsonProcessingException e) {
-            return new PureReplaceDefiner(this);
+            return new PureReplaceDefiningPane(this);
         }
     }
 
     @Getter
-    static class PureReplaceDefiner extends RuleDefiner{
+    static class PureReplaceDefiningPane extends RuleDefiningPane {
 
-        protected String oldText = "" , newText = "" ;
-        public PureReplaceDefiner(Rule parentRule) {
+        protected String oldText = "", newText = "";
+
+        public PureReplaceDefiningPane(Rule parentRule) {
             super(parentRule);
 
             init();
         }
 
-        public PureReplaceDefiner(Rule parentRule, String oldText, String newText) {
+        public PureReplaceDefiningPane(Rule parentRule, String oldText, String newText) {
             super(parentRule);
             this.oldText = oldText;
             this.newText = newText;
@@ -65,12 +69,10 @@ public class PureReplace implements Rule {
             init();
         }
 
-        void init(){
-            this.addLabel("将");
-            TextField textFieldOldText = this.addTextField(80);
+        protected void init() {
+            MFXTextField textFieldOldText = this.addTextField(oldText, "要替换的文字");
             textFieldOldText.textProperty().addListener((observable, oldValue, newValue) -> oldText = newValue);
-            this.addLabel("替换为");
-            TextField textFieldNewText = this.addTextField(80);
+            MFXTextField textFieldNewText = this.addTextField(newText, "替换后的文字");
             textFieldNewText.textProperty().addListener((observable, oldValue, newValue) -> newText = newValue);
         }
 
@@ -90,15 +92,15 @@ public class PureReplace implements Rule {
 
         @Override
         public String toSampleText() {
-            return oldText + "→" + newText ;
+            return oldText + "→" + newText;
         }
 
-        public PureReplaceDefiner setOldText(String oldText) {
+        public PureReplaceDefiningPane setOldText(String oldText) {
             this.oldText = oldText;
             return this;
         }
 
-        public PureReplaceDefiner setNewText(String newText) {
+        public PureReplaceDefiningPane setNewText(String newText) {
             this.newText = newText;
             return this;
         }
@@ -106,7 +108,7 @@ public class PureReplace implements Rule {
 
     static class PureReplaceEditor implements NameEditor {
 
-        protected String oldText , newText ;
+        protected String oldText, newText;
 
         public PureReplaceEditor(String oldText, String newText) {
             this.oldText = oldText;
@@ -114,8 +116,8 @@ public class PureReplace implements Rule {
         }
 
         @Override
-        public void doEdit(@NotNull RenameTargetContainer builder) {
-            builder.replace(oldText , newText);
+        public void doEdit(@NotNull FileRenameTargetWrapper builder) {
+            builder.replace(oldText, newText);
         }
 
     }

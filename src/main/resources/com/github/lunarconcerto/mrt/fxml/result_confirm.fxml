@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXTableColumn?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/11.0.14-internal"
+           prefWidth="800" prefHeight="600"
+           fx:id="mainPane"
+           fx:controller="com.github.lunarconcerto.mrt.controller.ResultConfirmController">
+    <SplitPane orientation="VERTICAL"
+               dividerPositions="0.88, 0.12">
+        <MFXTableView fx:id="resultTable" footerVisible="false"
+                      prefWidth="${mainPane.width}" prefHeight="${mainPane.height}">
+            <tableColumns>
+                <MFXTableColumn text="更改前" prefWidth="${mainPane.width}"/>
+                <MFXTableColumn text="更改后" prefWidth="${mainPane.width}"/>
+            </tableColumns>
+        </MFXTableView>
+        <GridPane>
+            <rowConstraints>
+                <RowConstraints vgrow="NEVER"/>
+                <RowConstraints vgrow="NEVER"/>
+            </rowConstraints>
+
+            <Label GridPane.rowIndex="0"
+                   fx:id="showOldNameLabel"
+                   text="点击任意一个项目,此处将显示其全名."
+                   prefWidth="${resultTable.width}">
+                <GridPane.margin>
+                    <Insets bottom="8" top="8" left="10" right="10"/>
+                </GridPane.margin>
+            </Label>
+            <MFXTextField floatMode="INLINE"
+                          floatingText="按下Enter键应用更改."
+                          fx:id="editNewNameTextField"
+                          promptText="点击任意一个项目,在此处可修改其结果."
+                          GridPane.rowIndex="1"
+                          prefWidth="${resultTable.width}">
+                <GridPane.margin>
+                    <Insets bottom="8" top="8" left="10" right="10"/>
+                </GridPane.margin>
+            </MFXTextField>
+        </GridPane>
+    </SplitPane>
+</StackPane>

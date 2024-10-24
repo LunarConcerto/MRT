@@ -1,6 +1,6 @@
 package com.github.lunarconcerto.mrt.exc;
 
-import com.github.lunarconcerto.mrt.gui.MRTApp;
+import com.github.lunarconcerto.mrt.util.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;
@@ -8,7 +8,8 @@ import java.io.PrintWriter;
 
 public class MRTException extends RuntimeException {
 
-    public MRTException() {}
+    public MRTException() {
+    }
 
     public MRTException(String message) {
         super(message);
@@ -26,28 +27,7 @@ public class MRTException extends RuntimeException {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
-    @Override
-    public void printStackTrace() {
-        super.printStackTrace();
-
-        MRTApp.printToUiLogger(buildErrorText(this));
-    }
-
-    @Override
-    public void printStackTrace(PrintStream s) {
-        super.printStackTrace(s);
-
-        MRTApp.printToUiLogger(buildErrorText(this));
-    }
-
-    @Override
-    public void printStackTrace(PrintWriter s) {
-        super.printStackTrace(s);
-
-        MRTApp.printToUiLogger(buildErrorText(this));
-    }
-
-    public static @NotNull String buildErrorText(@NotNull Throwable e){
+    public static @NotNull String buildErrorText(@NotNull Throwable e) {
         StringBuilder builder = new StringBuilder();
 
         builder.append("程序抛出了一个异常.").append("\n")
@@ -60,9 +40,29 @@ public class MRTException extends RuntimeException {
         }
         builder.append("您可以百度搜索问题原因, 或者在github上提交issue.");
 
-        return builder.toString() ;
+        return builder.toString();
     }
 
+    @Override
+    public void printStackTrace() {
+        super.printStackTrace();
+
+        Logger.info(getMessage(), buildErrorText(this));
+    }
+
+    @Override
+    public void printStackTrace(PrintStream s) {
+        super.printStackTrace(s);
+
+        Logger.info(getMessage(), buildErrorText(this));
+    }
+
+    @Override
+    public void printStackTrace(PrintWriter s) {
+        super.printStackTrace(s);
+
+        Logger.info(getMessage(), buildErrorText(this));
+    }
 
 
 }
