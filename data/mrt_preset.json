@@ -1,1 +1,107 @@
-[{"presetName":"dlsite","infos":[{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"[","index":0},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"rj","index":1},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"][","index":2},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"maker_name","index":3},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"][","index":4},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"cv_name","index":5},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"]","index":6},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"date","index":7}]},{"presetName":"乱码解除","infos":[{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureElement","serializeData":"source_name","index":0},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.TextDecoder","serializeData":"true","index":1}]},{"presetName":"default","infos":[{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"[","index":0},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"rj","index":1},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"][","index":2},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"maker_name","index":3},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"][","index":4},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"cv_name","index":5},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.PureText","serializeData":"]","index":6},{"ruleClassName":"com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement","serializeData":"product_name","index":7}]}]
+[
+  {
+    "presetName": "dlsite",
+    "infos": [
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "[",
+        "index": 0
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "rj",
+        "index": 1
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "][",
+        "index": 2
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "maker_name",
+        "index": 3
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "][",
+        "index": 4
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "cv_name",
+        "index": 5
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "]",
+        "index": 6
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "date",
+        "index": 7
+      }
+    ]
+  },
+  {
+    "presetName": "乱码解除",
+    "infos": [
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureElement",
+        "serializeData": "source_name",
+        "index": 0
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.TextDecoder",
+        "serializeData": "true",
+        "index": 1
+      }
+    ]
+  },
+  {
+    "presetName": "default",
+    "infos": [
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "[",
+        "index": 0
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "rj",
+        "index": 1
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "][",
+        "index": 2
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "maker_name",
+        "index": 3
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "][",
+        "index": 4
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "cv_name",
+        "index": 5
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.PureText",
+        "serializeData": "]",
+        "index": 6
+      },
+      {
+        "ruleClassName": "com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement",
+        "serializeData": "product_name",
+        "index": 7
+      }
+    ]
+  }
+]

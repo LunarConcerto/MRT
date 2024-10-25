@@ -10,6 +10,9 @@ open module com.github.lunarconcerto.mrt {
     requires org.kordamp.ikonli.javafx;
     requires org.slf4j;
 
+    requires animatefx;
+    requires org.jsoup;
+
     requires io.github.classgraph;
 
     requires com.fasterxml.jackson.annotation;

@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.0</junit.version>
         <javafx.version>19</javafx.version>
-        <output.dir>/mrt</output.dir>
+        <app.name>mrt</app.name>
     </properties>
 
     <repositories>
@@ -71,6 +71,11 @@
             <groupId>com.github.leewyatt</groupId>
             <artifactId>rxcontrols</artifactId>
             <version>11.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.typhon0</groupId>
+            <artifactId>AnimateFX</artifactId>
+            <version>1.3.0</version>
         </dependency>
 
         <!-- 测试 -->
@@ -132,6 +137,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.14.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+
         <!-- 单例实现 -->
         <dependency>
             <groupId>it.sauronsoftware</groupId>

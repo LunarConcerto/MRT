@@ -1,1 +1,13 @@
-{"enableProxy":true,"proxyHost":"127.0.0.1","proxyPort":"7890","defaultPath":"E:\\","dirShowOnly":false,"alwaysOnTop":false,"hideLogger":true,"directoryTreeDepth":1,"enableTrayIcon":true,"exitOnStageClose":true,"historyPaths":[]}
+{
+  "enableProxy": true,
+  "proxyHost": "127.0.0.1",
+  "proxyPort": "7890",
+  "defaultPath": "",
+  "dirShowOnly": true,
+  "alwaysOnTop": false,
+  "hideLogger": true,
+  "directoryTreeDepth": 1,
+  "enableTrayIcon": true,
+  "exitOnStageClose": true,
+  "historyPaths": []
+}

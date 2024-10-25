@@ -14,10 +14,8 @@
         <element id="library" level="project" name="Maven: io.github.classgraph:classgraph:4.8.154" />
         <element id="library" level="project" name="Maven: io.github.palexdev:materialfx:11.13.8" />
         <element id="library" level="project" name="Maven: io.github.palexdev:virtualizedfx:11.2.6" />
-        <element id="library" level="project" name="Maven: io.github.typhon0:AnimateFX:1.2.4" />
         <element id="library" level="project" name="Maven: it.sauronsoftware:junique:1.0.4" />
         <element id="library" level="project" name="Maven: org.controlsfx:controlsfx:11.1.2" />
-        <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.15.3" />
         <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-core:12.3.1" />
         <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-javafx:12.3.1" />
         <element id="library" level="project" name="Maven: org.kordamp.ikonli:ikonli-material-pack:12.2.0" />
@@ -37,6 +35,20 @@
         <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.24" />
         <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:2.0.5" />
         <element id="library" level="project" name="Maven: org.slf4j:slf4j-simple:2.0.5" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-web:17.0.1" />
+        <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.18.1" />
+        <element id="library" level="project" name="Maven: io.github.typhon0:AnimateFX:1.3.0" />
+        <element id="library" level="project" name="Maven: org.openjfx:javafx-web:win:17.0.1" />
+      </element>
+      <element id="archive" name="MRT.jar">
+        <element id="module-output" name="MRT" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/启动MRT.bat" />
+      <element id="directory" name="data">
+        <element id="dir-copy" path="$PROJECT_DIR$/data" />
+      </element>
+      <element id="directory" name="jre">
+        <element id="dir-copy" path="$PROJECT_DIR$/jre" />
       </element>
     </root>
   </artifact>
