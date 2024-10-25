@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.0</junit.version>
         <javafx.version>19</javafx.version>
-        <output.dir>${project.build.directory}/mrt_${project.version}_build</output.dir>
+        <output.dir>/mrt</output.dir>
     </properties>
 
     <repositories>
