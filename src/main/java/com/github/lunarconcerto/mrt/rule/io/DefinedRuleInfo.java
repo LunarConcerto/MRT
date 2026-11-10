@@ -2,16 +2,14 @@ package com.github.lunarconcerto.mrt.rule.io;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.lunarconcerto.mrt.control.RuleDefiningPane;
-import com.github.lunarconcerto.mrt.exc.MRTRuleException;
 import com.github.lunarconcerto.mrt.rule.Rule;
+import com.github.lunarconcerto.mrt.rule.RuleManager;
 import com.github.lunarconcerto.mrt.util.Json;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -84,31 +82,13 @@ public class DefinedRuleInfo {
     }
 
     public RuleDefiningPane toRuleDefiner() {
-        try {
-            Class<?> ruleClass = Class.forName(this.getRuleClassName());
-            Rule rule = (Rule) ruleClass.getConstructor().newInstance();
-
-            RuleDefiningPane definer;
-            String data = this.getSerializeData();
-
-            definer = data != null && !data.isEmpty() ?
-                    /* 序列化值非空的情况下调用反序列化的创建方法 */
-                    rule.createDefiningPane(data) :
-                    rule.createDefiningPane();
-
-            definer.setIndex(this.getIndex());
-
-            return definer;
-        } catch (ClassNotFoundException e) {
-            throw new MRTRuleException(MRTRuleException.ErrorType.CLASS_NOT_FOUND,
-                    "无法找到类" + this.getRuleClassName());
-        } catch (NoSuchMethodException e) {
-            throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER,
-                    "无可用构造函数" + this.getRuleClassName());
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException ignored) {
-            throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER,
-                    "其他错误" + this.getRuleClassName());
-        }
+        Rule rule = RuleManager.createRule(getRuleClassName());
+        String data = getSerializeData();
+        RuleDefiningPane definer = data != null && !data.isEmpty()
+                ? rule.createDefiningPane(data)
+                : rule.createDefiningPane();
+        definer.setIndex(getIndex());
+        return definer;
     }
 
 }

@@ -1,33 +1,58 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Java CL
+name: Build and release MRT
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [master]
+    tags: ['v[0-9]*']
   pull_request:
-    branches: [ "master" ]
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    permissions: write-all
-    
+  windows:
+    runs-on: windows-2022
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          architecture: x64
+          cache: maven
+      - name: Check release version
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        run: |
+          $version = ([xml](Get-Content -Raw pom.xml)).project.version
+          if ($env:GITHUB_REF_NAME -cne "v$version") {
+            throw "Release tag must match pom.xml (v$version)."
+          }
+      - name: Build and test
+        run: mvn -B -ntp clean verify
+      - name: Package and launch MRT
+        shell: pwsh
+        run: ./scripts/package-windows.ps1 -SmokeTest
+      - uses: actions/upload-artifact@v6
+        with:
+          name: MRT-windows-x64
+          path: target/MRT-windows-x64.zip
+          if-no-files-found: error
+          compression-level: 0
+
+  release:
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: MRT-windows-x64
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" MRT-windows-x64.zip --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes

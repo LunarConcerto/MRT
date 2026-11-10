@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.leewyatt.rxcontrols.controls.RXAvatar?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -24,14 +25,17 @@
             <GridPane.margin>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
             </GridPane.margin>
-            <RXAvatar layoutX="55.0" layoutY="14.0">
+            <ImageView layoutX="55.0" layoutY="14.0" fitWidth="100.0" fitHeight="100.0" smooth="true">
                 <image>
                     <Image url="@../img/cafe.jpg"/>
                 </image>
+                <clip>
+                    <Circle centerX="50.0" centerY="50.0" radius="50.0"/>
+                </clip>
                 <effect>
                     <InnerShadow color="#c9c9c9"/>
                 </effect>
-            </RXAvatar>
+            </ImageView>
             <Label alignment="CENTER" layoutX="45.0" layoutY="130.0" prefHeight="30.0" prefWidth="120.0"
                    style="-fx-background-color: #4f4f4f; -fx-background-radius: 10;" text="LunarConcerto"
                    textFill="WHITE">

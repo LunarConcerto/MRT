@@ -20,7 +20,7 @@ public class MRTStarter {
 
     public static void main(String[] args) {
         beforeUIStart();
-        Application.launch(MRTApplication.class);
+        Application.launch(MRTApplication.class, args);
     }
 
 }

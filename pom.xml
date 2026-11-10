@@ -6,7 +6,7 @@
 
     <groupId>com.github.lunarconcerto</groupId>
     <artifactId>MRT</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
     <name>MRT</name>
 
@@ -15,20 +15,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.0</junit.version>
         <javafx.version>19</javafx.version>
-        <app.name>mrt</app.name>
+        <excludedGroups>external</excludedGroups>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>poolborges-github-thirdparty</id>
-            <name>poolborges-github</name>
-            <url>https://github.com/poolborges/maven/raw/master/thirdparty/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!-- FX组件 -->
@@ -61,16 +49,18 @@
             <groupId>com.dlsc.preferencesfx</groupId>
             <artifactId>preferencesfx-core</artifactId>
             <version>11.11.0</version>
+            <exclusions>
+                <!-- PreferencesFX 的设置面板不使用 WebView。 -->
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.github.palexdev</groupId>
             <artifactId>materialfx</artifactId>
             <version>11.13.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.leewyatt</groupId>
-            <artifactId>rxcontrols</artifactId>
-            <version>11.0.3</version>
         </dependency>
         <dependency>
             <groupId>io.github.typhon0</groupId>
@@ -128,11 +118,6 @@
 
         <!-- 其他功能 -->
         <dependency>
-            <groupId>io.github.classgraph</groupId>
-            <artifactId>classgraph</artifactId>
-            <version>4.8.154</version>
-        </dependency>
-        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.14.0</version>
@@ -143,12 +128,6 @@
             <version>1.18.1</version>
         </dependency>
 
-        <!-- 单例实现 -->
-        <dependency>
-            <groupId>it.sauronsoftware</groupId>
-            <artifactId>junique</artifactId>
-            <version>1.0.4</version>
-        </dependency>
         <!-- 托盘实现 -->
         <dependency>
             <groupId>com.dustinredmond.fxtrayicon</groupId>
@@ -160,39 +139,36 @@
 
 
     <build>
+        <finalName>MRT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.3.0</version>
-                <configuration>
-                    <type>jar</type>
-                    <includeTypes>jar</includeTypes>
-                    <outputDirectory>${output.dir}/lib</outputDirectory>
-
-                    <excludeArtifactIds>lombok</excludeArtifactIds>
-                    <excludeArtifactIds>annotations</excludeArtifactIds>
-                    <excludeGroupIds>org.junit.jupiter</excludeGroupIds>
-
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>${project.artifactId}</artifactId>
-                            <type>jar</type>
-                            <overWrite>true</overWrite>
-                            <outputDirectory>${output.dir}/lib</outputDirectory>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-runtime-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.4.2</version>
                 <configuration>
                     <archive>
-                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
                         <manifest>
                             <useUniqueVersions>false</useUniqueVersions>
                             <addClasspath>true</addClasspath>
@@ -200,16 +176,6 @@
                             <mainClass>com.github.lunarconcerto.mrt.MRTStarter</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>${output.dir}</outputDirectory>
-                    <includes>
-                        <include>**/*.class</include>
-                        <include>**/*.properties</include>
-                        <include>**/*.fxml</include>
-                        <include>**/*.jpg</include>
-                        <include>**/*.png</include>
-                        <include>**/*.ttf</include>
-                        <include>**/*.css</include>
-                    </includes>
                 </configuration>
             </plugin>
 
@@ -218,9 +184,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                    <encoding>utf-8</encoding>
+                    <release>${jdk.version}</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -239,17 +203,19 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
-                <executions>
-                    <execution>
-                        <id>default-cli</id>
-                        <configuration>
-                            <stripDebug>true</stripDebug>
-                            <jlinkImageName>mrt</jlinkImageName>
-                            <jlinkZipName>mrt.zip</jlinkZipName>
-                            <mainClass>com.github.lunarconcerto.mrt.MRTApplication</mainClass>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <runtimePathOption>CLASSPATH</runtimePathOption>
+                    <mainClass>com.github.lunarconcerto.mrt.MRTStarter</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.3</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                    <excludedGroups>${excludedGroups}</excludedGroups>
+                </configuration>
             </plugin>
         </plugins>
     </build>

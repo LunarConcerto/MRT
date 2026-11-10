@@ -13,8 +13,6 @@ open module com.github.lunarconcerto.mrt {
     requires animatefx;
     requires org.jsoup;
 
-    requires io.github.classgraph;
-
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;

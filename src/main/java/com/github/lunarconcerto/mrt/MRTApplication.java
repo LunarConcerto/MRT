@@ -8,6 +8,7 @@ import com.github.lunarconcerto.mrt.util.FileUtil;
 import com.github.lunarconcerto.mrt.util.I18n;
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -15,11 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 public class MRTApplication extends Application {
 
-    public static final String VERSION = "[v]1.1.0";
+    public static final String VERSION = "[v]" + Objects.requireNonNullElse(
+            MRTApplication.class.getPackage().getImplementationVersion(), "dev");
 
     public static IndexController mainController;
 
@@ -43,7 +46,7 @@ public class MRTApplication extends Application {
         stage.setTitle(I18n.get("mrt.name") + "\t" + VERSION);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> {
-            if (configuration.isExitOnStageClose()) {
+            if (configuration.isExitOnStageClose() || TrayIconManager.getTrayIconManager().getTrayIcon() == null) {
                 Exit.exit();
             } else {
                 stage.hide();
@@ -60,7 +63,10 @@ public class MRTApplication extends Application {
         configuration.updateUI();
 
         applyConfig();
-        test();
+        if (getParameters().getRaw().contains("--smoke-test")) {
+            // The packaging check exits through the normal save path after JavaFX starts.
+            Platform.runLater(Exit::exit);
+        }
     }
 
     private void applyConfig() {
@@ -69,10 +75,6 @@ public class MRTApplication extends Application {
         mainController.getMenuItemDirOnly().setSelected(configuration.isDirShowOnly());
         mainController.getMenuItemAlwaysOnTop().setSelected(configuration.isAlwaysOnTop());
         mainController.getMenuItemHideLogger().setSelected(configuration.isHideLogger());
-    }
-
-    private void test() {
-
     }
 
 }

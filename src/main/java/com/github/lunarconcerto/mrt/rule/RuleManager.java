@@ -2,17 +2,34 @@ package com.github.lunarconcerto.mrt.rule;
 
 import com.github.lunarconcerto.mrt.config.ConfigurationManager;
 import com.github.lunarconcerto.mrt.exc.MRTRuleException;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassInfo;
-import io.github.classgraph.ScanResult;
-import org.jetbrains.annotations.NotNull;
+import com.github.lunarconcerto.mrt.rule.impl.DlsiteOnseiElement;
+import com.github.lunarconcerto.mrt.rule.impl.PureElement;
+import com.github.lunarconcerto.mrt.rule.impl.PureRemove;
+import com.github.lunarconcerto.mrt.rule.impl.PureReplace;
+import com.github.lunarconcerto.mrt.rule.impl.PureText;
+import com.github.lunarconcerto.mrt.rule.impl.ReplaceExtension;
+import com.github.lunarconcerto.mrt.rule.impl.TextDecoder;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class RuleManager {
+
+    // 已保存的预设使用规则的全限定类名作为标识。
+    private static final Map<String, Supplier<? extends Rule>> BUILT_IN_RULES = new LinkedHashMap<>();
+
+    static {
+        register(DlsiteOnseiElement.class, DlsiteOnseiElement::new);
+        register(PureElement.class, PureElement::new);
+        register(PureRemove.class, PureRemove::new);
+        register(PureReplace.class, PureReplace::new);
+        register(PureText.class, PureText::new);
+        register(ReplaceExtension.class, ReplaceExtension::new);
+        register(TextDecoder.class, TextDecoder::new);
+    }
 
     private static RuleManager instance;
     protected List<Rule> ruleList;
@@ -38,32 +55,20 @@ public class RuleManager {
     }
 
     void loadInternalRules() {
-        try (ScanResult scanResult =
-                     new ClassGraph().enableClassInfo()
-                             .acceptPackages("com.github.lunarconcerto.mrt.rule.impl")
-                             .scan()
-        ) {
-            List<Class<?>> ruleImplList = scanResult.getClassesImplementing(Rule.class.getName())
-                    .stream()
-                    .map(ClassInfo::loadClass)
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-            if (!ruleImplList.isEmpty()) {
-                instantiationRules(ruleImplList);
-            }
-        }
+        BUILT_IN_RULES.values().forEach(factory -> ruleList.add(factory.get()));
     }
 
-    void instantiationRules(@NotNull List<Class<?>> rules) {
-        for (Class<?> ruleClass : rules) {
-            try {
-                Rule rule = (Rule) ruleClass.getConstructor().newInstance();
-                this.ruleList.add(rule);
-            } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
-                throw new MRTRuleException(MRTRuleException.ErrorType.NO_ACCESSIBLE_CONTAINER, ruleClass, "无法实例化");
-            }
+    private static <T extends Rule> void register(Class<T> type, Supplier<T> factory) {
+        BUILT_IN_RULES.put(type.getName(), factory);
+    }
+
+    public static Rule createRule(String className) {
+        Supplier<? extends Rule> factory = BUILT_IN_RULES.get(className);
+        if (factory == null) {
+            throw new MRTRuleException(MRTRuleException.ErrorType.CLASS_NOT_FOUND,
+                    "未注册的命名规则 " + className);
         }
+        return factory.get();
     }
 
     void initRules() {

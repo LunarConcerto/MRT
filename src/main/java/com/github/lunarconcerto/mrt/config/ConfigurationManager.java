@@ -22,10 +22,10 @@ import java.util.Properties;
 @Getter
 public class ConfigurationManager {
 
-    public static final String userDir = System.getProperty("user.dir");
-    public static final File propertiesFile = new File(userDir + "/data/mrt.properties");
-    public static final File configFile = new File(userDir + "/data/mrt_config.json");
-    public static final File presetFile = new File(userDir + "/data/mrt_preset.json");
+    private static final File dataDirectory = getDataDirectory();
+    public static final File propertiesFile = new File(dataDirectory, "mrt.properties");
+    public static final File configFile = new File(dataDirectory, "mrt_config.json");
+    public static final File presetFile = new File(dataDirectory, "mrt_preset.json");
     private static final ConfigurationManager manager = new ConfigurationManager();
     private final Properties properties = new Properties();
     private Configuration configuration;
@@ -38,49 +38,25 @@ public class ConfigurationManager {
         return manager;
     }
 
-    protected InputStream openInputStream() {
-        try {
-            return new FileInputStream(ConfigurationManager.propertiesFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    private static File getDataDirectory() {
+        if (!Boolean.getBoolean("mrt.packaged")) {
+            return new File(System.getProperty("user.dir"), "data");
         }
-        return null;
-    }
-
-    protected OutputStream openOutputStream() {
-        try {
-            return new FileOutputStream(ConfigurationManager.propertiesFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        String localAppData = System.getenv("LOCALAPPDATA");
+        if (localAppData == null || localAppData.isBlank()) {
+            localAppData = System.getProperty("user.home");
         }
-        return null;
-    }
-
-    protected void ensureDirectoryExists() {
-        File file = new File(userDir + "/data");
-        if (!file.exists()) {
-            boolean b = file.mkdir();
-        }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    protected void ensureFileExists() {
-        if (!ConfigurationManager.propertiesFile.exists()) {
-            try {
-                ConfigurationManager.propertiesFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        return new File(localAppData, "MRT");
     }
 
 
     public void load() {
-        ensureDirectoryExists();
-        ensureFileExists();
         try {
-            properties.load(openInputStream());
-
+            if (propertiesFile.isFile()) {
+                try (InputStream input = new FileInputStream(propertiesFile)) {
+                    properties.load(input);
+                }
+            }
             loadObjectConfig();
             loadPreset();
         } catch (IOException e) {
@@ -99,12 +75,14 @@ public class ConfigurationManager {
         }
     }
 
-    protected void loadPreset() throws JsonProcessingException {
+    protected void loadPreset() throws IOException {
         String jsonConfig = getJson(presetFile);
-        if (jsonConfig != null && !jsonConfig.isEmpty()) {
-            ObjectMapper mapper = new ObjectMapper();
-            presetList = mapper.readValue(jsonConfig, new TypeReference<>() {
-            });
+        if (jsonConfig == null) {
+            try (InputStream defaults = ConfigurationManager.class.getResourceAsStream("/mrt_preset.json")) {
+                presetList = Json.MAPPER.readValue(defaults, new TypeReference<>() {});
+            }
+        } else if (!jsonConfig.isEmpty()) {
+            presetList = Json.MAPPER.readValue(jsonConfig, new TypeReference<>() {});
         } else {
             presetList = new ArrayList<>();
         }
@@ -123,13 +101,15 @@ public class ConfigurationManager {
     }
 
     public void save() {
-        ensureDirectoryExists();
         try {
+            Files.createDirectories(dataDirectory.toPath());
             saveObjectConfig();
             savePreset();
 
-            properties.store(openOutputStream(), "RenameTools properties , last change:" +
-                    DateFormatter.getFormattedNowTime());
+            try (OutputStream output = new FileOutputStream(propertiesFile)) {
+                properties.store(output, "RenameTools properties , last change:" +
+                        DateFormatter.getFormattedNowTime());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -142,10 +122,8 @@ public class ConfigurationManager {
     }
 
     protected void savePreset() throws IOException {
-        if (!presetList.isEmpty()) {
-            String value = Json.MAPPER.writeValueAsString(presetList);
-            saveJson(presetFile, value);
-        }
+        String value = Json.MAPPER.writeValueAsString(presetList);
+        saveJson(presetFile, value);
     }
 
     protected void saveJson(@NotNull File file, String content) throws IOException {
